@@ -82,6 +82,7 @@ module.exports = {
         "chat": "url('images/chat.svg')",
         "security": "url('images/security.svg')",
         "logout": "url('images/logout.svg')",
+        "user-profile-group": "url('images/user-profile-group.svg')",
       },
       borderRadius: {
         "12": "12px",
