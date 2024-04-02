@@ -3,10 +3,12 @@ import {ChangeEvent, useState} from "react";
 
 interface IInputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
   HTMLType: 'email' | 'text' | 'password' | 'date' | 'search' | 'number' | 'time';
   iconType?: 'person' | 'mail' | 'password' | 'search-icon-gray' | 'add-media-icon';
   value?: string;
   placeholder?: string;
+  autoComplete?: 'off' | 'on';
   extraBoxClass?: string;
   extraContentClass?: string;
   inlineLabel?: boolean;
@@ -16,9 +18,10 @@ interface IInputProps {
   id?: string;
   labelText?: string;
   hookFormValues?: UseFormRegisterReturn<string>;
+  isDisabled?: boolean;
 }
 
-export function Input({ onChange, HTMLType, iconType, value, placeholder, extraBoxClass, extraContentClass, extraInputClass, inlineLabel, defaultValue, error, id, labelText, hookFormValues }: IInputProps) {
+export function Input({ onChange, onBlur, HTMLType, iconType, value, placeholder, autoComplete, extraBoxClass, extraContentClass, extraInputClass, inlineLabel, defaultValue, error, id, labelText, hookFormValues, isDisabled }: IInputProps) {
   const [type, setType] = useState<string>(HTMLType);
   const [passwordIcon, setPasswordIcon] = useState<string>('show-password');
 
@@ -45,8 +48,9 @@ export function Input({ onChange, HTMLType, iconType, value, placeholder, extraB
               style={{ backgroundImage: `url("/images/${iconType}.svg")` }}
             />}
           <input
-            {...hookFormValues}
             onChange={onChange}
+            onBlur={onBlur}
+            {...hookFormValues}
             value={value}
             type={type}
             defaultValue={defaultValue}
@@ -54,6 +58,8 @@ export function Input({ onChange, HTMLType, iconType, value, placeholder, extraB
             aria-invalid={error ? 'true' : 'false'}
             className={`h-full w-full outline-none text-black bg-inherit font-normal text-base md:text-lg ${extraInputClass}`}
             id={id}
+            autoComplete={autoComplete}
+            disabled={isDisabled}
           />
           {(HTMLType === 'password') &&
             <div
