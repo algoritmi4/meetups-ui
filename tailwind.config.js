@@ -87,6 +87,7 @@ module.exports = {
         'text-fade-out': "linear-gradient(to right, transparent, #E5E5E3 50%)",
         'slider-fade-out': "linear-gradient(to right, transparent, #FFFEFC 60%)",
         'close-cross': "url('images/close-cross.svg')",
+        'close-cross-purple': "url('/images/close-cross-purple.svg')",
         'check': "url('/images/check.svg')",
         'event-card-people': "url('images/event-card-people.png')",
         'selector-triangle': "url('images/selector-triangle.png')",
@@ -94,7 +95,9 @@ module.exports = {
         'chevron-down-black': "url('/images/chevron-down-black.svg')",
         'edit-pen-icon': "url('/images/edit-pen-icon.svg')",
         'link-icon': "url('/images/link-icon.svg')",
-        'chevron-left-purple': "url('/images/chevron-left-purple.svg')"
+        'chevron-left-purple': "url('/images/chevron-left-purple.svg')",
+        'gallery-icon': "url('/images/gallery-icon.svg')",
+        'plus-icon': "url('/images/plus-icon.svg')"
       },
       borderRadius: {
         '12': '12px',

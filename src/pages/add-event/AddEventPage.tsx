@@ -1,59 +1,103 @@
 import { AddEventForm } from "@/features/addEvent";
 import { AddEventPageTitle } from "@/widgets/AddEventPageTitle";
-import {ReactElement} from "react";
-import {Input, SelectInput, LargeTextInput, SwitchInput, CheckboxWithValue, FileInputWithDrag} from "@/shared";
+import {ReactElement, useEffect} from "react";
+import {Input, SelectInput, LargeTextInput, CheckboxWithValue} from "@/shared";
 import { MapWidget } from "@/widgets/mapWidget";
 import { PeriodicControl } from "@/features/periodicControl";
-import { AccessControl } from "@/features/addEventAccessControl";
-
-// mock data for testing
-const people = [
-  { id: 1, name: 'Durward Reynolds', unavailable: false },
-  { id: 2, name: 'Kenton Towne', unavailable: false },
-  { id: 3, name: 'Therese Wunsch', unavailable: false },
-  { id: 4, name: 'Benedict Kessler', unavailable: true },
-  { id: 5, name: 'Katelyn Rohan', unavailable: false },
-  { id: 6, name: 'Durward Reynolds', unavailable: false },
-  { id: 7, name: 'Kenton Towne', unavailable: false },
-  { id: 8, name: 'Therese Wunsch', unavailable: false },
-  { id: 9, name: 'Benedict Kessler', unavailable: true },
-  { id: 10, name: 'Katelyn Rohan', unavailable: false },
-]
-
-const currency = [
-  { id: 1, name: 'BYN', unavailable: false },
-  { id: 2, name: 'USD', unavailable: false },
-  { id: 3, name: 'RUB', unavailable: false },
-]
+import { AccessControl } from "@/features/accessControl";
+import { TagsControl } from "@/entities/tags";
+import { useForm } from "react-hook-form";
+import { AddEventValidationSchema, addEventSchema } from "@/features/addEvent/model/addEventFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useGetCategoriesQuery } from "@/features/searchFilter/api/categoriesApi";
+import { PriceControl } from "@/features/priceControl";
+import { PlacesNumberControl } from "@/features/placesNumberControl";
+import { Gallery } from "@/features/gallery";
+import { useFormActions } from "@/features/addEvent/model/useFormActions";
+import { MainImageControl } from "@/features/mainImageControl";
 
 function AddEventPage(): ReactElement {
+  const { data: categories = {results: []} } = useGetCategoriesQuery();
+
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    clearErrors
+  } = useForm<AddEventValidationSchema>({
+    resolver: zodResolver(addEventSchema),
+    defaultValues: {
+      schedule: [],
+      private_url: null,
+      free: false,
+      repeatable: false,
+      currency: 1,
+      tags: [],
+      gallery: []
+    }
+  });
+
+  const {
+    onSelectCategory,
+    onSelectAddress,
+    onChangePlacesLimit,
+    onSelectEventType,
+    onSwitchPriceType,
+    onChangeCurrencyType,
+    onPeriodicChange,
+    onChangeSchedule,
+    onChangeScheduleDayTime,
+    handleTags,
+    onUploadImage
+  } = useFormActions({ setValue, clearErrors, getValues });
+
+  useEffect(() => {
+    const values = getValues()
+    console.log(errors);
+    console.log(values);
+  }, [errors, getValues]);
+
   return (
     <main className="w-full max-w-[1005px] mx-auto pb-[98px]">
       <AddEventPageTitle />
-      <AddEventForm>
+      <AddEventForm handleSubmit={handleSubmit}>
         <div className="flex items-end mt-[40px]">
           <div className="flex flex-col mr-[45px]">
             <Input
               HTMLType='text'
+              hookFormValues={register('name')}
+              error={errors.name?.message}
               labelText='Название'
               placeholder='Введите название'
-              id='add-event-name'
+              id='name'
               extraBoxClass={'w-[480px] md:w-[480px] mt-[7px]'}
               extraContentClass={'h-[44px]'}
               extraInputClass={'px-[22px]'}
             />
 
             <SelectInput
+              setValueFunc={onSelectCategory}
+              error={errors.category?.message}
               labelText='Категория'
-              options={people}
+              options={categories.results}
               placeholder='Выберите категорию'
               extraBoxClass="mt-[18px]"
             />
+
           </div>
-          <FileInputWithDrag />
+          <MainImageControl
+            error={errors.image_url?.message}
+            onUploadImage={onUploadImage}
+            setValue={setValue}
+            clearErrors={clearErrors}
+          />
         </div>
 
         <LargeTextInput
+          hookFormValues={register('description')}
+          error={errors.description?.message}
           labelText='Описание'
           placeholder='Расскажите подробнее'
           extraBoxClass={'mt-[18px]'}
@@ -61,6 +105,8 @@ function AddEventPage(): ReactElement {
 
         <div className='flex items-center relative mt-[18px]'>
           <Input
+            hookFormValues={register('start_date')}
+            error={errors.start_date?.message}
             HTMLType='date'
             labelText='Дата'
             placeholder='Начало'
@@ -70,11 +116,12 @@ function AddEventPage(): ReactElement {
             extraInputClass='px-[22px]'
           />
           <div
-            className='w-4 h-0.5 mx-3.5 mt-8'
-            style={{ backgroundImage: `url("/images/line-icon.svg")` }}
+            className='w-4 h-0.5 mx-3.5 mt-8 border-1 border-text-light-gray border-solid'
           />
           <div className='self-end relative'>
             <Input
+              hookFormValues={register('end_date', { required: false })}
+              error={errors.end_date?.message}
               HTMLType='date'
               placeholder='Конец'
               id='add-event-end-date'
@@ -88,6 +135,8 @@ function AddEventPage(): ReactElement {
 
         <div className='flex items-center relative mt-[20px]'>
           <Input
+            hookFormValues={register('start_time')}
+            error={errors.start_time?.message}
             HTMLType='time'
             labelText='Время'
             placeholder='Начало'
@@ -97,11 +146,12 @@ function AddEventPage(): ReactElement {
             extraInputClass='px-[22px]'
           />
           <div
-            className='w-4 h-0.5 mx-3.5 mt-8'
-            style={{ backgroundImage: `url("/images/line-icon.svg")` }}
+            className='w-4 h-0.5 mx-3.5 mt-8 border-1 border-text-light-gray border-solid'
           />
           <div className='self-end relative'>
             <Input
+              hookFormValues={register('end_time', { required: false })}
+              error={errors.end_time?.message}
               HTMLType='time'
               placeholder='Конец'
               id='add-event-end-time'
@@ -113,25 +163,28 @@ function AddEventPage(): ReactElement {
         </div>
 
         <div className="mt-[30px] mb-[18px] text-text-black">
-          <PeriodicControl />
+          <PeriodicControl
+            onPeriodicChange={onPeriodicChange}
+            onChangeSchedule={onChangeSchedule}
+            onChangeScheduleDayTime={onChangeScheduleDayTime}
+          />
         </div>
 
-        <MapWidget text="Точка на карте" position={{ lat: 53.9, lng: 27.56667 }} zoom={14} markers={[]} withAddressControl={true} />
+        <MapWidget
+          setValuesFunc={onSelectAddress}
+          setValue={setValue}
+          error={errors.address?.message}
+          text="Точка на карте"
+          position={{ lat: 53.9, lng: 27.56667 }}
+          zoom={14}
+          withAddressControl={true}
+        />
 
-        <div className={'flex items-center mt-[18px]'}>
-          <Input
-            HTMLType='number'
-            labelText='Количество мест'
-            placeholder='25'
-            id='add-event-people-number'
-            inlineLabel={true}
-            extraBoxClass={'w-[72px] md:w-[72px] mt-[7px]'}
-            extraContentClass={'h-[44px]'}
-            extraInputClass="px-[24px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          />
-          <SwitchInput
-            labelText={'Места не ограничены'}
-            extraBoxClass={'ml-[60px]'}
+        <div className="flex items-center mt-[18px]">
+          <PlacesNumberControl
+            hookFormValues={register('desired_participants_number', { valueAsNumber: true })}
+            setValuesFunc={onChangePlacesLimit}
+            error={errors.desired_participants_number?.message}
           />
           <CheckboxWithValue
             id="chat"
@@ -143,6 +196,8 @@ function AddEventPage(): ReactElement {
 
         <div className={`flex items-center mt-[18px]`}>
           <Input
+            hookFormValues={register('participants_age', { valueAsNumber: true })}
+            error={errors.participants_age?.message}
             HTMLType='number'
             labelText='Возраст участников'
             placeholder='18'
@@ -155,56 +210,27 @@ function AddEventPage(): ReactElement {
           <p className={`text-xl text-text-black font-medium ml-1.5`}>+</p>
         </div>
 
-        <AccessControl />
+        <AccessControl
+          error={errors.type?.message}
+          setValueFunc={onSelectEventType}
+        />
 
-        <div className={'flex items-center mt-[18px]'}>
-          <Input
-            HTMLType='number'
-            labelText='Стоимость'
-            placeholder='12'
-            id='add-event-price'
-            inlineLabel={true}
-            extraBoxClass={'w-[92px] md:w-[92px] mr-1.5'}
-            extraContentClass={'h-[44px]'}
-            extraInputClass="px-[34px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          />
-          <SelectInput
-            extraBoxClass={'w-[90px] my-auto'}
-            extraContentClass={'pl-[14px] pr-[10px]'}
-            extraDropdownClass={'w-[90px]'}
-            options={currency}
-          />
-          <SwitchInput
-            labelText={'Бесплатное'}
-            extraBoxClass={'ml-[60px]'}
-          />
-        </div>
+        <PriceControl
+          hookFormValues={register('cost')}
+          error={errors.cost?.message}
+          onSwitchPriceType={onSwitchPriceType}
+          onChangeCurrencyType={onChangeCurrencyType}
+        />
 
-        <div className="mt-[18px]">
-          <Input
-            HTMLType='text'
-            iconType='add-media-icon'
-            labelText='Галерея фото и видео (необязательно)'
-            placeholder='Загрузите дополнительные материалы'
-            id='add-event-photos'
-            extraBoxClass="mt-[7px]"
-            extraContentClass="ml-[22px]"
-            extraInputClass="ml-3"
-          />
-        </div>
+        <Gallery
+          onUploadImage={onUploadImage}
+          setValue={setValue}
+          getValues={getValues}
+        />
 
-        <div className="mt-[18px]">
-          <Input
-            HTMLType='text'
-            iconType='search-icon-gray'
-            labelText='Тэги (необязательно)'
-            placeholder='Ищите теги'
-            id='add-event-name'
-            extraBoxClass="px-[22px] mt-[7px]"
-            extraInputClass="pl-3"
-          />
-          <p className='text-text-light-gray mt-2'>Тезисно опишите свое мероприятие</p>
-        </div>
+        <TagsControl
+          setValuesFunc={handleTags}
+        />
       </AddEventForm>
     </main>
   );
