@@ -4,9 +4,17 @@ import { Switch } from '@headlessui/react'
 interface ISwitchInputProps {
   labelText?: string;
   extraBoxClass?: string;
+  setValueFunc?: (state: boolean) => void;
 }
-export function SwitchInput({labelText, extraBoxClass}: ISwitchInputProps) {
-  const [enabled, setEnabled] = useState(false)
+
+export function SwitchInput({ labelText, extraBoxClass, setValueFunc }: ISwitchInputProps) {
+  const [enabled, setEnabled] = useState(false);
+
+  const onSwitch = (state: boolean) => {
+    setEnabled(state);
+
+    setValueFunc && setValueFunc(state);
+  }
 
   return (
     <Switch.Group>
@@ -16,7 +24,7 @@ export function SwitchInput({labelText, extraBoxClass}: ISwitchInputProps) {
         )}
         <Switch
           checked={enabled}
-          onChange={setEnabled}
+          onChange={onSwitch}
           className={`${
             enabled ? 'bg-main-blue' : 'bg-custom-gray'
           } relative inline-flex h-[30px] w-[60px] items-center rounded-full transition-colors `}
