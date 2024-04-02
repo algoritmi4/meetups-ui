@@ -1,36 +1,42 @@
 import {Fragment, useEffect, useState} from 'react'
 import { Listbox } from '@headlessui/react'
-
-interface ISelectInputOptions {
-  id: number;
-  name: string;
-  unavailable: boolean;
-}
+import { ISelectInputOptions } from '../model/types';
 
 interface ISelectInputProps {
   labelText?: string;
   placeholder?: string;
+  isDisabled?: boolean;
+  setValueFunc?: (option: ISelectInputOptions) => void;
+  error?: string;
   extraBoxClass?: string;
   extraContentClass?: string;
   extraDropdownClass?: string;
   options: ISelectInputOptions[];
 }
 
-export function SelectInput({options, labelText, placeholder, extraBoxClass, extraContentClass, extraDropdownClass}: ISelectInputProps) {
+export function SelectInput({options, labelText, placeholder, isDisabled, error, setValueFunc, extraBoxClass, extraContentClass, extraDropdownClass}: ISelectInputProps) {
   const [selectedOption, setSelectedOption] = useState<ISelectInputOptions | null>(null);
 
   useEffect(() => {
     if (!placeholder) {
       setSelectedOption(options[0]);
+
+      setValueFunc && setValueFunc(options[0]);
     }
   }, []);
+
+  const onSelectOption = (option: ISelectInputOptions) => {
+    setSelectedOption(option);
+
+    setValueFunc && setValueFunc(option);
+  }
 
   return (
     <div className={`w-[480px] flex flex-col items-start relative ${extraBoxClass}`}>
       <Listbox
         as={Fragment}
         value={selectedOption}
-        onChange={setSelectedOption}
+        onChange={onSelectOption}
         name="assignee"
       >
         {({open, value}) => (
@@ -41,16 +47,16 @@ export function SelectInput({options, labelText, placeholder, extraBoxClass, ext
               </Listbox.Label>
             )}
             <Listbox.Button
-              className={`h-[44px] bg-custom-gray rounded-[10px] border w-full border-transparent flex justify-between items-center px-[22px] ${extraContentClass}`}
+              className={`h-[44px] bg-custom-gray rounded-[10px] border-1 border-solid w-full flex justify-between items-center px-[22px] ${error ? "border-input-error" : "border-transparent"} ${extraContentClass}`}
+              aria-disabled={isDisabled}
             >
               {(!value && placeholder) ? (
                 <p className={'text-lg text-text-light-gray'}>{placeholder}</p>
                 ) : (
-                <p className={'text-lg text-text-black'}>{selectedOption?.name}</p>
+                <p className={`text-lg ${isDisabled ? "text-white" : "text-text-black"}`}>{selectedOption?.name}</p>
               )}
               <div
-                className={`bg-center bg-no-repeat bg-cover w-6 h-6 ml-1 ${open ? 'transition ease-in-out rotate-180 duration-100': 'transition ease-in-out rotate-0 duration-100'}`}
-                style={{ backgroundImage: `url("/images/dropdown-icon.svg")` }}
+                className={`bg-center bg-no-repeat bg-cover w-6 h-6 ml-1 ${isDisabled ? "bg-chevron-down-white" : "bg-chevron-down-black"} ${open ? 'transition ease-in-out rotate-180 duration-100': 'transition ease-in-out rotate-0 duration-100'}`}
               ></div>
             </Listbox.Button>
               <Listbox.Options
@@ -62,7 +68,7 @@ export function SelectInput({options, labelText, placeholder, extraBoxClass, ext
                     as='div'
                     key={option.id}
                     value={option}
-                    className={'cursor-pointer py-[4px]'}
+                    className={'cursor-pointer pt-2 first-of-type:pt-0'}
                   >
                     {option.name}
                   </Listbox.Option>
