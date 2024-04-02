@@ -1,0 +1,1 @@
+export { MainImageControl } from './MainImageControl';
