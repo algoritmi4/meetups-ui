@@ -6,7 +6,7 @@ interface ILargeTextInputProps {
   extraBoxClass?: string;
   extraTextAreaClass?: string;
   defaultValue?: string;
-  error?: any;
+  error?: string;
   id?: string;
   labelText?: string;
   hookFormValues?: UseFormRegisterReturn<string>;
@@ -24,7 +24,7 @@ export function LargeTextInput({ value, placeholder, extraBoxClass, extraTextAre
         defaultValue={defaultValue}
         placeholder={placeholder}
         aria-invalid={error ? 'true' : 'false'}
-        className={`text-[18px] font-light min-h-[150px] rounded-[10px] px-[25px] pt-3 mt-[7px] outline-none text-text-black bg-custom-gray placeholder:text-text-light-gray ${extraTextAreaClass}`}
+        className={`text-[17px] min-h-[150px] rounded-[10px] px-[25px] pt-3 mt-[7px] outline-none text-text-black bg-custom-gray placeholder:text-text-light-gray ${extraTextAreaClass} ${error ? "border-1 border-solid border-input-error" : ""}`}
         id={id}
       />
     </div>

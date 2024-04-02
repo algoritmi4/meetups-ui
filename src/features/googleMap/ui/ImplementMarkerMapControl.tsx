@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/shared/model";
-import { implementMarkerSetted } from "@/widgets/mapWidget/model/addressControlSlice";
+import { implementMarkerSetted } from "@/features/addressControl/model/addressControlSlice";
 import { ControlPosition, MapControl, useMap } from "@vis.gl/react-google-maps";
 import { ReactElement, useCallback, useEffect } from "react";
 
