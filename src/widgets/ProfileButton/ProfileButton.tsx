@@ -6,16 +6,13 @@ import { BurgerMenu } from "@/features/burgerMenu";
 export function ProfileButton() {
   let { data: profileData } = useMyDetailsQuery();
   return (
-    
     <Menu>
-      {({ open }) => (
-        <div className="relative">
-          <Menu.Button className="text-base mt-2.5">
-            {profileData?.username}
-          </Menu.Button>
-          {open && <BurgerMenu />}
-        </div>
-      )}
+      <div className="relative">
+        <Menu.Button className="text-base mt-2.5">
+          {profileData?.username}
+        </Menu.Button>
+        <BurgerMenu />
+      </div>
     </Menu>
   );
 }
