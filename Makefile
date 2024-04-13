@@ -31,7 +31,11 @@ download_node_modules:
 
 # Clean up artifacts
 clean:
+	docker-rm
 	rm -rf build/
+	rm -rf node_modules/
 
 # Default target (run tests and build)
 all: lint test build
+
+rerundev: clean docker-build download_node_modules dev-demon

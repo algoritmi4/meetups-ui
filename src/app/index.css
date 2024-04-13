@@ -59,3 +59,20 @@ body {
   src: url("../shared/ui/assets/fonts/Mulish-ExtraBold.ttf");
   font-weight: 800;
 }
+
+.event_card figure {
+  overflow: hidden; /* hide the excess */
+}
+
+.event_card figure img {
+  display: block; /* no whitespace */
+  transition: .3s ease-in-out;
+}
+
+.event_card:hover figure img{
+  transform: scale(1.05);
+}
+
+.event_card:hover figure div figcaption{
+  font-weight: 900;
+}
