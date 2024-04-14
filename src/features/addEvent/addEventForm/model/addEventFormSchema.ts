@@ -17,7 +17,6 @@ export const addEventSchema = z.object({
     .max(250, { message: 'Максимальная длина - 250 символов' }),
   start_date: z
     .string()
-    .refine((v) => new Date(`${v} 24:00`) > new Date(), { message: 'Ивент должен начинаться в будущем' })
     .nullable(),
   end_date: z
     .string()
@@ -93,6 +92,9 @@ export const addEventSchema = z.object({
   tags: z
     .number()
     .array(),
+}).refine((data) => !data.start_date || new Date(`${data.start_date} 24:00`) > new Date(), {
+  message: 'Ивент должен начинаться в будущем',
+  path: ['start_date']
 }).refine((data) => !data.end_date || new Date(data.end_date ?? '') > new Date(data.start_date ?? ''), {
   message: 'Ивент должен заканчиваться после начала',
   path: ['end_date']

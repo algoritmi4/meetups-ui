@@ -4,7 +4,7 @@ import { ReactElement, SyntheticEvent, useState } from "react";
 import { implementMarkerSetted, selectedPlaceSetted } from "../model/addressControlSlice";
 import { Input } from "@/shared";
 import { UseFormSetValue } from "react-hook-form";
-import { AddEventValidationSchema } from "@/features/addEvent/model/addEventFormSchema";
+import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
 interface IAddressControlProps {
   setValuesFunc?: (city: string, country: string, geometry: google.maps.places.PlaceGeometry | null) => void;

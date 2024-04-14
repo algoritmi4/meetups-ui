@@ -4,7 +4,7 @@ import { IFeatures } from "../model/types";
 import { ICoordinates } from "@/features/googleMap/model/types";
 import { AddressControl } from "@/features/addressControl";
 import { UseFormSetValue } from "react-hook-form";
-import { AddEventValidationSchema } from "@/features/addEvent/model/addEventFormSchema";
+import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
 interface IMapWidgetProps {
   text?: string;

@@ -1,23 +1,23 @@
-import { AddEventForm } from "@/features/addEvent";
+import { AddEventForm } from "@/features/addEvent/addEventForm";
 import { AddEventPageTitle } from "@/widgets/AddEventPageTitle";
 import { ReactElement } from "react";
 import { Input, SelectInput, LargeTextInput, CheckboxWithLabel } from "@/shared";
 import { MapWidget } from "@/widgets/mapWidget";
-import { PeriodicControl } from "@/features/periodicControl";
-import { AccessControl } from "@/features/accessControl";
+import { PeriodicControl } from "@/features/addEvent/periodicControl";
+import { AccessControl } from "@/features/addEvent/accessControl";
 import { TagsControl } from "@/entities/tags";
 import { Controller, useForm } from "react-hook-form";
-import { AddEventValidationSchema, addEventSchema } from "@/features/addEvent/model/addEventFormSchema";
+import { AddEventValidationSchema, addEventSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetCategoriesQuery } from "@/features/searchFilter/api/categoriesApi";
-import { PriceControl } from "@/features/priceControl";
-import { PlacesNumberControl } from "@/features/placesNumberControl";
-import { Gallery } from "@/features/gallery";
-import { useFormActions } from "@/features/addEvent/model/useFormActions";
-import { MainImageControl } from "@/features/mainImageControl";
+import { PriceControl } from "@/features/addEvent/priceControl";
+import { PlacesNumberControl } from "@/features/addEvent/placesNumberControl";
+import { Gallery } from "@/features/addEvent/gallery";
+import { useFormActions } from "@/features/addEvent/addEventForm/model/useFormActions";
+import { MainImageControl } from "@/features/addEvent/mainImageControl";
 import { ISelectInputOptions } from "@/shared/model/types";
 import { useGetTagsQuery } from "@/entities/tags/api/tagsApi";
-import { useGetCurrenciesQuery } from "@/features/priceControl/api/currencyApi";
+import { useGetCurrenciesQuery } from "@/features/addEvent/priceControl/api/currencyApi";
 
 function AddEventPage(): ReactElement {
   const { data: categories = {results: []}, isError: isCategoriesError, error: categoriesError, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
@@ -187,6 +187,7 @@ function AddEventPage(): ReactElement {
                 onChange={onChange}
                 schedule={value ?? []}
                 error={errors.schedule?.message}
+                clearErrors={clearErrors}
               />
             )}
           />

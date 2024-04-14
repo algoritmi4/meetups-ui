@@ -1,7 +1,7 @@
 import { Input, SelectInput, SwitchInput } from "@/shared";
 import { ReactElement } from "react";
 import { Control, Controller, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
-import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
+import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 import { ISelectInputOptions } from "@/shared/model/types";
 
 interface IPriceControlProps {

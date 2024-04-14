@@ -1,9 +1,9 @@
 import { CheckboxWithLabel, Input } from "@/shared";
 import { Disclosure } from "@headlessui/react";
 import { ReactElement, useState } from "react";
-import { daysArr } from "./model/consts";
-import { Control, Controller } from "react-hook-form";
-import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
+import { daysArr, parityDayNames } from "./model/consts";
+import { Control, Controller, UseFormClearErrors } from "react-hook-form";
+import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 import { IDay } from "./model/types";
 
 interface IPeriodicControlProps {
@@ -12,19 +12,10 @@ interface IPeriodicControlProps {
   onChange: (day: IDay[]) => void;
   schedule: IDay[];
   error?: string;
+  clearErrors: UseFormClearErrors<AddEventValidationSchema>;
 }
 
-const parityDayNames = {
-  mon: 'Пн',
-  tue: 'Вт',
-  wed: 'Ср',
-  thu: 'Чт',
-  fri: 'Пт',
-  sat: 'Сб',
-  sun: 'Вс'
-}
-
-export function PeriodicControl({ isPeriodic, control, onChange, schedule, error }: IPeriodicControlProps): ReactElement {
+export function PeriodicControl({ isPeriodic, control, onChange, schedule, error, clearErrors }: IPeriodicControlProps): ReactElement {
   const [isInputsDisabled, setIsInputsDisabled] = useState(true);
 
   const handleInputsDisable = () => {
@@ -45,6 +36,10 @@ export function PeriodicControl({ isPeriodic, control, onChange, schedule, error
     onChange(newSchedule);
   }
 
+  const onChangePeriodic = () => {
+    clearErrors(['schedule', 'start_date', 'start_time', 'end_date', 'end_time']);
+  }
+
   return (
     <Disclosure>
       {
@@ -60,6 +55,9 @@ export function PeriodicControl({ isPeriodic, control, onChange, schedule, error
                   extraLabelClass="text-[20px] ml-2.5"
                   onChange={(e) => {
                     !e.target.checked && close();
+
+                    onChangePeriodic();
+
                     onChange(e.target.checked);
                   }}
                   value={value}

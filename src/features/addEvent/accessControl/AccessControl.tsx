@@ -4,7 +4,7 @@ import { Popover } from "@headlessui/react";
 import { ReactElement } from "react";
 import { useLazyGetAccessLinkQuery } from "./api/accessLinkApi";
 import { Control, Controller } from "react-hook-form";
-import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
+import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 
 interface IAccessControlProps {
   error?: string;

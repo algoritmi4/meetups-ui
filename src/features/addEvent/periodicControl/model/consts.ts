@@ -9,3 +9,13 @@ export const daysArr: IDay[] = [
   { day_of_week: 'sat', time: '18:00' },
   { day_of_week: 'sun', time: '18:00' }
 ]
+
+export const parityDayNames = {
+  mon: 'Пн',
+  tue: 'Вт',
+  wed: 'Ср',
+  thu: 'Чт',
+  fri: 'Пт',
+  sat: 'Сб',
+  sun: 'Вс'
+}

@@ -1,7 +1,7 @@
 import { Input, SwitchInput } from "@/shared";
 import { ReactElement } from "react";
 import { Control, Controller, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
-import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
+import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 
 interface INumberOfPlacesAndChatControlProps {
   isPlacesDisabled: boolean;
