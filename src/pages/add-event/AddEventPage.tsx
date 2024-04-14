@@ -1,12 +1,12 @@
 import { AddEventForm } from "@/features/addEvent";
 import { AddEventPageTitle } from "@/widgets/AddEventPageTitle";
-import {ReactElement, useEffect} from "react";
-import {Input, SelectInput, LargeTextInput, CheckboxWithValue} from "@/shared";
+import { ReactElement } from "react";
+import { Input, SelectInput, LargeTextInput, CheckboxWithLabel } from "@/shared";
 import { MapWidget } from "@/widgets/mapWidget";
 import { PeriodicControl } from "@/features/periodicControl";
 import { AccessControl } from "@/features/accessControl";
 import { TagsControl } from "@/entities/tags";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { AddEventValidationSchema, addEventSchema } from "@/features/addEvent/model/addEventFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetCategoriesQuery } from "@/features/searchFilter/api/categoriesApi";
@@ -15,54 +15,49 @@ import { PlacesNumberControl } from "@/features/placesNumberControl";
 import { Gallery } from "@/features/gallery";
 import { useFormActions } from "@/features/addEvent/model/useFormActions";
 import { MainImageControl } from "@/features/mainImageControl";
+import { ISelectInputOptions } from "@/shared/model/types";
+import { useGetTagsQuery } from "@/entities/tags/api/tagsApi";
+import { useGetCurrenciesQuery } from "@/features/priceControl/api/currencyApi";
 
 function AddEventPage(): ReactElement {
-  const { data: categories = {results: []} } = useGetCategoriesQuery();
+  const { data: categories = {results: []}, isError: isCategoriesError, error: categoriesError, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
+  const { data: tags = {results: []}, isError: isTagsError, error: tagsError, isLoading: isTagsLoading } = useGetTagsQuery();
+  const { data: currencies = {results: []}, isError: isCurrenciesError, error: currenciesError, isLoading: isCurrenciesLoading } = useGetCurrenciesQuery();
+
+  isCurrenciesError && console.log(`Ошибка при получении валют - ${JSON.stringify(currenciesError)}`);
+  isTagsError && console.log(`Ошибка при получении тегов - ${JSON.stringify(tagsError)}`);
+  isCategoriesError && console.log(`Ошибка при получении тегов - ${JSON.stringify(categoriesError)}`);
+
+  const isFormLoading = isCategoriesLoading || isTagsLoading || isCurrenciesLoading || isCurrenciesError || isTagsError || isCategoriesError;
 
   const {
     formState: { errors },
     register,
     handleSubmit,
     setValue,
-    getValues,
-    clearErrors
+    clearErrors,
+    control,
+    watch
   } = useForm<AddEventValidationSchema>({
     resolver: zodResolver(addEventSchema),
+    mode: 'onBlur',
     defaultValues: {
+      any_participant_number: false,
       schedule: [],
       private_url: null,
-      free: false,
       repeatable: false,
-      currency: 1,
+      free: false,
       tags: [],
       gallery: []
     }
   });
 
-  const {
-    onSelectCategory,
-    onSelectAddress,
-    onChangePlacesLimit,
-    onSelectEventType,
-    onSwitchPriceType,
-    onChangeCurrencyType,
-    onPeriodicChange,
-    onChangeSchedule,
-    onChangeScheduleDayTime,
-    handleTags,
-    onUploadImage
-  } = useFormActions({ setValue, clearErrors, getValues });
-
-  useEffect(() => {
-    const values = getValues()
-    console.log(errors);
-    console.log(values);
-  }, [errors, getValues]);
+  const { onSelectAddress } = useFormActions({ setValue, clearErrors });
 
   return (
     <main className="w-full max-w-[1005px] mx-auto pb-[98px]">
       <AddEventPageTitle />
-      <AddEventForm handleSubmit={handleSubmit}>
+      <AddEventForm handleSubmit={handleSubmit} isLoading={isFormLoading}>
         <div className="flex items-end mt-[40px]">
           <div className="flex flex-col mr-[45px]">
             <Input
@@ -77,21 +72,35 @@ function AddEventPage(): ReactElement {
               extraInputClass={'px-[22px]'}
             />
 
-            <SelectInput
-              setValueFunc={onSelectCategory}
-              error={errors.category?.message}
-              labelText='Категория'
-              options={categories.results}
-              placeholder='Выберите категорию'
-              extraBoxClass="mt-[18px]"
+            <Controller
+              control={control}
+              name="category"
+              render={({ field: { onChange, value } }) => (
+                <SelectInput
+                  value={categories.results.find((el) => el.id === value)}
+                  onChange={(option: ISelectInputOptions) => {
+                    onChange(option.id);
+                  }}
+                  error={errors.category?.message}
+                  labelText='Категория'
+                  options={categories.results}
+                  placeholder='Выберите категорию'
+                  extraBoxClass="mt-[18px]"
+                />
+              )}
             />
 
           </div>
-          <MainImageControl
-            error={errors.image_url?.message}
-            onUploadImage={onUploadImage}
-            setValue={setValue}
-            clearErrors={clearErrors}
+          <Controller
+            control={control}
+            name="image_url"
+            render={({ field: { onChange, value }}) => (
+              <MainImageControl
+                error={errors.image_url?.message}
+                value={value}
+                onChange={onChange}
+              />
+            )}
           />
         </div>
 
@@ -111,23 +120,25 @@ function AddEventPage(): ReactElement {
             labelText='Дата'
             placeholder='Начало'
             id='add-event-start-date'
-            extraBoxClass={'w-[480px] md:w-[480px] mt-[7px]'}
+            extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
             extraContentClass={'h-[44px]'}
             extraInputClass='px-[22px]'
+            isDisabled={watch('repeatable')}
           />
           <div
             className='w-4 h-0.5 mx-3.5 mt-8 border-1 border-text-light-gray border-solid'
           />
           <div className='self-end relative'>
             <Input
-              hookFormValues={register('end_date', { required: false })}
+              hookFormValues={register('end_date')}
               error={errors.end_date?.message}
               HTMLType='date'
               placeholder='Конец'
               id='add-event-end-date'
-              extraBoxClass={'w-[480px] md:w-[480px] mt-[7px]'}
+              extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
               extraContentClass={'h-[44px]'}
               extraInputClass='px-[22px]'
+              isDisabled={watch('repeatable')}
             />
             <p className='text-text-light-gray mt-2 absolute bottom-[-26px] left-0'>Необязательное поле</p>
           </div>
@@ -141,32 +152,43 @@ function AddEventPage(): ReactElement {
             labelText='Время'
             placeholder='Начало'
             id='add-event-start-time'
-            extraBoxClass={'w-[480px] md:w-[480px] mt-[7px]'}
+            extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
             extraContentClass={'h-[44px]'}
             extraInputClass='px-[22px]'
+            isDisabled={watch('repeatable')}
           />
           <div
             className='w-4 h-0.5 mx-3.5 mt-8 border-1 border-text-light-gray border-solid'
           />
           <div className='self-end relative'>
             <Input
-              hookFormValues={register('end_time', { required: false })}
+              hookFormValues={register('end_time')}
               error={errors.end_time?.message}
               HTMLType='time'
               placeholder='Конец'
               id='add-event-end-time'
-              extraBoxClass={'w-[480px] md:w-[480px] mt-[7px] px-[22px]'}
+              extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
               extraContentClass={'h-[44px]'}
+              extraInputClass='px-[22px]'
+              isDisabled={watch('repeatable')}
             />
             <p className='text-text-light-gray mt-2 absolute bottom-[-26px] left-0'>Необязательное поле</p>
           </div>
         </div>
 
         <div className="mt-[30px] mb-[18px] text-text-black">
-          <PeriodicControl
-            onPeriodicChange={onPeriodicChange}
-            onChangeSchedule={onChangeSchedule}
-            onChangeScheduleDayTime={onChangeScheduleDayTime}
+          <Controller
+            control={control}
+            name="schedule"
+            render={({ field: { onChange, value } }) => (
+              <PeriodicControl
+                isPeriodic={watch('repeatable')}
+                control={control}
+                onChange={onChange}
+                schedule={value ?? []}
+                error={errors.schedule?.message}
+              />
+            )}
           />
         </div>
 
@@ -182,13 +204,16 @@ function AddEventPage(): ReactElement {
 
         <div className="flex items-center mt-[18px]">
           <PlacesNumberControl
+            isPlacesDisabled={watch('any_participant_number')}
             hookFormValues={register('desired_participants_number', { valueAsNumber: true })}
-            setValuesFunc={onChangePlacesLimit}
             error={errors.desired_participants_number?.message}
+            control={control}
+            setValue={setValue}
+            clearErrors={clearErrors}
           />
-          <CheckboxWithValue
+          <CheckboxWithLabel
             id="chat"
-            value="Добавить чат участников"
+            label="Добавить чат участников"
             extraBoxClass="ml-auto"
             extraLabelClass="ml-2.5"
           />
@@ -205,31 +230,60 @@ function AddEventPage(): ReactElement {
             inlineLabel={true}
             extraBoxClass={'w-[62px] md:w-[62px] mt-[7px]'}
             extraContentClass={'h-[44px]'}
-            extraInputClass="px-[19px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            extraInputClass="px-[10px] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
           <p className={`text-xl text-text-black font-medium ml-1.5`}>+</p>
         </div>
 
-        <AccessControl
-          error={errors.type?.message}
-          setValueFunc={onSelectEventType}
+        <Controller
+          control={control}
+          name="private_url"
+          render={({ field: { onChange, value } }) => (
+            <AccessControl
+              error={errors.type?.message}
+              control={control}
+              onChangeLink={onChange}
+              link={value}
+              type={watch('type')}
+            />
+          )}
         />
 
         <PriceControl
           hookFormValues={register('cost')}
           error={errors.cost?.message}
-          onSwitchPriceType={onSwitchPriceType}
-          onChangeCurrencyType={onChangeCurrencyType}
-        />
-
-        <Gallery
-          onUploadImage={onUploadImage}
+          control={control}
+          isPriceActive={!watch('free')}
           setValue={setValue}
-          getValues={getValues}
+          clearErrors={clearErrors}
+          currencies={currencies.results}
         />
 
-        <TagsControl
-          setValuesFunc={handleTags}
+        <Controller
+          name="gallery"
+          control={control}
+          render={({ field: { onChange, value }}) => (
+            <Gallery
+              onChange={(image_url: string) => {
+                onChange([...value, image_url]);
+              }}
+              value={value}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="tags"
+          render={({ field: { onChange, value } }) => (
+            <TagsControl
+              tags={tags.results}
+              onChange={(tagId: number, toRemove: boolean) => 
+                toRemove ? onChange(value.filter((el) => el !== tagId)) : onChange([...value, tagId])
+              }
+              value={value}
+            />
+          )}
         />
       </AddEventForm>
     </main>

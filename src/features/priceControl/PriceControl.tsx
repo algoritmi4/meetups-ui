@@ -1,33 +1,20 @@
 import { Input, SelectInput, SwitchInput } from "@/shared";
-import { ReactElement, useState } from "react";
-import { useGetCurrenciesQuery } from "./api/currencyApi";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { ReactElement } from "react";
+import { Control, Controller, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
+import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
 import { ISelectInputOptions } from "@/shared/model/types";
 
 interface IPriceControlProps {
   hookFormValues: UseFormRegisterReturn<string>;
   error?: string;
-  onSwitchPriceType: (state: boolean) => void;
-  onChangeCurrencyType?: (option: ISelectInputOptions) => void;
+  control: Control<AddEventValidationSchema>;
+  isPriceActive: boolean;
+  setValue: UseFormSetValue<AddEventValidationSchema>;
+  clearErrors: UseFormClearErrors<AddEventValidationSchema>;
+  currencies: ISelectInputOptions[];
 }
 
-export function PriceControl({ hookFormValues, error, onSwitchPriceType, onChangeCurrencyType }: IPriceControlProps): ReactElement {
-  const [isPriceActive, setIsPriceActive] = useState(true);
-
-  const { data: currencies = {results: []}, isError, error: currenciesError, isLoading } = useGetCurrenciesQuery();
-
-  isError && console.log(`Ошибка при получении валют - ${JSON.stringify(currenciesError)}`);
-
-  const onSwitchFree = (state: boolean) => {
-    if (state) {
-      setIsPriceActive(false);
-    } else {
-      setIsPriceActive(true);
-    }
-
-    onSwitchPriceType(state);
-  }
-
+export function PriceControl({ hookFormValues, error, control, isPriceActive, setValue, clearErrors, currencies }: IPriceControlProps): ReactElement {
   return (
     <div className={'flex items-center mt-[18px]'}>
       <Input
@@ -43,24 +30,40 @@ export function PriceControl({ hookFormValues, error, onSwitchPriceType, onChang
         extraInputClass={`px-[34px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${!isPriceActive && "text-white"}`}
         isDisabled={!isPriceActive}
       />
-      {
-        isLoading ? (
-          <></>
-        ) : (
+      <Controller
+        control={control}
+        name="currency"
+        render={({ field: { onChange, value } }) => (
           <SelectInput
             extraBoxClass={'w-[90px] my-auto'}
             extraContentClass={`pl-[14px] pr-[10px] ${isPriceActive ? "" : "bg-select-disable cursor-default"}`}
             extraDropdownClass={'w-[90px]'}
             isDisabled={!isPriceActive}
-            options={currencies.results}
-            setValueFunc={onChangeCurrencyType}
+            options={currencies}
+            onChange={(option: ISelectInputOptions) => {
+              onChange(option.id)
+            }}
+            value={currencies.find((el) => el.id === value)}
           />
-        )
-      }
-      <SwitchInput
-        labelText={'Бесплатное'}
-        extraBoxClass={'ml-[60px]'}
-        setValueFunc={onSwitchFree}
+        )}
+      />
+      <Controller
+        control={control}
+        name="free"
+        render={({ field: { onChange, value } }) => (
+          <SwitchInput
+            labelText={'Бесплатное'}
+            extraBoxClass={'ml-[60px]'}
+            onChange={(state: boolean) => {
+              onChange(state);
+
+              state ? setValue('cost', null) : setValue('cost', '');
+
+              clearErrors('cost');
+            }}
+            value={value}
+          />
+        )}
       />
     </div>
   )

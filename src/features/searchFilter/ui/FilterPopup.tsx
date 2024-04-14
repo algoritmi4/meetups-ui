@@ -1,4 +1,4 @@
-import { CheckboxWithValue, Input } from "@/shared";
+import { CheckboxWithLabel, Input } from "@/shared";
 import { ChangeEvent, ReactElement, useState } from "react";
 import { ICategory } from "../model/types";
 import { useAppDispatch } from "@/shared/model";
@@ -40,13 +40,13 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
             <h3 className="text-[24px] font-semibold leading-[30.12px] w-[148px]">Катерогии</h3>
             {
               categories.map((category, index) =>
-              <CheckboxWithValue
+              <CheckboxWithLabel
                 key={index}
                 id={String(category.id)}
-                value={category.name}
+                label={category.name}
                 extraBoxClass="mt-3 first-of-type:mt-4"
                 extraLabelClass="ml-2"
-                onChangeFunc={(e) => handleCheckedCategories(e, category)}
+                onChange={(e) => handleCheckedCategories(e, category)}
               />
             )
             }
@@ -66,15 +66,15 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
           </div>
           <div className="ml-[65px]">
             <h3 className="text-[24px] font-semibold leading-[30.12px] w-[137px]">Стоимость</h3>
-            <CheckboxWithValue
+            <CheckboxWithLabel
               id="paid"
-              value="Платное"
+              label="Платное"
               extraBoxClass="mt-3 first-of-type:mt-4"
               extraLabelClass="ml-2"
             />
-            <CheckboxWithValue
+            <CheckboxWithLabel
               id="free"
-              value="Бесплатное"
+              label="Бесплатное"
               extraBoxClass="mt-3 first-of-type:mt-4"
               extraLabelClass="ml-2"
             />

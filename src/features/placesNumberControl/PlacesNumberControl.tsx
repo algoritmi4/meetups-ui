@@ -1,21 +1,18 @@
 import { Input, SwitchInput } from "@/shared";
-import { ReactElement, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { ReactElement } from "react";
+import { Control, Controller, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
+import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
 
 interface INumberOfPlacesAndChatControlProps {
+  isPlacesDisabled: boolean;
   hookFormValues: UseFormRegisterReturn<string>;
   error?: string;
-  setValuesFunc?: (state: boolean) => void;
+  control: Control<AddEventValidationSchema>;
+  setValue: UseFormSetValue<AddEventValidationSchema>;
+  clearErrors: UseFormClearErrors<AddEventValidationSchema>;
 }
 
-export function PlacesNumberControl({ hookFormValues, error, setValuesFunc }: INumberOfPlacesAndChatControlProps): ReactElement {
-  const [isPlacesDisabled, setIsPlacesDisabled] = useState(false);
-
-  const handlePlacesLimit = (state: boolean) => {
-    setIsPlacesDisabled(state);
-    setValuesFunc && setValuesFunc(state);
-  }
-
+export function PlacesNumberControl({ isPlacesDisabled, hookFormValues, error, control, setValue, clearErrors }: INumberOfPlacesAndChatControlProps): ReactElement {
   return (
     <div className={'flex items-center'}>
       <Input
@@ -28,13 +25,26 @@ export function PlacesNumberControl({ hookFormValues, error, setValuesFunc }: IN
         inlineLabel={true}
         extraBoxClass={`w-[72px] md:w-[72px] mt-[7px] ${isPlacesDisabled && "bg-select-disable"}`}
         extraContentClass={'h-[44px]'}
-        extraInputClass={`px-[24px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isPlacesDisabled && "text-white"}`}
+        extraInputClass={`px-[10px] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isPlacesDisabled && "text-white"}`}
         isDisabled={isPlacesDisabled}
       />
-      <SwitchInput
-        labelText={'Места не ограничены'}
-        extraBoxClass={'ml-[60px]'}
-        setValueFunc={handlePlacesLimit}
+      <Controller
+        control={control}
+        name='any_participant_number'
+        render={({ field: { onChange, value }}) => (
+          <SwitchInput
+            labelText={'Места не ограничены'}
+            extraBoxClass={'ml-[60px]'}
+            onChange={(state: boolean) => {
+              onChange(state);
+
+              state ? setValue('desired_participants_number', null) : setValue('desired_participants_number', NaN);
+
+              clearErrors('desired_participants_number');
+            }}
+            value={value}
+          />
+        )}
       />
     </div>
   )

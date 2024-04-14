@@ -6,7 +6,8 @@ interface ISelectInputProps {
   labelText?: string;
   placeholder?: string;
   isDisabled?: boolean;
-  setValueFunc?: (option: ISelectInputOptions) => void;
+  value?: ISelectInputOptions;
+  onChange?: (option: ISelectInputOptions) => void;
   error?: string;
   extraBoxClass?: string;
   extraContentClass?: string;
@@ -14,28 +15,39 @@ interface ISelectInputProps {
   options: ISelectInputOptions[];
 }
 
-export function SelectInput({options, labelText, placeholder, isDisabled, error, setValueFunc, extraBoxClass, extraContentClass, extraDropdownClass}: ISelectInputProps) {
+export function SelectInput({
+  options,
+  labelText,
+  placeholder,
+  isDisabled,
+  error,
+  value,
+  onChange,
+  extraBoxClass,
+  extraContentClass,
+  extraDropdownClass
+}: ISelectInputProps) {
   const [selectedOption, setSelectedOption] = useState<ISelectInputOptions | null>(null);
 
   useEffect(() => {
     if (!placeholder) {
       setSelectedOption(options[0]);
 
-      setValueFunc && setValueFunc(options[0]);
+      onChange && onChange(options[0]);
     }
   }, []);
 
   const onSelectOption = (option: ISelectInputOptions) => {
     setSelectedOption(option);
 
-    setValueFunc && setValueFunc(option);
+    onChange && onChange(option);
   }
 
   return (
     <div className={`w-[480px] flex flex-col items-start relative ${extraBoxClass}`}>
       <Listbox
         as={Fragment}
-        value={selectedOption}
+        value={value ?? selectedOption}
         onChange={onSelectOption}
         name="assignee"
       >
@@ -53,7 +65,7 @@ export function SelectInput({options, labelText, placeholder, isDisabled, error,
               {(!value && placeholder) ? (
                 <p className={'text-lg text-text-light-gray'}>{placeholder}</p>
                 ) : (
-                <p className={`text-lg ${isDisabled ? "text-white" : "text-text-black"}`}>{selectedOption?.name}</p>
+                <p className={`text-lg ${isDisabled ? "text-white" : "text-text-black"}`}>{value?.name ?? selectedOption?.name}</p>
               )}
               <div
                 className={`bg-center bg-no-repeat bg-cover w-6 h-6 ml-1 ${isDisabled ? "bg-chevron-down-white" : "bg-chevron-down-black"} ${open ? 'transition ease-in-out rotate-180 duration-100': 'transition ease-in-out rotate-0 duration-100'}`}

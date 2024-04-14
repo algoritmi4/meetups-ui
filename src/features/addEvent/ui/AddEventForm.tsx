@@ -3,13 +3,15 @@ import { AddEventValidationSchema } from "../model/addEventFormSchema";
 import { UseFormHandleSubmit } from "react-hook-form";
 import { useCreateEventMutation } from "@/entities/event/api/eventApi";
 import { prepareDataToRequest } from "../model/prepareDataToRequest";
+import { Preloader } from "@/shared/ui/Preloader";
 
 interface IAddEventFormProps {
   children: ReactNode;
   handleSubmit: UseFormHandleSubmit<AddEventValidationSchema>;
+  isLoading: boolean;
 }
 
-export function AddEventForm({ children, handleSubmit }: IAddEventFormProps): ReactElement {
+export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFormProps): ReactElement {
   const [createEvent] = useCreateEventMutation();
 
   const onSubmit = (data: AddEventValidationSchema) => {
@@ -20,6 +22,10 @@ export function AddEventForm({ children, handleSubmit }: IAddEventFormProps): Re
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
+
+  if (isLoading) return (
+    <Preloader />
+  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col scrollbar">

@@ -1,16 +1,25 @@
 import { baseApi } from "@/shared/api";
+import { ISelectInputOptions } from "@/shared/model/types";
 import { IApiResponse } from "@/shared/types";
-import { ITag } from "../model/types";
 
 const tagsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getTags: build.query<IApiResponse<ITag[]>, void>({
+    getTags: build.query<IApiResponse<ISelectInputOptions[]>, void>({
       query: () => ({
         url: '/tags/',
         method: 'GET'
+      })
+    }),
+    createTag: build.mutation<ISelectInputOptions, string>({
+      query: (tagName) => ({
+        url: '/tags/',
+        method: 'POST',
+        body: {
+          name: tagName
+        }
       })
     })
   })
 })
 
-export const { useGetTagsQuery } = tagsApi;
+export const { useGetTagsQuery, useCreateTagMutation } = tagsApi;

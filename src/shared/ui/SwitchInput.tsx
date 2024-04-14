@@ -4,16 +4,17 @@ import { Switch } from '@headlessui/react'
 interface ISwitchInputProps {
   labelText?: string;
   extraBoxClass?: string;
-  setValueFunc?: (state: boolean) => void;
+  onChange: (state: boolean) => void;
+  value: boolean;
 }
 
-export function SwitchInput({ labelText, extraBoxClass, setValueFunc }: ISwitchInputProps) {
-  const [enabled, setEnabled] = useState(false);
+export function SwitchInput({ labelText, extraBoxClass, onChange, value }: ISwitchInputProps) {
+  const [enabled, setEnabled] = useState(value || false);
 
   const onSwitch = (state: boolean) => {
     setEnabled(state);
 
-    setValueFunc && setValueFunc(state);
+    onChange && onChange(state);
   }
 
   return (

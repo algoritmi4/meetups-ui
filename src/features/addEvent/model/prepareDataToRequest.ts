@@ -3,28 +3,35 @@ import { AddEventValidationSchema } from "./addEventFormSchema";
 export const prepareDataToRequest = (data: AddEventValidationSchema) => {
   const dataToCreateEvent = data;
 
-  if (!data.repeatable) {
-    dataToCreateEvent.schedule = [];
+  if (!dataToCreateEvent.repeatable) {
+    dataToCreateEvent.schedule = null;
   }
 
-  if (data.any_participant_number) {
+  if (dataToCreateEvent.any_participant_number) {
     dataToCreateEvent.desired_participants_number = null;
   }
 
-  if (data.type === 'open') {
+  if (dataToCreateEvent.type === 'open') {
     dataToCreateEvent.private_url = null;
   }
 
-  if (data.free) {
+  if (dataToCreateEvent.free) {
     dataToCreateEvent.cost = null;
     dataToCreateEvent.currency = null;
   }
 
-  if (!data.end_date) {
+  if (!dataToCreateEvent.end_date) {
     dataToCreateEvent.end_date = null;
   }
 
-  if (!data.end_time) {
+  if (!dataToCreateEvent.end_time) {
+    dataToCreateEvent.end_time = null;
+  }
+
+  if (dataToCreateEvent.repeatable) {
+    dataToCreateEvent.start_date = null;
+    dataToCreateEvent.start_time = null;
+    dataToCreateEvent.end_date = null;
     dataToCreateEvent.end_time = null;
   }
 

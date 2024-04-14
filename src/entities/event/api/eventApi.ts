@@ -20,7 +20,7 @@ export const eventApi = baseApi.injectEndpoints({
         url: '/events/',
         method: 'POST',
         body: eventInfo
-      })
+      }),
     })
   })
 })

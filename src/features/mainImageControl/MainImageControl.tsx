@@ -1,24 +1,22 @@
 import { ReactElement, useState } from "react";
 import addImageIcon from '/images/add-image-icon.svg';
 import { FileInputWithDrag } from "@/shared";
-import { UseFormClearErrors, UseFormSetValue } from "react-hook-form";
-import { AddEventValidationSchema } from "../addEvent/model/addEventFormSchema";
+import { useUploadImage } from "@/shared/lib/hooks/useUploadImage";
 
 interface IMainImageControlProps {
   error?: string;
-  onUploadImage: (file: File, callback: (res: {url: string}) => void) => void;
-  setValue: UseFormSetValue<AddEventValidationSchema>;
-  clearErrors: UseFormClearErrors<AddEventValidationSchema>;
+  value?: string;
+  onChange?: (image_url: string) => void;
 }
 
-export function MainImageControl({ error, onUploadImage, setValue, clearErrors }: IMainImageControlProps): ReactElement {
+export function MainImageControl({ error, value, onChange }: IMainImageControlProps): ReactElement {
   const [imageState, setImageState] = useState({isImageUpload: false, src: ''});
+  const { onUploadImage } = useUploadImage();
 
   const onUploadMainImage = (file: File) => {
     onUploadImage(file, (res) => {
       setImageState({isImageUpload: true, src: `https://storage.googleapis.com/meetups-dev/media/${res.url}`});
-      setValue('image_url', `https://storage.googleapis.com/meetups-dev/media/${res.url}`);
-      clearErrors('image_url');
+      onChange && onChange(`https://storage.googleapis.com/meetups-dev/media/${res.url}`);
     })
   }
 
@@ -30,7 +28,7 @@ export function MainImageControl({ error, onUploadImage, setValue, clearErrors }
     >
       {
         imageState.isImageUpload ? (
-          <img className="object-contain" src={imageState.src} alt="Ваше загруженное изображение" />
+          <img className="object-contain" src={value ?? imageState.src} alt="Ваше загруженное изображение" />
         ) : (
           <>
             <img className="mt-[45px]" src={addImageIcon} alt="Поле для загрузки фото" />
