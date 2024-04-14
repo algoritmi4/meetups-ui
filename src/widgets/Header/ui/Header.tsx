@@ -11,7 +11,7 @@ export function Header(): ReactElement {
     const navigate = useNavigate();
     const access = selectAccessToken()
     const refresh = selectRefreshToken()
-    const onLoginClick = (e: React.MouseEvent<HTMLElement>) => {
+    const onLoginClick = (e: React.MouseEvent<HTMLElement>) => { 
         e.stopPropagation()
         e.preventDefault()
         navigate('/login')
@@ -23,7 +23,6 @@ export function Header(): ReactElement {
             <div className="ml-auto">
                 {!access && <Button HTMLType='button' type='secondary' onClick={onLoginClick}>Войти</Button>}
                 {access &&  <ProfileButton/>}
-                {refresh && <LogoutButton refresh={refresh}/>}
             </div>
         </header>
     );
