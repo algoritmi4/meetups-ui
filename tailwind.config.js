@@ -26,7 +26,8 @@ module.exports = {
         "600": "600px",
       },
       colors: {
-        "main-purple": "rgb(87, 84, 198)",
+        "main-purple": "rgb(94, 92, 206)",
+        "purple-light": "rgb(230, 229, 255)",
         "custom-gray": "rgb(237, 237, 237)",
         "main-dark-blue": "rgb(49, 46, 112)",
         "hover-pink": "rgb(188, 115, 206)",
@@ -39,7 +40,7 @@ module.exports = {
         "text-black": "rgb(46, 46, 46)",
         "text-red": "rgb(187, 16, 16)",
         "popup-bg": "rgba(26, 26, 26, .4)",
-        "button-purple": "rgb(94, 92, 206)",
+        "comment": "rgb(243, 243, 245)"
       },
       padding: {
         "60": "60px",
@@ -83,6 +84,10 @@ module.exports = {
         "security": "url('images/security.svg')",
         "logout": "url('images/logout.svg')",
         "user-profile-group": "url('images/user-profile-group.svg')",
+        "calendar": "url('images/calendar.svg')",
+        "clock": "url('images/clock.svg')",
+        "location": "url('images/marker.svg')",
+        "like": "url('images/heart.svg')"
       },
       borderRadius: {
         "12": "12px",

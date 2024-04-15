@@ -32,7 +32,7 @@ export function GoogleMap({ position, markersArr, isLoading, zoom, extraClasses,
           <Preloader />
         ) : (
           <APIProvider apiKey={apiKey}>
-            <Map zoom={zoom} center={position} mapId={mapId} disableDefaultUI={true} className={`w-full h-[365px] rounded-[12px] ${extraClasses}`}>
+            <Map zoom={zoom} center={position} mapId={mapId} disableDefaultUI={true} className={`w-full h-full ${extraClasses}`}>
               {
                 withAddressControl && (
                   <>

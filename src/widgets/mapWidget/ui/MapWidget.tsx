@@ -15,10 +15,10 @@ interface IMapWidgetProps {
 
 export function MapWidget({ text, position, zoom, markers, isLoading, withAddressControl }: IMapWidgetProps): ReactElement {
   return (
-    <>
+    <div className="w-full h-[365px] rounded-[12px]">
       {withAddressControl && <AddressControl />}
       {text && <p className="text-[20px] font-normal leading-[25.1px] mb-[7px] mt-[15px]">{text}</p>}
-      <GoogleMap position={position} markersArr={markers} isLoading={isLoading} zoom={zoom} withAddressControl={withAddressControl} />
-    </>
+      <GoogleMap position={position} markersArr={markers} isLoading={isLoading} zoom={zoom} withAddressControl={withAddressControl} extraClasses="rounded-[12px] "/>
+    </div>
   )
 }

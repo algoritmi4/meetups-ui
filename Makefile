@@ -30,8 +30,7 @@ download_node_modules:
 	${COMPOSE} stop dev
 
 # Clean up artifacts
-clean:
-	docker-rm
+clean: docker-rm
 	rm -rf build/
 	rm -rf node_modules/
 

@@ -8,7 +8,8 @@ export function getDateAndTime(date: string): IGetDateAndTime {
 
   const eventDate = formattedDate.toLocaleString('ru-RU', {
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    year: 'numeric'
   });
 
   const eventTime = `${formattedDate.getHours() || "00"}:${formattedDate.getMinutes() || "00"}`;

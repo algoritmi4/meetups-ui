@@ -7,7 +7,8 @@ interface IButtonProps {
   type: 'primary' | 'secondary' | 'back';
   HTMLType: 'submit' | 'button' | 'reset';
   extraClass?: string;
-  iconType?: 'next';
+  extraIconClass?: string;
+  iconType?: 'next' | 'heart' | 'user-profile-group-lg'| 'heart-light';
   disabled?: boolean
 }
 
@@ -16,6 +17,7 @@ export function Button({
   children,
   type,
   extraClass,
+  extraIconClass,
   disabled,
   HTMLType,
   iconType
@@ -29,7 +31,7 @@ export function Button({
         type={HTMLType}
         disabled={disabled}
         onClick={onClick}
-        className={`h-50 flex bg-main-purple hover:bg-hover-pink disabled:bg-neutral-500 text-white text-lg font-bold rounded-full items-center p-3.5 ${isMobileDevice ? 'w-[316px]' : 'w-80'} ${iconType ? 'justify-between' : 'justify-center'} ${extraClass}`}
+        className={`h-50 flex bg-main-purple hover:bg-hover-pink disabled:bg-neutral-500 text-white text-lg font-bold rounded-[10px] items-center p-3.5 ${isMobileDevice ? 'w-[316px]' : 'w-80'} ${iconType ? 'justify-between' : 'justify-center'} ${extraClass}`}
       >
         {iconType && <div className='w-6 h-6 invisible' />}
         <p>{children}</p>
@@ -46,6 +48,11 @@ export function Button({
         className={`bg-transparent text-neutral-500 text-lg font-normal hover:text-neutral-950 ${extraClass}`}
       >
         <p>{children}</p>
+        {iconType &&
+          <div
+            className={`w-6 h-6 bg-center bg-no-repeat ${extraIconClass}`}
+            style={{ backgroundImage: `url("/images/${iconType}.svg")` }}
+          />}
       </button>
     )
   )

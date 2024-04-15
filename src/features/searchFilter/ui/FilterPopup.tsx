@@ -63,7 +63,7 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
             <CheckboxWithValue id="free" value="Бесплатное"/>
           </div>
         </div>
-        <button type="button" onClick={onButtonClick} className="text-[18px] font-bold text-white bg-button-purple rounded-[10px] min-h-[44px] min-w-[127px] duration-150 hover:opacity-[0.8] self-end">Найти</button>
+        <button type="button" onClick={onButtonClick} className="text-[18px] font-bold text-white bg-main-purple rounded-[10px] min-h-[44px] min-w-[127px] duration-150 hover:opacity-[0.8] self-end">Найти</button>
       </div>
     </>
   )

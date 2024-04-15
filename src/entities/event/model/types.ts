@@ -1,6 +1,13 @@
-interface IEventTag {
+export interface IEventTag {
   id: number,
   name: string
+}
+
+export interface IParticipant {
+  id: number,
+  username: string,
+  image_url: string,
+  bio?: string
 }
 
 export interface IEvent {
@@ -15,5 +22,10 @@ export interface IEvent {
   address: string,
   category: IEventTag | null,
   participants_number: number,
-  desired_participants_number: number
+  desired_participants_number: number,
+  created_by: IParticipant,
+  participants: IParticipant[],
+  gallery: string[],
+  free: boolean,
+  cost: string
 }
