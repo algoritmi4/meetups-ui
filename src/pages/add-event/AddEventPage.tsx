@@ -1,6 +1,6 @@
 import { AddEventForm } from "@/features/addEvent/addEventForm";
 import { AddEventPageTitle } from "@/widgets/AddEventPageTitle";
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { Input, SelectInput, LargeTextInput, CheckboxWithLabel } from "@/shared";
 import { MapWidget } from "@/widgets/mapWidget";
 import { PeriodicControl } from "@/features/addEvent/periodicControl";
@@ -18,8 +18,11 @@ import { MainImageControl } from "@/features/addEvent/mainImageControl";
 import { ISelectInputOptions } from "@/shared/model/types";
 import { useGetTagsQuery } from "@/entities/tags/api/tagsApi";
 import { useGetCurrenciesQuery } from "@/features/addEvent/priceControl/api/currencyApi";
+import TimeInput from "@/shared/ui/TimeInput";
 
 function AddEventPage(): ReactElement {
+  const startTimeId = useId();
+
   const { data: categories = {results: []}, isError: isCategoriesError, error: categoriesError, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
   const { data: tags = {results: []}, isError: isTagsError, error: tagsError, isLoading: isTagsLoading } = useGetTagsQuery();
   const { data: currencies = {results: []}, isError: isCurrenciesError, error: currenciesError, isLoading: isCurrenciesLoading } = useGetCurrenciesQuery();
@@ -48,7 +51,9 @@ function AddEventPage(): ReactElement {
       repeatable: false,
       free: false,
       tags: [],
-      gallery: []
+      gallery: [],
+      start_time: null,
+      end_time: null
     }
   });
 
@@ -140,39 +145,49 @@ function AddEventPage(): ReactElement {
               extraInputClass='px-[22px]'
               isDisabled={watch('repeatable')}
             />
-            <p className='text-text-light-gray mt-2 absolute bottom-[-26px] left-0'>Необязательное поле</p>
+            <p className='text-text-light-gray absolute bottom-[-26px] left-[22px]'>Необязательное поле</p>
           </div>
         </div>
 
-        <div className='flex items-center relative mt-[20px]'>
-          <Input
-            hookFormValues={register('start_time')}
-            error={errors.start_time?.message}
-            HTMLType='time'
-            labelText='Время'
-            placeholder='Начало'
-            id='add-event-start-time'
-            extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
-            extraContentClass={'h-[44px]'}
-            extraInputClass='px-[22px]'
-            isDisabled={watch('repeatable')}
-          />
-          <div
-            className='w-4 h-0.5 mx-3.5 mt-8 border-1 border-text-light-gray border-solid'
-          />
-          <div className='self-end relative'>
-            <Input
-              hookFormValues={register('end_time')}
-              error={errors.end_time?.message}
-              HTMLType='time'
-              placeholder='Конец'
-              id='add-event-end-time'
-              extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
-              extraContentClass={'h-[44px]'}
-              extraInputClass='px-[22px]'
-              isDisabled={watch('repeatable')}
+        <div className='flex flex-col relative mt-[20px]'>
+          <label id={startTimeId} className="text-xl">Время</label>
+          <div className="flex items-center mt-[7px]">
+            <Controller
+              control={control}
+              name="start_time"
+              render={({ field: { onChange, value } }) => (
+                <TimeInput
+                  onStringChange={onChange}
+                  stringValue={value}
+                  error={errors.start_time?.message}
+                  extraFieldClass={`flex items-center w-[480px] h-[44px] px-[22px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
+                  extraSegmentClass="text-[18px]"
+                  id={startTimeId}
+                  isDisabled={watch('repeatable')}
+                />
+              )}
             />
-            <p className='text-text-light-gray mt-2 absolute bottom-[-26px] left-0'>Необязательное поле</p>
+            <div
+              className='w-4 h-0.5 mx-3.5 border-1 border-text-light-gray border-solid'
+            />
+            <div className="relative">
+              <Controller
+                control={control}
+                name="end_time"
+                render={({ field: { onChange, value } }) => (
+                  <TimeInput
+                    onStringChange={onChange}
+                    stringValue={value}
+                    error={errors.end_time?.message}
+                    extraFieldClass={`flex items-center w-[480px] h-[44px] px-[22px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
+                    extraSegmentClass="text-[18px]"
+                    id={startTimeId}
+                    isDisabled={watch('repeatable')}
+                  />
+                )}
+              />
+              <p className='text-text-light-gray absolute bottom-[-26px] left-[22px]'>Необязательное поле</p>
+            </div>
           </div>
         </div>
 

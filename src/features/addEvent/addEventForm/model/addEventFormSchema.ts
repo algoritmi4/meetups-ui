@@ -98,10 +98,13 @@ export const addEventSchema = z.object({
 }).refine((data) => !data.end_date || new Date(data.end_date ?? '') > new Date(data.start_date ?? ''), {
   message: 'Ивент должен заканчиваться после начала',
   path: ['end_date']
-}).refine((data) => data.repeatable || (data.start_date && data.start_time), {
+}).refine((data) => data.repeatable || data.start_date, {
   message: 'Заполните дату и время проведения ивента',
   path: ['start_date']
-}).refine((data) => !data.repeatable || (data.schedule && data.schedule?.length > 0), {
+}).refine((data) => data.repeatable || data.start_time, {
+  message: 'Заполните дату и время проведения ивента',
+  path: ['start_time']
+}).refine((data) => !data.repeatable || (data.schedule && data.schedule.length > 0), {
   message: 'Заполните расписание',
   path: ['schedule']
 })

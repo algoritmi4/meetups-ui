@@ -1,10 +1,11 @@
-import { CheckboxWithLabel, Input } from "@/shared";
+import { CheckboxWithLabel } from "@/shared";
 import { Disclosure } from "@headlessui/react";
 import { ReactElement, useState } from "react";
 import { daysArr, parityDayNames } from "./model/consts";
 import { Control, Controller, UseFormClearErrors } from "react-hook-form";
 import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 import { IDay } from "./model/types";
+import TimeInput from "@/shared/ui/TimeInput";
 
 interface IPeriodicControlProps {
   isPeriodic: boolean;
@@ -73,7 +74,7 @@ export function PeriodicControl({ isPeriodic, control, onChange, schedule, error
                 <p>Проводится каждый:</p>
                 <p className="mt-[12px]">Время:</p>
               </div>
-              <ul aria-labelledby="periodic-control" className="flex items-center ml-[18px]">
+              <ul className="flex items-center ml-[18px]">
                 {
                   daysArr.map((el, index) => (
                     <li key={index} className="h-[77px] w-[55px] flex flex-col items-center ml-1 first-of-type:ml-0">
@@ -82,13 +83,12 @@ export function PeriodicControl({ isPeriodic, control, onChange, schedule, error
                       </div>
                       {
                         schedule.some((item) => item.day_of_week === el.day_of_week) && (
-                          <Input
-                            HTMLType="time"
-                            extraBoxClass={`w-[53px] h-[28px] mt-0.5 ${isInputsDisabled ? "" : "border-1 !border-text-black border-solid"}`}
-                            extraContentClass="h-[28px]"
-                            extraInputClass={`[&::-webkit-calendar-picker-indicator]:hidden text-center !text-[16px] ${isInputsDisabled ? "text-text-black" : "text-text-light-gray"}`}
-                            value={schedule.find((item) => item.day_of_week === el.day_of_week)?.time}
-                            onChange={(e) => onChangeTime(el, e.target.value)}
+                          <TimeInput
+                            extraFieldClass={`flex items-center justify-center w-[53px] h-[28px] mt-0.5 ${isInputsDisabled ? "" : "border-1 border-text-black border-solid"}`}
+                            extraInputClass={`${isInputsDisabled ? "text-text-black" : "text-text-light-gray"}`}
+                            stringValue={schedule.find((item) => item.day_of_week === el.day_of_week)?.time ?? null}
+                            onStringChange={(time) => onChangeTime(el, time)}
+                            id={el.day_of_week}
                             isDisabled={isInputsDisabled}
                           />
                         )
