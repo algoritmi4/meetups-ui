@@ -6,7 +6,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {AUTH_FORM_VALUES_KEY} from "@/features/authentication/lib/constants";
 import {ValueTextField} from "@/shared/types";
 import {setFormValuesInStorage} from "@/shared/lib/saveAndGetFormValues";
-import {useFilledValue} from "@/shared/lib/hooks";
+import {useFilledValue} from "@/shared/lib/hooks"; 
 import {useLoginMutation} from "@/entities/session/api/sessionApi.ts";
 import {Button, FormWrapper, Input, InputErrorMessage} from "@/shared/ui";
 
@@ -75,7 +75,7 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
         >
           Забыли пароль?
         </Link>
-        <InputErrorMessage error={errors.email ?? errors.password} />
+        <InputErrorMessage error={errors.email || errors.password} />
         <Button
           HTMLType='submit'
           type='primary'
