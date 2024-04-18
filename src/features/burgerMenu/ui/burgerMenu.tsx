@@ -13,7 +13,7 @@ export function BurgerMenu() {
   ));
 
   return (
-    <Menu.Items className="absolute flex flex-col right-0 z-[11] mt-10 w-[293px] h-[410px] px-10 py-[30px] rounded-[20px] bg-white shadow justify-start items-start gap-[15px] inline-flex focus:outline-none">
+    <Menu.Items className="absolute flex flex-col right-[25px] top-[37px] z-[11] mt-10 w-[293px] h-[410px] px-10 py-[30px] rounded-[20px] bg-white shadow justify-start items-start gap-[15px] inline-flex focus:outline-none">
       {menuList}
       {refresh && <LogoutButton refresh={refresh} />}
     </Menu.Items>
