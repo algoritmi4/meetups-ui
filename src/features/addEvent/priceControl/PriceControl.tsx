@@ -25,9 +25,9 @@ export function PriceControl({ hookFormValues, error, control, isPriceActive, se
         placeholder={`${isPriceActive ? "12" : ""}`}
         id='add-event-price'
         inlineLabel={true}
-        extraBoxClass={`w-[92px] md:w-[92px] mr-1.5 ${!isPriceActive && "bg-select-disable"}`}
+        extraBoxClass={`w-[92px] mr-1.5 ${!isPriceActive && "bg-select-disable"}`}
         extraContentClass={'h-[44px]'}
-        extraInputClass={`px-[34px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${!isPriceActive && "text-white"}`}
+        extraInputClass={`px-2.5 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${!isPriceActive && "text-white"}`}
         isDisabled={!isPriceActive}
       />
       <Controller

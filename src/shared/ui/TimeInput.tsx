@@ -13,7 +13,7 @@ interface ITimeInputProps<T extends TimeValue> extends TimeFieldProps<T> {
   id?: string;
 }
 
-// This Input was created for custom control hourCycle of input type=time
+// This Input was created for custom control hourCycle of input type=time.
 // It only accepts and returns time in 14:30 format.
 // Due to the nature of the library, it is difficult to make it reusable.
 // If you need an input that will return time in any format other than 14:30 - create a new component.

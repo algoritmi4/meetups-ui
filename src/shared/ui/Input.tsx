@@ -19,9 +19,12 @@ interface IInputProps {
   labelText?: string;
   hookFormValues?: UseFormRegisterReturn<string>;
   isDisabled?: boolean;
+  maxLength?: number;
+  max?: string;
+  pattern?: string;
 }
 
-export function Input({ onChange, onBlur, HTMLType, iconType, value, placeholder, autoComplete, extraBoxClass, extraContentClass, extraInputClass, inlineLabel, defaultValue, error, id, labelText, hookFormValues, isDisabled }: IInputProps) {
+export function Input({ onChange, onBlur, HTMLType, iconType, value, placeholder, autoComplete, extraBoxClass, extraContentClass, extraInputClass, inlineLabel, defaultValue, error, id, labelText, hookFormValues, isDisabled, maxLength, max, pattern }: IInputProps) {
   const [type, setType] = useState<string>(HTMLType);
   const [passwordIcon, setPasswordIcon] = useState<string>('show-password');
 
@@ -38,7 +41,7 @@ export function Input({ onChange, onBlur, HTMLType, iconType, value, placeholder
   return (
     <div className={`flex ${inlineLabel ? 'flex-row items-center gap-x-3.5' : 'flex-col'}`}>
       {labelText && (
-        <label htmlFor={id} className={`text-xl text-text-black`}>{labelText}</label>
+        <label htmlFor={id} className={`text-xl text-text-black cursor-pointer`}>{labelText}</label>
       )}
       <div className={`bg-custom-gray rounded-[10px] border ${extraBoxClass} ${error ? 'border-input-error' : 'border-transparent'}`}>
         <div className={`flex items-center h-48px w-full overflow-hidden ${extraContentClass}`}>
@@ -58,6 +61,9 @@ export function Input({ onChange, onBlur, HTMLType, iconType, value, placeholder
             aria-invalid={error ? 'true' : 'false'}
             className={`h-full w-full outline-none text-black bg-inherit font-normal text-base md:text-lg ${extraInputClass}`}
             id={id}
+            maxLength={maxLength}
+            max={max}
+            pattern={pattern}
             autoComplete={autoComplete}
             disabled={isDisabled}
           />

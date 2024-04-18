@@ -10,9 +10,10 @@ interface ILargeTextInputProps {
   id?: string;
   labelText?: string;
   hookFormValues?: UseFormRegisterReturn<string>;
+  maxLength?: number;
 }
 
-export function LargeTextInput({ value, placeholder, extraBoxClass, extraTextAreaClass, defaultValue, error, id, labelText, hookFormValues }: ILargeTextInputProps) {
+export function LargeTextInput({ value, placeholder, extraBoxClass, extraTextAreaClass, defaultValue, error, id, labelText, hookFormValues, maxLength }: ILargeTextInputProps) {
   return (
     <div className={`flex flex-col ${extraBoxClass}`}>
       {labelText && (
@@ -26,6 +27,7 @@ export function LargeTextInput({ value, placeholder, extraBoxClass, extraTextAre
         aria-invalid={error ? 'true' : 'false'}
         className={`text-[17px] min-h-[150px] rounded-[10px] px-[25px] pt-3 mt-[7px] outline-none text-text-black bg-custom-gray placeholder:text-text-light-gray ${extraTextAreaClass} ${error ? "border-1 border-solid border-input-error" : ""}`}
         id={id}
+        maxLength={maxLength}
       />
     </div>
   )

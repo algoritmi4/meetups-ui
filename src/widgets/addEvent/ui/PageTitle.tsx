@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function AddEventPageTitle(): ReactElement {
+export function PageTitle(): ReactElement {
   const navigate = useNavigate();
 
   return (
