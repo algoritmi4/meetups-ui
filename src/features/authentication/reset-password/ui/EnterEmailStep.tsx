@@ -14,6 +14,7 @@ import {ValueTextField} from "@/shared/types";
 import {AUTH_FORM_VALUES_KEY} from "@/features/authentication/lib/constants";
 import {useFilledValue} from "@/shared/lib/hooks";
 import {useChangeStep} from "@/features/authentication/reset-password/lib/hooks/useChangeStep";
+import Svg from "@/shared/ui/Svg";
 
 export function EnterEmailStep(): ReactElement  {
   const {
@@ -58,15 +59,20 @@ export function EnterEmailStep(): ReactElement  {
         />
         <InputErrorMessage error={errors.email} />
         <Button
-          HTMLType='submit'
-          type='primary'
+          type='submit'
+          importance="primary"
           extraClass='mt-9 md:mt-5'
-          iconType='next'
-          disabled={!isValid && isSubmitted}
+          size="xl"
+          disabled={!isValid || isSubmitted}
         >
           Далее
+          <Svg className="w-6 h-6 absolute top-1/2 right-5 translate-y-[-50%]" id="next-arrow" />
         </Button>
-        <Button type='secondary' HTMLType='button' onClick={handlePrevStep} extraClass='mt-6'>Назад</Button>
+        <Button
+          type='button'
+          onClick={handlePrevStep}
+          extraClass='self-center !rounded-none !p-0 text-[18px] leading-def mt-6'
+        >Назад</Button>
       </form>
     </FormWrapper>
   )

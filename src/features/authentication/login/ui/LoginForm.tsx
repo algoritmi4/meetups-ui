@@ -77,10 +77,11 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
         </Link>
         <InputErrorMessage error={errors.email || errors.password} />
         <Button
-          HTMLType='submit'
-          type='primary'
+          type='submit'
+          size="xl"
+          importance="primary"
           extraClass='mt-[21px] md:mt-[15px] mb-[31px] md:mb-0'
-          disabled={!isValid && isSubmitted}
+          disabled={!isValid || isSubmitted}
         >
           Войти
         </Button>

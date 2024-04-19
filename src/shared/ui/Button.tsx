@@ -1,52 +1,46 @@
-import React, {type ReactNode} from 'react';
-import {useMediaQuery} from "@uidotdev/usehooks";
+import { ReactNode } from "react";
+import cx from 'classnames';
 
 interface IButtonProps {
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   children?: ReactNode;
-  type: 'primary' | 'secondary' | 'back';
-  HTMLType: 'submit' | 'button' | 'reset';
+  type?: 'submit' | 'button' | 'reset';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  importance?: 'none' | 'primary' | 'secondary';
   extraClass?: string;
-  iconType?: 'next';
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 export function Button({
   onClick,
   children,
-  type,
-  extraClass,
-  disabled,
-  HTMLType,
-  iconType
+  type = 'button',
+  size = 'sm',
+  importance = 'none',
+  extraClass = '',
+  disabled = false
 }: IButtonProps) {
-
-  const isMobileDevice = useMediaQuery("only screen and (max-width : 768px)");
-
   return (
-    (type === 'primary') ? (
-      <button
-        type={HTMLType}
-        disabled={disabled}
-        onClick={onClick}
-        className={`h-50 flex bg-main-purple hover:bg-hover-pink disabled:bg-neutral-500 text-white text-lg font-bold rounded-full items-center p-3.5 ${isMobileDevice ? 'w-[316px]' : 'w-80'} ${iconType ? 'justify-between' : 'justify-center'} ${extraClass}`}
-      >
-        {iconType && <div className='w-6 h-6 invisible' />}
-        <p>{children}</p>
-        {iconType &&
-          <div
-            className='w-6 h-6 bg-center bg-no-repeat'
-            style={{ backgroundImage: `url("/images/${iconType}.svg")` }}
-          />}
-      </button>
-      ) : (
-      <button
-        type={HTMLType}
-        onClick={onClick}
-        className={`bg-transparent text-neutral-500 text-lg font-normal hover:text-neutral-950 ${extraClass}`}
-      >
-        <p>{children}</p>
-      </button>
-    )
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={!disabled ? onClick : undefined}
+      className={
+        cx(
+          'relative inline-flex items-center justify-center select-none outline-none overflow-hidden rounded-def duration-150 hoverscreen:hover:opacity-70 text-[18px] leading-def',
+          {
+            'px-5 py-2.5': size === 'sm',
+            'px-[30px] py-2.5': size === 'md',
+            'px-[45px] py-2.5': size === 'lg',
+            'w-full py-3.5': size === 'xl',
+            'bg-transparent text-black': importance === 'none',
+            'bg-main-purple hoverscreen:hover:bg-hover-pink text-white font-semibold': importance === 'primary',
+            'bg-beige text-main-violet font-semibold': importance === 'secondary',
+            'cursor-default bg-select-disable text-white pointer-events-none': disabled
+          },
+          extraClass
+        )
+      }
+    >{children}</button>
   )
 }
