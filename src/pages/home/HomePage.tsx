@@ -3,7 +3,6 @@ import {DateSlider} from '@/features/calendarFilter';
 import { useGetCategoriesQuery } from '@/features/searchFilter/api/categoriesApi';
 import { FilterPopup } from '@/features/searchFilter/ui/FilterPopup';
 import {HomePageTitle} from '@/features/townFilter';
-import { Popup } from '@/shared';
 import { useAppSelector } from '@/shared/model';
 import { EventsList } from '@/widgets/EventsList';
 import { MapWidget } from '@/widgets/mapWidget';
@@ -12,7 +11,6 @@ import { ReactElement } from 'react';
 
 export function HomePage(): ReactElement {
   const { search, checkedCategories } = useAppSelector(state => state.searchFilter);
-  const { isOpen } = useAppSelector((state) => state.filterPopup);
   const { data: events = {results: []}, isLoading: isEventsLoading, isError: isEventsError, error: eventsError } = useGetEventsQuery({ search, categories: checkedCategories });
   const { data: categories = {results: []}, isError: isCategoriesError, error: categoriesError } = useGetCategoriesQuery();
   const { data: markers = {features: []}, isLoading: isMarkersLoading, isError: isMarkersError, error: markersError } = useGetMarkersQuery();
@@ -24,7 +22,7 @@ export function HomePage(): ReactElement {
 
   return (
     <main className="w-full">
-      <Popup isOpen={isOpen}><FilterPopup categories={categories.results}/></Popup>
+      <FilterPopup categories={categories.results}/>
       <HomePageTitle />
       <DateSlider />
       <EventsList listTitle="Ближайшие" isLoading={isEventsLoading} data={events.results} extraClasses="mt-14 mb-[50px]" />

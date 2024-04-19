@@ -9,6 +9,7 @@ import {
 import {useAppDispatch, useAppSelector} from "@/shared/model";
 import {selectUserData, userDataFilled} from "../model/formState";
 import { useCheckEmailMutation } from "@/entities/session/api/sessionApi";
+import Svg from "@/shared/ui/Svg";
 
 
 export function DetailForm(): ReactElement {
@@ -68,12 +69,15 @@ export function DetailForm(): ReactElement {
         />
         <InputErrorMessage error={errors.email ?? errors.username} />
         <Button
-          HTMLType='submit'
-          type='primary'
+          type='submit'
+          size="xl"
+          importance="primary"
           extraClass='mt-6 md:mt-5'
-          iconType="next"
-          disabled={!isValid && isSubmitted}
-        >Далее</Button>
+          disabled={!isValid || isSubmitted}
+        >
+          Далее
+          <Svg className="w-6 h-6 absolute top-1/2 right-5 translate-y-[-50%]" id="next-arrow" />
+        </Button>
       </form>
     )
   }

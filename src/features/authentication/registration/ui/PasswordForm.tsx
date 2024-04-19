@@ -64,12 +64,16 @@ export function PasswordForm(): ReactElement {
           </p>
         </div>
         <Button
-          HTMLType='submit'
-          type='primary'
+          type='submit'
+          importance="primary"
           extraClass='mt-10 md:mt-6'
-          disabled={!isValid && isSubmitted}
+          size="xl"
+          disabled={!isValid || isSubmitted}
         >Зарегистрироваться</Button>
-        <Button onClick={onPrev} HTMLType='button' type='secondary' extraClass='w-80 mt-5 flex justify-center hover:text-neutral-950 text-lg font-normal text-center'>Назад</Button>
+        <Button
+          onClick={onPrev}
+          extraClass='self-center !rounded-none !p-0 mt-5 text-[18px] leading-def'
+        >Назад</Button>
       </form>
     )
   }

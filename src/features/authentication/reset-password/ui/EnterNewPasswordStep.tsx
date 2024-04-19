@@ -71,10 +71,11 @@ export function EnterNewPasswordStep({onComplete}: ILoginFormProps): ReactElemen
           </p>
         </div>
         <Button
-          HTMLType='submit'
-          type='primary'
-          extraClass='mt-6'
-          disabled={!isValid && isSubmitted}
+          type='submit'
+          size="xl"
+          importance="primary"
+          extraClass='mt-[21px] md:mt-[15px] mb-[31px] md:mb-0'
+          disabled={!isValid || isSubmitted}
         >
           Войти
         </Button>

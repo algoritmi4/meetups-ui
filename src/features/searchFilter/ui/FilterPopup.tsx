@@ -1,7 +1,7 @@
-import { CheckboxWithLabel, Input } from "@/shared";
+import { Button, CheckboxWithLabel, Input, Popup } from "@/shared";
 import { ChangeEvent, ReactElement, useState } from "react";
 import { ICategory } from "../model/types";
-import { useAppDispatch } from "@/shared/model";
+import { useAppDispatch, useAppSelector } from "@/shared/model";
 import { isPopupOpenSetted } from "../model/filterPopupSlice";
 import { categorySetted } from "../model/SearchFilterSlice";
 
@@ -11,6 +11,7 @@ interface IFilterPopupProps {
 
 export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
   const dispatch = useAppDispatch();
+  const { isOpen } = useAppSelector((state) => state.filterPopup);
   const [checkedCategories, setCheckedCategories] = useState<ICategory[]>([]);
 
   const handleCheckedCategories = (e: ChangeEvent<HTMLInputElement>, category: ICategory) => {
@@ -28,7 +29,7 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
   }
 
   return (
-    <>
+    <Popup isOpen={isOpen} onClose={() => dispatch(isPopupOpenSetted(false))}>
       <div className="absolute flex flex-col top-[100px] left-[50%] translate-x-[-50%] bg-white min-w-[584px] rounded-[10px] px-[45px] py-[35px]">
         <div onClick={() => dispatch(isPopupOpenSetted(false))} className="absolute top-[42px] right-[45px] bg-close-cross bg-no-repeat bg-cover bg-center w-6 h-6 cursor-pointer"></div>
         <div className="flex items-center">
@@ -80,8 +81,13 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
             />
           </div>
         </div>
-        <button type="button" onClick={onButtonClick} className="text-[18px] font-bold text-white bg-button-purple rounded-[10px] min-h-[44px] min-w-[127px] duration-150 hover:opacity-[0.8] self-end">Найти</button>
+        <Button
+          onClick={onButtonClick}
+          importance="primary"
+          extraClass="text-[18px] font-semibold text-white bg-main-purple !px-[35px] self-end"
+          size="md"
+        >Найти</Button>
       </div>
-    </>
+    </Popup>
   )
 }

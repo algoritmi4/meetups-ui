@@ -8,6 +8,9 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+      'hoverscreen': {'raw': '(hover: hover)'}
+    },
     extend: {
       borderWidth: {
         '1': '1px',
@@ -58,7 +61,8 @@ module.exports = {
         'button-purple': 'rgb(94, 92, 206)',
         'text-light-gray': 'rgb(153, 153, 153)',
         'toggle-color': 'rgb(185, 185, 186, 1)',
-        'select-disable': 'rgba(191, 189, 189, 1)'
+        'select-disable': 'rgba(191, 189, 189, 1)',
+        'beige': 'rgba(230, 229, 255, 1)'
       },
       padding: {
         "60": "60px",
@@ -102,7 +106,11 @@ module.exports = {
       borderRadius: {
         "12": "12px",
         "circle": "50%",
+        'def': '10px'
       },
+      lineHeight: {
+        'def': '22.59px'
+      }
     },
   },
 }
