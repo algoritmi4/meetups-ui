@@ -16,3 +16,8 @@ export interface IEvent {
   category: IEventTag | null,
   participants_number: number,
 }
+
+export interface IGetEventRequest {
+  search?: string;
+  categories?: string;
+}

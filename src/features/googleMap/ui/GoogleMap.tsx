@@ -31,7 +31,7 @@ export function GoogleMap({ position, markersArr, isLoading, zoom, extraClasses,
         isLoading ? (
           <Preloader />
         ) : (
-          <APIProvider apiKey={apiKey}>
+          <APIProvider language="ru-RU" apiKey={apiKey}>
             <Map zoom={zoom} center={position} mapId={mapId} disableDefaultUI={true} className={`w-full h-[365px] rounded-[12px] ${extraClasses}`}>
               {
                 withAddressControl && (

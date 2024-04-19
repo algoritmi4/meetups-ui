@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IAddedMarker } from "./types";
+import { IAddedMarker } from "../../../widgets/mapWidget/model/types";
 
 interface IInitialState {
   selectedPlace: google.maps.places.PlaceResult | null;

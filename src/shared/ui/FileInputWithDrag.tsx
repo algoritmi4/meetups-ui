@@ -1,11 +1,16 @@
-import { ChangeEvent, DragEvent, ReactElement, useState } from "react";
-import addImageIcon from '/images/add-image-icon.svg';
-import { useUploadImageMutation } from "../api/uploadImageApi";
+import { ChangeEvent, DragEvent, ReactElement, ReactNode, useId, useState } from "react";
 
-export function FileInputWithDrag(): ReactElement {
+interface IFileInputWithDragProps {
+  children: ReactNode;
+  uploadImageFunc: (file: File) => void;
+  id?: string;
+  extraClass?: string;
+  error?: string;
+}
+
+export function FileInputWithDrag({ children, uploadImageFunc, id, extraClass, error }: IFileInputWithDragProps): ReactElement {
+  const uploadInputId = useId();
   const [isDragActive, setIsDragActive] = useState(false);
-  const [imageState, setImageState] = useState({isImageUpload: false, src: ''});
-  const [ uploadImage ] = useUploadImageMutation();
 
   function handleDrag(e: DragEvent<HTMLLabelElement>) {
     e.preventDefault();
@@ -25,28 +30,14 @@ export function FileInputWithDrag(): ReactElement {
     setIsDragActive(false);
 
     if (e.dataTransfer.files) {
-      setFormDataAndUploadImage(e.dataTransfer.files[0]);
+      uploadImageFunc(e.dataTransfer.files[0]);
     }
   }
 
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
-      setFormDataAndUploadImage(e.target.files[0]);
+      uploadImageFunc(e.target.files[0]);
     }
-  }
-
-  function setFormDataAndUploadImage(file: File) {
-    const formData = new FormData();
-
-    formData.append('file', file);
-
-    uploadImage(formData)
-    .unwrap()
-    .then((res) => {
-      setImageState({isImageUpload: true, src: `https://storage.googleapis.com/meetups-dev/media/${res.url}`});
-      // setValue from react-hook-form
-    })
-    .catch((err) => console.log(err));
   }
 
   return (
@@ -54,21 +45,12 @@ export function FileInputWithDrag(): ReactElement {
       <input
         onChange={onChange}
         type="file"
-        id="input-upload-file"
+        id={id ? id : uploadInputId}
         className="hidden"
         accept="image/png, image/gif, image/jpeg"
       />
-      <label onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleDrag} onDrop={handleDrop} htmlFor="input-upload-file" className={`bg-gray flex flex-col items-center max-w-[270px] rounded-[10px] box-border h-[170px] overflow-hidden flex items-center justify-center ${isDragActive ? "border-dashed border-2 border-text-light-gray" : ""}`}>
-        {
-          imageState.isImageUpload ? (
-            <img className="object-cover" src={imageState.src} alt="Ваше загруженное изображение" />
-          ) : (
-            <>
-              <img className="mt-[45px]" src={addImageIcon} alt="Поле для загрузки фото" />
-              <p className="text-[18px] text-text-light-gray mt-5 mb-[22px] leading-[22.59px]">Загрузите главное фото</p>
-            </>
-          )
-        }
+      <label onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleDrag} onDrop={handleDrop} htmlFor={id ? id : uploadInputId} className={`bg-custom-gray rounded-[10px] box-border overflow-hidden cursor-pointer ${extraClass} ${isDragActive ? "border-dashed border-2 border-text-light-gray" : ""} ${error && "border-solid border-input-error border-1"}`}>
+        {children}
       </label>
     </>
   )
