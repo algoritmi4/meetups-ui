@@ -4,6 +4,7 @@ import { UseFormHandleSubmit } from "react-hook-form";
 import { useCreateEventMutation } from "@/entities/event/api/eventApi";
 import { prepareDataToRequest } from "../model/prepareDataToRequest";
 import { Preloader } from "@/shared/ui/Preloader";
+import { useNavigate } from "react-router-dom";
 
 interface IAddEventFormProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ interface IAddEventFormProps {
 }
 
 export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFormProps): ReactElement {
+  const navigate = useNavigate();
   const [createEvent] = useCreateEventMutation();
 
   const onSubmit = (data: AddEventValidationSchema) => {
@@ -19,7 +21,7 @@ export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFor
 
     createEvent(dataToCreateEvent)
       .unwrap()
-      .then((res) => console.log(res))
+      .then(() => navigate('/'))
       .catch((err) => console.log(err));
   };
 
@@ -28,7 +30,7 @@ export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFor
   )
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col scrollbar">
+    <form onSubmit={(data) => void handleSubmit(onSubmit)(data)} noValidate className="flex flex-col scrollbar">
       {children}
       <button type="submit" className="self-start h-[44px] w-[165px] bg-button-purple text-[18px] font-semibold text-white rounded-[10px] mt-10 duration-150 hover:opacity-70">Создать</button>
     </form>
