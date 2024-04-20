@@ -1,6 +1,7 @@
 import { ReactElement} from "react";
 import {IEvent} from "../model/types";
 import {getDateAndTime} from "../lib/getDateAndTime";
+import Svg from "@/shared/ui/Svg";
 
 export interface IEventCard {
   event: IEvent;
@@ -33,9 +34,9 @@ export function EventCard({ event }: IEventCard): ReactElement {
           </div>
             {
               event.rating && (
-                <div className="flex items-center mt-[8px]">
+                <div className="flex items-start mt-[8px] self-end">
                   <p className="text-[14px] font-medium">{event.rating}</p>
-                  <div className="bg-rating-star w-[16px] h-[16px]"></div>
+                  <Svg id='rating-star' className='w-[18px] h-[18px] ml-2' />
                 </div>
               )
             }

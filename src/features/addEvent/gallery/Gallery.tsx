@@ -15,7 +15,7 @@ export function Gallery({ onChange, value }: IGalleryProps): ReactElement {
   const onUploadImageInGallery = (file: File) => {
     onUploadImage(file, (res) => {
       setImagesArr((state) => ([...state, `https://storage.googleapis.com/meetups-dev/media/${res.url}`]));
-      onChange && onChange(`https://storage.googleapis.com/meetups-dev/media/${res.url}`);
+      onChange && onChange(res.url);
     })
   }
 

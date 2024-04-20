@@ -58,14 +58,14 @@ export function TagsControl({ tags, onChange, value }: ITagsControlProps): React
         onChange={handleChange}
         id='add-event-name'
         extraBoxClass="px-[22px] mt-[7px] max-w-[480px]"
-        extraInputClass="pl-3"
+        extraInputClass="text-[18px] pl-3"
       />
       <p className='text-text-light-gray mt-2'>Тезисно опишите свое мероприятие</p>
       {
         inputValue === '' || (tips.length === 0 && !isCreateEventButtonShow) ? (
           <></>
         ) : (
-          <div className="absolute top-[90px] w-full bg-custom-gray rounded-[10px] pl-[22px] py-[13px] pr-1.5 max-w-[480px]">
+          <div className="absolute top-[90px] w-full bg-custom-gray rounded-[10px] pl-[22px] py-[13px] pr-1.5 max-w-[480px] z-10">
             <ul className="w-full max-h-[170px] overflow-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-text-light-gray [&::-webkit-scrollbar-thumb]:rounded-[10px]">
               {
                 tips.map((tag, index) => (
