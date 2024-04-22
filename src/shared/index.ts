@@ -1,4 +1,5 @@
-export { Button } from './ui/Button';
+export { Button } from './ui/Buttons/Button';
+export { IconButton } from './ui/Buttons/IconButton';
 export { Input } from './ui/Input';
 export { BackgroundCard } from './ui/BackgroundCard';
 export { Layout } from './ui/Layout';
