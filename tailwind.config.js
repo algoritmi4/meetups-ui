@@ -46,7 +46,6 @@ module.exports = {
         'main-purple': 'rgb(87, 84, 198)',
         'main-violet': 'rgba(73, 70, 185, 1)',
         'custom-gray': 'rgb(243, 243, 245)',
-        'main-blue': 'rgb(94, 92, 206)',
         'main-dark-blue': 'rgb(49, 46, 112)',
         'hover-pink': 'rgb(188, 115, 206)',
         'input-error': 'rgb(202, 106, 106)',
@@ -58,11 +57,16 @@ module.exports = {
         'text-black': 'rgb(46, 46, 46)',
         'text-red': 'rgb(187, 16, 16)',
         'popup-bg': 'rgba(26, 26, 26, .4)',
-        'button-purple': 'rgb(94, 92, 206)',
         'text-light-gray': 'rgb(153, 153, 153)',
         'toggle-color': 'rgb(185, 185, 186, 1)',
         'select-disable': 'rgba(191, 189, 189, 1)',
-        'beige': 'rgba(230, 229, 255, 1)'
+        'but-disable': 'rgb(177, 177, 187)',
+        'but-primary': 'rgb(94, 92, 206)',
+        'but-primary-hover': 'rgb(87, 85, 189)',
+        'but-primary-active': 'rgb(77, 75, 169)',
+        'but-second': 'rgb(230, 229, 255)',
+        'but-second-hover': 'rgb(216, 215, 241)',
+        'but-second-active': 'rgb(194, 193, 228)'
       },
       padding: {
         "60": "60px",
