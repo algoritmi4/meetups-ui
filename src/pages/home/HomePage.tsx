@@ -1,4 +1,4 @@
-import { useGetEventsQuery } from '@/entities/event/api/eventApi';
+import {useGetEventsQuery, useGetTopEventsQuery} from '@/entities/event/api/eventApi';
 import {DateSlider} from '@/features/calendarFilter';
 import { useGetCategoriesQuery } from '@/features/searchFilter/api/categoriesApi';
 import { FilterPopup } from '@/features/searchFilter/ui/FilterPopup';
@@ -12,6 +12,7 @@ import { ReactElement } from 'react';
 export function HomePage(): ReactElement {
   const { search, checkedCategories } = useAppSelector(state => state.searchFilter);
   const { data: events = {results: []}, isLoading: isEventsLoading, isError: isEventsError, error: eventsError } = useGetEventsQuery({ search, categories: checkedCategories });
+  const { data: topEvents = {results: []} } = useGetTopEventsQuery();
   const { data: categories = {results: []}, isError: isCategoriesError, error: categoriesError } = useGetCategoriesQuery();
   const { data: markers = {features: []}, isLoading: isMarkersLoading, isError: isMarkersError, error: markersError } = useGetMarkersQuery();
 
@@ -27,8 +28,8 @@ export function HomePage(): ReactElement {
       <DateSlider />
       <EventsList listTitle="Ближайшие" isLoading={isEventsLoading} data={events.results} extraClasses="mt-14 mb-[50px]" />
       <MapWidget position={{ lat: 53.9, lng: 27.56667 }} zoom={14} markers={markers.features} isLoading={isMarkersLoading} />
-      <EventsList listTitle="Рекомендации для Вас" isLoading={isEventsLoading} data={events.results} extraClasses="mt-[50px]" />
-      <EventsList listTitle="Топ мероприятий" isLoading={isEventsLoading} data={events.results} extraClasses="mt-[50px]" />
+      <EventsList listTitle="Рекомендации для Вас" isLoading={isEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
+      <EventsList listTitle="Топ мероприятий" isLoading={isEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
     </main>
   );
 }

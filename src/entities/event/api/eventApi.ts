@@ -11,9 +11,19 @@ export const eventApi = baseApi.injectEndpoints({
         method: 'GET',
         params: {
           search,
-          category__name__in: categories
+          category__name__in: categories,
+          ordering: 'start_date'
         }
       })
+    }),
+    getTopEvents: build.query<IApiResponse<IEvent[]>, void>({
+        query: () => ({
+          url: '/events/',
+          method: 'GET',
+          params: {
+            ordering: '-average_rating'
+          }
+        })
     }),
     createEvent: build.mutation<void, AddEventValidationSchema>({
       query: (eventInfo) => ({
@@ -25,4 +35,4 @@ export const eventApi = baseApi.injectEndpoints({
   })
 })
 
-export const { useGetEventsQuery, useCreateEventMutation } = eventApi;
+export const { useGetEventsQuery, useCreateEventMutation, useGetTopEventsQuery } = eventApi;

@@ -7,7 +7,7 @@ export interface SvgProps extends Partial<SVGProps<SVGSVGElement>> {
 const Svg = (({ id, ...rest }: SvgProps): ReactNode => {
   return (
     <svg {...rest}>
-      <use href={`../public/images/svg.svg#${id}`} />
+      <use href={`../images/svg.svg#${id}`} />
     </svg>
   );
 });

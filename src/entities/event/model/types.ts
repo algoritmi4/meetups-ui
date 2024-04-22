@@ -6,7 +6,7 @@ interface IEventTag {
 export interface IEvent {
   id: number,
   name: string,
-  rating: string | null,
+  average_rating: string | null,
   image_url: string,
   description: string,
   start_date: string,
