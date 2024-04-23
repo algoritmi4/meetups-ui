@@ -27,7 +27,7 @@ export function SwitchInput({ labelText, extraBoxClass, onChange, value }: ISwit
           checked={enabled}
           onChange={onSwitch}
           className={`${
-            enabled ? 'bg-main-blue' : 'bg-custom-gray'
+            enabled ? 'bg-but-primary' : 'bg-custom-gray'
           } relative inline-flex h-[30px] w-[60px] items-center rounded-full transition-colors `}
         >
           <span

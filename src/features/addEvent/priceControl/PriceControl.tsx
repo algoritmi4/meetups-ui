@@ -1,11 +1,11 @@
-import { Input, SelectInput, SwitchInput } from "@/shared";
+import { LabeledInput, SelectInput, SwitchInput } from "@/shared";
 import { ReactElement } from "react";
 import { Control, Controller, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
 import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 import { ISelectInputOptions } from "@/shared/model/types";
 
 interface IPriceControlProps {
-  hookFormValues: UseFormRegisterReturn<string>;
+  hookFormRegister: UseFormRegisterReturn<string>;
   error?: string;
   control: Control<AddEventValidationSchema>;
   isPriceActive: boolean;
@@ -14,21 +14,21 @@ interface IPriceControlProps {
   currencies: ISelectInputOptions[];
 }
 
-export function PriceControl({ hookFormValues, error, control, isPriceActive, setValue, clearErrors, currencies }: IPriceControlProps): ReactElement {
+export function PriceControl({ hookFormRegister, error, control, isPriceActive, setValue, clearErrors, currencies }: IPriceControlProps): ReactElement {
   return (
     <div className={'flex items-center mt-[18px]'}>
-      <Input
-        hookFormValues={hookFormValues}
-        error={error}
-        HTMLType='number'
-        labelText='Стоимость'
+      <LabeledInput
+        hookFormRegister={hookFormRegister}
+        error={!!error}
+        type='number'
         placeholder={`${isPriceActive ? "12" : ""}`}
-        id='add-event-price'
-        inlineLabel={true}
-        extraBoxClass={`w-[92px] mr-1.5 ${!isPriceActive && "bg-select-disable"}`}
-        extraContentClass={'h-[44px]'}
-        extraInputClass={`px-2.5 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${!isPriceActive && "text-white"}`}
-        isDisabled={!isPriceActive}
+        className={`w-[90px] max-h-11 text-[18px] mr-1.5 ml-3.5 ${!isPriceActive && "bg-select-disable"}`}
+        size="sm"
+        extraBoxClass={`!flex-row !items-center`}
+        extraInputClass={`text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${!isPriceActive && "text-white"}`}
+        disabled={!isPriceActive}
+        labelText='Стоимость'
+        extraLabelClass="text-[20px]"
       />
       <Controller
         control={control}

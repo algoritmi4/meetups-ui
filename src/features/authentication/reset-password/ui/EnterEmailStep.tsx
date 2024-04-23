@@ -21,13 +21,17 @@ export function EnterEmailStep(): ReactElement  {
     formState: { errors, isValid, isSubmitted },
     handleSubmit,
     setValue,
+    setError,
     register,
   } = useForm<EmailValidationSchema>({
     resolver: zodResolver(emailSchema)
   });
 
   const navigate = useNavigate();
-  const [ postResetPassword ] = useResetPasswordMutation();
+  const [
+    postResetPassword,
+    { isLoading: isLoading }
+  ] = useResetPasswordMutation();
   useFilledValue(AUTH_FORM_VALUES_KEY, setValue, [ValueTextField.EMAIL]);
   const handleNextStep = useChangeStep(AUTH_FORM_VALUES_KEY, resetPasswordPath, Step.CHECK_EMAIL);
   const handlePrevStep = () => {
@@ -40,7 +44,14 @@ export function EnterEmailStep(): ReactElement  {
       .then(() => {
         handleNextStep({email});
       })
-      .catch(err => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        if (err.status === 400) {
+          setError('email', {message: 'Почта не зарегестрирована'})
+        } else {
+          console.log(`Some server error ${err}`);
+        }
+      })
   }, []);
 
   return (
@@ -48,22 +59,22 @@ export function EnterEmailStep(): ReactElement  {
       <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col px-0 md:px-90">
         <p className='text-neutral-500 text-base md:text-lg font-normal w-80 mb-3 md:mb-5 mt-6 md:mt-5'>Для подтверждения личности введите вашу почту</p>
         <Input
-          HTMLType='email'
-          iconType='mail'
+          type='email'
+          head={<Svg className="w-6 h-6" id="email-icon" />}
+          extraInputClass="pl-3"
           placeholder='Почта'
-          hookFormValues={register('email')}
-          extraBoxClass='mb-2.5'
-          error={errors.email}
-          extraContentClass="p-3.5"
-          extraInputClass="px-3"
+          error={!!errors.email}
+          size="md"
+          hookFormRegister={register('email')}
+          className="text-[18px]"
         />
-        <InputErrorMessage error={errors.email} />
+        {errors.email && <InputErrorMessage error={errors.email} />}
         <Button
           type='submit'
           importance="primary"
-          extraClass='mt-9 md:mt-5'
+          extraClass={`mt-9 md:mt-5 ${errors.email ? "!mt-4" : ""}`}
           size="xl"
-          disabled={!isValid || isSubmitted}
+          disabled={(!isValid && isSubmitted) || isLoading}
         >
           Далее
           <Svg className="w-6 h-6 absolute top-1/2 right-5 translate-y-[-50%]" id="next-arrow" />

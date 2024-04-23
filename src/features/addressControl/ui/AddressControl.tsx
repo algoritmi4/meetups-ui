@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/shared/model";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { ReactElement, SyntheticEvent, useState } from "react";
 import { implementMarkerSetted, selectedPlaceSetted } from "../model/addressControlSlice";
-import { Input } from "@/shared";
+import { LabeledInput } from "@/shared";
 import { UseFormSetValue } from "react-hook-form";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
@@ -110,18 +110,18 @@ export function AddressControl({ setValuesFunc, setValue, error }: IAddressContr
 
   return (
     <>
-      <h3 className="text-[20px] font-normal leading-[25.1px] mb-[7px]">Адрес</h3>
       <div className="w-[480px] relative">
-        <Input
+        <LabeledInput
           value={inputValue}
           onChange={onInputChange}
-          error={error}
-          HTMLType="search"
+          error={!!error}
+          type="search"
           placeholder="Введите адрес"
-          extraBoxClass="w-full h-[44px]"
-          extraContentClass="h-[44px]"
-          extraInputClass="px-[22px]"
+          className="w-full text-[18px] mt-[7px]"
+          size="lg"
           autoComplete="off"
+          labelText="Адрес"
+          extraLabelClass="text-[20px]"
         />
         {predictionResults.length > 0 && (
           <ul className="w-full flex flex-col absolute top-[48px] bg-custom-gray rounded-[10px] z-50">

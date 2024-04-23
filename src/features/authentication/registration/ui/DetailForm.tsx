@@ -29,6 +29,7 @@ export function DetailForm(): ReactElement {
 
     const [
       checkEmailTrigger,
+      { isLoading: isLoading }
     ] = useCheckEmailMutation()
 
     const onSubmit = ({username, email}: UserDataValidationSchema) => {
@@ -46,34 +47,36 @@ export function DetailForm(): ReactElement {
     }
 
     return (
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-[320px]">
         <p className="text-neutral-500 text-base md:text-lg font-normal mb-[10px]">Отображаемое другим людям</p>
         <Input
-          HTMLType='text'
-          iconType='person'
+          type='text'
+          head={<Svg className="w-6 h-6" id="person-icon" />}
           placeholder='Имя пользователя'
-          error={errors.username}
-          hookFormValues={register('username')}
-          extraContentClass="p-3.5"
-          extraInputClass="px-3"
+          error={!!errors.username}
+          hookFormRegister={register('username')}
+          extraInputClass="pl-3"
+          size="md"
         />
         <Input
-          extraBoxClass='mt-3.5 mb-3 md:mb-2.5'
-          HTMLType='email'
-          iconType='mail'
+          type='email'
+          head={<Svg className="w-6 h-6" id="email-icon" />}
           placeholder='Почта'
-          error={errors.email}
-          hookFormValues={register('email')}
-          extraContentClass="p-3.5"
-          extraInputClass="px-3"
+          error={!!errors.email}
+          hookFormRegister={register('email')}
+          size="md"
+          extraInputClass="pl-3"
+          className="mt-3.5"
         />
-        <InputErrorMessage error={errors.email ?? errors.username} />
+        {
+          (errors.email ?? errors.username) && (<InputErrorMessage error={errors.email ?? errors.username} />)
+        }
         <Button
           type='submit'
           size="xl"
           importance="primary"
-          extraClass='mt-6 md:mt-5'
-          disabled={!isValid || isSubmitted}
+          extraClass={`mt-11 md:mt-5 ${(errors.email ?? errors.username) ? "!mt-[21px]" : ""}`}
+          disabled={(!isValid && isSubmitted) || isLoading}
         >
           Далее
           <Svg className="w-6 h-6 absolute top-1/2 right-5 translate-y-[-50%]" id="next-arrow" />

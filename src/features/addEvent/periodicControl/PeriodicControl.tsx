@@ -5,7 +5,7 @@ import { daysArr, parityDayNames } from "./model/consts";
 import { Control, Controller, UseFormClearErrors } from "react-hook-form";
 import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 import { IDay } from "./model/types";
-import TimeInput from "@/shared/ui/TimeInput";
+import TimeInput from "@/shared/ui/Inputs/TimeInput";
 
 interface IPeriodicControlProps {
   isPeriodic: boolean;

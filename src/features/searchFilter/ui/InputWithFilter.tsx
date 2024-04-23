@@ -4,6 +4,7 @@ import { setSearchFilter } from "../model/SearchFilterSlice";
 import { ChangeEvent, useEffect, useState } from "react";
 import { isPopupOpenSetted } from "../model/filterPopupSlice";
 import { useDebounce } from "use-debounce";
+import Svg from "@/shared/ui/Svg";
 
 export function InputWithFilter() {
   const [inputValue, setInputValue] = useState('');
@@ -18,13 +19,12 @@ export function InputWithFilter() {
   return (
     <div className="flex items-center ml-[235px]">
       <Input
-        HTMLType="text"
-        iconType="search-icon-gray"
+        type="text"
+        head={<Svg className="w-6 h-6" id="search-icon-def" />}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
         value={inputValue}
-        extraInputClass="px-3 py-[10px]"
-        extraContentClass="px-3.5 h-[42px]"
-        extraBoxClass="min-w-[375px]"
+        size="lg"
+        className="w-[375px] max-h-11 text-[18px]"
       />
       <div onClick={() => dispatch(isPopupOpenSetted(true))} className="bg-filter-icon w-6 h-6 bg-cover bg-no-repeat bg-center ml-5 cursor-pointer"></div>
     </div>
