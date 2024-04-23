@@ -67,7 +67,7 @@ export function TagsControl({ tags, onChange, value }: ITagsControlProps): React
         inputValue === '' || (tips.length === 0 && !isCreateEventButtonShow) ? (
           <></>
         ) : (
-          <div className="absolute top-[90px] w-full bg-custom-gray rounded-[10px] pl-[22px] py-[13px] pr-1.5 max-w-[480px]">
+          <div className="absolute top-[90px] w-full bg-custom-gray rounded-[10px] pl-[22px] py-[13px] pr-1.5 max-w-[480px] z-10">
             <ul className="w-full max-h-[170px] overflow-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-text-light-gray [&::-webkit-scrollbar-thumb]:rounded-[10px]">
               {
                 tips.map((tag, index) => (

@@ -20,7 +20,7 @@ export function CheckboxWithLabel({ id, label, value, onChange, extraBoxClass, e
   
   return (
     <div className={`flex items-center ${extraBoxClass}`}>
-      <input id={id} onChange={handleChecked} type="checkbox" className="relative h-5 w-5 m-0.5 cursor-pointer appearance-none rounded-[5px] border-2 border-text-black bg-center bg-no-repeat checked:bg-check" checked={value ?? isChecked} />
+      <input id={id} onChange={handleChecked} type="checkbox" className="relative h-5 w-5 m-0.5 cursor-pointer appearance-none outline-none rounded-[5px] border-2 border-text-black bg-center bg-no-repeat checked:bg-check" checked={value ?? isChecked} />
       <label htmlFor={id} className={`text-[18px] cursor-pointer ${extraLabelClass}`}>{label}</label>
     </div>
   )

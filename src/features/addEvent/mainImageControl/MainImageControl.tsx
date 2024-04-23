@@ -16,7 +16,7 @@ export function MainImageControl({ error, value, onChange }: IMainImageControlPr
   const onUploadMainImage = (file: File) => {
     onUploadImage(file, (res) => {
       setImageState({isImageUpload: true, src: `https://storage.googleapis.com/meetups-dev/media/${res.url}`});
-      onChange && onChange(`https://storage.googleapis.com/meetups-dev/media/${res.url}`);
+      onChange && onChange(res.url);
     })
   }
 
@@ -28,7 +28,7 @@ export function MainImageControl({ error, value, onChange }: IMainImageControlPr
     >
       {
         imageState.isImageUpload ? (
-          <img className="object-contain" src={value ?? imageState.src} alt="Ваше загруженное изображение" />
+          <img className="object-contain" src={value ? `https://storage.googleapis.com/meetups-dev/media/${value}` : imageState.src} alt="Ваше загруженное изображение" />
         ) : (
           <>
             <img className="mt-[45px]" src={addImageIcon} alt="Поле для загрузки фото" />

@@ -12,7 +12,7 @@ export function Selector({
 }: ISelectorProps): ReactElement {
   return (
     <div className={`relative pr-8 ${extraClasses}`}>
-      <select className="appearance-none text-[45px] text-text-black font-semibold underline outline-none leading-normal pr-8 cursor-pointer">
+      <select className="appearance-none text-[45px] text-text-black font-semibold outline-none leading-normal pr-8 cursor-pointer bg-transparent">
         {
           options.map((el, index) => <option key={index} value={el.value}>{el.name}</option>)
         }
