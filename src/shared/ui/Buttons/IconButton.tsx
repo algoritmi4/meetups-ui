@@ -6,11 +6,13 @@ import { ReactElement } from 'react';
 export interface IIconButtonProps extends Omit<IButtonProps, 'children' | 'size'> {
   iconId: string;
   size?: 'sm' | 'md' | 'lg';
+  extraSvgClass?: string;
 }
 
 export function IconButton({
   iconId,
   extraClass,
+  extraSvgClass,
   size = 'md',
   ...rest
 }: IIconButtonProps): ReactElement {
@@ -28,7 +30,7 @@ export function IconButton({
       size='md'
       {...rest}
     >
-      <Svg className="fill-current w-6 h-6" id={iconId} />
+      <Svg className={`fill-current w-6 h-6 ${extraSvgClass ?? ''}`} id={iconId} />
     </Button>
   );
 }

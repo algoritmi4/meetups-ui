@@ -7,6 +7,7 @@ import { Preloader } from "@/shared/ui/Preloader";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared";
 
+
 interface IAddEventFormProps {
   children: ReactNode;
   handleSubmit: UseFormHandleSubmit<AddEventValidationSchema>;

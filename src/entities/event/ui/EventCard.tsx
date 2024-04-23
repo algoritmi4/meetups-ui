@@ -33,10 +33,10 @@ export function EventCard({ event }: IEventCard): ReactElement {
             <div className="w-6 h-6 bg-event-card-people bg-no-repeat bg-center ml-1"></div>
           </div>
             {
-              event.average_rating && (
+              (!!event.average_rating || event.average_rating === 0) && (
                 <div className="flex items-start mt-[8px] self-end">
                   <p className="text-[14px] font-medium">{event.average_rating}</p>
-                  <Svg id='rating-star' className='w-[18px] h-[18px] ml-2' />
+                  <Svg id='rating-star' extraUseClass="!fill-current" className='w-[18px] h-[18px] ml-2' />
                 </div>
               )
             }
