@@ -11,7 +11,7 @@ export function PageTitle(): ReactElement {
       <h1 className="text-[45px] text-text-black font-bold leading-normal">Cоздайте мероприятие</h1>
       <Button
         onClick={() => navigate(-1)}
-        extraClass="text-but-primary text-[18px] font-semibold hoverscreen:hover:opacity-70 !bg-white"
+        extraClass="!items-end text-but-primary text-[18px] font-semibold hoverscreen:hover:opacity-70 !bg-white"
       >
         <Svg className="w-6 h-6 mr-2" id="chevron-left-purple" />
         Назад

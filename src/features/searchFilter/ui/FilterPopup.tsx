@@ -53,16 +53,16 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
             }
           </div>
           <div className="flex flex-col ml-[45px]">
-            <h3 className="text-[24px] font-semibold leading-[30.12px]">Возраст</h3>
+            <h2 className="text-[24px] font-semibold leading-[30.12px]">Возраст</h2>
             <div className="flex items-center mt-4">
               <Input
-                HTMLType="text"
-                extraBoxClass="w-[60px]"
+                type="number"
                 placeholder="18"
-                extraContentClass="h-[44px]"
-                extraInputClass="px-[19px] min-w-[60px] text-[18px]"
+                className="w-[60px] max-h-11 text-[18px]"
+                extraInputClass="text-center"
+                size="sm"
               />
-              <p className="text-[20px] font-medium ml-[6px]">+</p>
+              <p className="text-[20px] font-medium ml-1.5">+</p>
             </div>
           </div>
           <div className="ml-[65px]">

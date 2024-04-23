@@ -1,7 +1,7 @@
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 import { PeriodicControl } from "@/features/addEvent/periodicControl";
-import { Input } from "@/shared";
-import TimeInput from "@/shared/ui/TimeInput";
+import { Input, LabeledInput } from "@/shared";
+import TimeInput from "@/shared/ui/Inputs/TimeInput";
 import { ReactElement, useId } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -20,34 +20,31 @@ export function TimeControl(): ReactElement {
   return (
     <>
       <div className='flex items-center relative mt-[18px]'>
-        <Input
-          hookFormValues={register('start_date')}
-          error={errors.start_date?.message}
-          HTMLType='date'
-          labelText='Дата'
+        <LabeledInput
+          hookFormRegister={register('start_date')}
+          error={!!errors.start_date?.message}
+          type='date'
           placeholder='Начало'
-          id='add-event-start-date'
-          extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
-          extraContentClass='h-[44px]'
-          extraInputClass='px-[22px]'
+          className={`w-[480px] text-[18px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
+          size="lg"
           max="9999-12-31"
-          isDisabled={watch('repeatable')}
+          disabled={watch('repeatable')}
+          labelText="Дата"
+          extraLabelClass="text-[20px]"
         />
         <div
           className='w-4 h-0.5 mx-3.5 mt-8 border-1 border-text-light-gray border-solid'
         />
         <div className='self-end relative'>
           <Input
-            hookFormValues={register('end_date')}
-            error={errors.end_date?.message}
-            HTMLType='date'
+            hookFormRegister={register('end_date')}
+            error={!!errors.end_date?.message}
+            type='date'
             placeholder='Конец'
-            id='add-event-end-date'
-            extraBoxClass={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
-            extraContentClass={'h-[44px]'}
-            extraInputClass='px-[22px]'
+            className={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
+            size="lg"
             max="9999-12-31"
-            isDisabled={watch('repeatable')}
+            disabled={watch('repeatable')}
           />
           <p className='text-text-light-gray absolute bottom-[-26px] left-[22px]'>Необязательное поле</p>
         </div>

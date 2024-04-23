@@ -1,32 +1,32 @@
-import { Input, SwitchInput } from "@/shared";
+import { LabeledInput, SwitchInput } from "@/shared";
 import { ReactElement } from "react";
 import { Control, Controller, UseFormClearErrors, UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
 import { AddEventValidationSchema } from "../addEventForm/model/addEventFormSchema";
 
 interface INumberOfPlacesAndChatControlProps {
   isPlacesDisabled: boolean;
-  hookFormValues: UseFormRegisterReturn<string>;
+  hookFormRegister: UseFormRegisterReturn<string>;
   error?: string;
   control: Control<AddEventValidationSchema>;
   setValue: UseFormSetValue<AddEventValidationSchema>;
   clearErrors: UseFormClearErrors<AddEventValidationSchema>;
 }
 
-export function PlacesNumberControl({ isPlacesDisabled, hookFormValues, error, control, setValue, clearErrors }: INumberOfPlacesAndChatControlProps): ReactElement {
+export function PlacesNumberControl({ isPlacesDisabled, hookFormRegister, error, control, setValue, clearErrors }: INumberOfPlacesAndChatControlProps): ReactElement {
   return (
     <div className={'flex items-center'}>
-      <Input
-        hookFormValues={hookFormValues}
-        error={error}
-        HTMLType='number'
-        labelText='Количество мест'
+      <LabeledInput
+        hookFormRegister={hookFormRegister}
+        error={!!error}
+        type='number'
         placeholder='25'
-        id='add-event-people-number'
-        inlineLabel={true}
-        extraBoxClass={`w-[72px] md:w-[72px] mt-[7px] ${isPlacesDisabled && "bg-select-disable"}`}
-        extraContentClass={'h-[44px]'}
-        extraInputClass={`px-[10px] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isPlacesDisabled && "text-white"}`}
-        isDisabled={isPlacesDisabled}
+        className={`w-[70px] max-h-11 ml-3.5 text-[18px] ${isPlacesDisabled ? "bg-select-disable" : ""}`}
+        extraBoxClass="!flex-row !items-center"
+        size="sm"
+        extraInputClass={`text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isPlacesDisabled && "text-white"}`}
+        disabled={isPlacesDisabled}
+        labelText='Количество мест'
+        extraLabelClass="text-[20px]"
       />
       <Controller
         control={control}

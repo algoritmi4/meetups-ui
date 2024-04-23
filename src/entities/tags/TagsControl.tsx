@@ -1,7 +1,8 @@
-import { Input } from "@/shared";
+import { LabeledInput } from "@/shared";
 import { ChangeEvent, ReactElement, useState } from "react";
 import { ISelectInputOptions } from "@/shared/model/types";
 import { useCreateTagMutation } from "./api/tagsApi";
+import Svg from "@/shared/ui/Svg";
 
 interface ITagsControlProps {
   tags: ISelectInputOptions[];
@@ -48,17 +49,18 @@ export function TagsControl({ tags, onChange, value }: ITagsControlProps): React
 
   return (
     <div className="mt-[18px] relative">
-      <Input
-        HTMLType='text'
-        iconType='search-icon-gray'
-        labelText="Тэги (необязательно)"
+      <LabeledInput
+        type='text'
+        head={<Svg className="w-6 h-6" id="search-icon-gray" />}
         placeholder='Ищите теги'
         autoComplete="off"
         value={inputValue}
         onChange={handleChange}
-        id='add-event-name'
-        extraBoxClass="px-[22px] mt-[7px] max-w-[480px]"
-        extraInputClass="text-[18px] pl-3"
+        size="lg"
+        className="w-[480px] text-[18px] mt-[7px]"
+        extraInputClass="pl-3"
+        labelText="Тэги (необязательно)"
+        extraLabelClass="text-[20px]"
       />
       <p className='text-text-light-gray mt-2'>Тезисно опишите свое мероприятие</p>
       {

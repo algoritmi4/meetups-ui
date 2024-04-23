@@ -1,11 +1,12 @@
 import {ReactElement} from "react"
-import {Button, Input} from "@/shared";
+import {Button, PasswordInput} from "@/shared";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAppDispatch, useAppSelector} from "@/shared/model";
 import {passwordSchema, PasswordValidationSchema} from "../model/RegisterFormSchema";
 import {goBack, passwordFilled, selectUserData} from "../model/formState";
 import { useRegisterMutation } from "@/entities/session/api/sessionApi";
+import Svg from "@/shared/ui/Svg";
 
 
 export function PasswordForm(): ReactElement {
@@ -40,17 +41,19 @@ export function PasswordForm(): ReactElement {
     }
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-        <p className="text-neutral-500 text-base md:text-lg font-normal mb-[10px]">Придумайте уникальный пароль</p>
-        <Input
-          HTMLType='password'
-          iconType='password'
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-[320px]">
+        <p className="text-neutral-500 text-base md:text-lg font-normal">Придумайте уникальный пароль</p>
+        <PasswordInput
+          type='password'
+          head={<Svg className="w-6 h-6" id="password-icon" />}
           placeholder='Пароль'
-          hookFormValues={register('password')}
-          extraContentClass="p-3.5"
-          extraInputClass="px-3"
+          extraInputClass="pl-3"
+          error={!!errors.password}
+          hookFormRegister={register('password')}
+          size="md"
+          className="mt-3.5 text-[18px] !pr-5"
         />
-        <div className='flex mt-5 md:mt-18 pb-3.5 md:pb-3 items-center'>
+        <div className='flex mt-5 md:mt-18 md:pb-3 items-center'>
           {(isValid && isSubmitted) ? (
             <div
               className='w-[18px] h-[18px] mr-3 bg-center bg-no-repeat'
@@ -66,9 +69,9 @@ export function PasswordForm(): ReactElement {
         <Button
           type='submit'
           importance="primary"
-          extraClass='mt-10 md:mt-6'
+          extraClass='mt-[60px] md:mt-6'
           size="xl"
-          disabled={!isValid || isSubmitted}
+          disabled={isSubmitted}
         >Зарегистрироваться</Button>
         <Button
           onClick={onPrev}

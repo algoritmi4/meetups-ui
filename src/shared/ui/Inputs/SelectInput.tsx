@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useState} from 'react'
 import { Listbox } from '@headlessui/react'
-import { ISelectInputOptions } from '../model/types';
+import { ISelectInputOptions } from '../../model/types';
 
 interface ISelectInputProps {
   labelText?: string;

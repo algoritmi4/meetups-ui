@@ -1,6 +1,6 @@
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 import { MainImageControl } from "@/features/addEvent/mainImageControl";
-import { Input, LargeTextInput, SelectInput } from "@/shared";
+import { LabeledInput, LargeTextInput, SelectInput } from "@/shared";
 import { ISelectInputOptions } from "@/shared/model/types";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -20,17 +20,16 @@ export function MainInfoControl({ categories }: IMainInfoProps): ReactElement {
     <>
       <div className="flex items-end mt-[40px]">
         <div className="flex flex-col mr-[45px]">
-          <Input
-            HTMLType='text'
-            hookFormValues={register('name')}
-            error={errors.name?.message}
-            labelText='Название'
+          <LabeledInput
+            hookFormRegister={register('name')}
+            type='text'
+            error={!!errors.name?.message}
             placeholder='Введите название'
-            id='name'
             maxLength={250}
-            extraBoxClass={'w-[480px] md:w-[480px] mt-[7px]'}
-            extraContentClass={'h-[44px]'}
-            extraInputClass={'px-[22px]'}
+            className="text-[18px] w-[480px] mt-[7px]"
+            labelText="Название"
+            extraLabelClass="text-[20px]"
+            size="lg"
           />
 
           <Controller

@@ -2,7 +2,7 @@ import { AccessControl } from "@/features/addEvent/accessControl";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 import { PlacesNumberControl } from "@/features/addEvent/placesNumberControl";
 import { PriceControl } from "@/features/addEvent/priceControl";
-import { CheckboxWithLabel, Input } from "@/shared";
+import { CheckboxWithLabel, LabeledInput } from "@/shared";
 import { ISelectInputOptions } from "@/shared/model/types";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -26,7 +26,7 @@ export function ParticipantsControl({ currencies }: IParticipantsControlProps): 
       <div className="flex items-center mt-[18px]">
         <PlacesNumberControl
           isPlacesDisabled={watch('any_participant_number')}
-          hookFormValues={register('desired_participants_number', { valueAsNumber: true })}
+          hookFormRegister={register('desired_participants_number', { valueAsNumber: true })}
           error={errors.desired_participants_number?.message}
           control={control}
           setValue={setValue}
@@ -41,17 +41,17 @@ export function ParticipantsControl({ currencies }: IParticipantsControlProps): 
       </div>
 
       <div className={`flex items-center mt-[18px]`}>
-        <Input
-          hookFormValues={register('participants_age', { valueAsNumber: true })}
-          error={errors.participants_age?.message}
-          HTMLType='number'
-          labelText='Возраст участников'
+        <LabeledInput
+          hookFormRegister={register('participants_age', { valueAsNumber: true })}
+          error={!!errors.participants_age?.message}
+          type='number'
           placeholder='18'
-          id='add-event-people-age'
-          inlineLabel={true}
-          extraBoxClass={'w-[62px] md:w-[62px] mt-[7px]'}
-          extraContentClass={'h-[44px]'}
-          extraInputClass="px-[10px] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          size="sm"
+          className="w-[60px] max-h-11 text-[18px] ml-3.5"
+          extraInputClass="text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          extraBoxClass="!flex-row !items-center"
+          labelText='Возраст участников'
+          extraLabelClass="text-[20px]"
         />
         <p className={`text-xl text-text-black font-medium ml-1.5`}>+</p>
       </div>
@@ -71,7 +71,7 @@ export function ParticipantsControl({ currencies }: IParticipantsControlProps): 
       />
 
       <PriceControl
-        hookFormValues={register('cost')}
+        hookFormRegister={register('cost')}
         error={errors.cost?.message}
         control={control}
         isPriceActive={!watch('free')}
