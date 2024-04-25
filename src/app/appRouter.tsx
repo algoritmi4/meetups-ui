@@ -9,6 +9,7 @@ import ResetPasswordPage from "@/pages/reset-password/ResetPasswordPage";
 import {selectAccessToken} from "@/shared/lib";
 import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
+import ChatPage from '@/pages/chat/ChatPage';
 
 interface GuestGuardProps {
   children: ReactElement
@@ -52,6 +53,12 @@ export const appRouter = createBrowserRouter([
         element: (
           <NonFound/>
         ),
+      },
+      {
+        path: '/chat',
+        element: (
+          <ChatPage />
+        )
       }
     ]
   },

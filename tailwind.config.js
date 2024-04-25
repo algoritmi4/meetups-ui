@@ -66,7 +66,8 @@ module.exports = {
         'but-primary-active': 'rgb(77, 75, 169)',
         'but-second': 'rgb(230, 229, 255)',
         'but-second-hover': 'rgb(216, 215, 241)',
-        'but-second-active': 'rgb(194, 193, 228)'
+        'but-second-active': 'rgb(194, 193, 228)',
+        'placeholder-gray': 'rgb(192, 192, 194)'
       },
       padding: {
         "60": "60px",
