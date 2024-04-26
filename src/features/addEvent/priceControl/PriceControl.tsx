@@ -19,7 +19,7 @@ export function PriceControl({ hookFormRegister, error, control, isPriceActive, 
     <div className={'flex items-center mt-[18px]'}>
       <LabeledInput
         hookFormRegister={hookFormRegister}
-        error={!!error}
+        isError={!!error}
         type='number'
         placeholder={`${isPriceActive ? "12" : ""}`}
         className={`w-[90px] max-h-11 text-[18px] mr-1.5 ml-3.5 ${!isPriceActive && "bg-select-disable"}`}

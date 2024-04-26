@@ -53,7 +53,7 @@ export function DetailForm(): ReactElement {
           type='text'
           head={<Svg className="w-6 h-6" id="person-icon" />}
           placeholder='Имя пользователя'
-          error={!!errors.username}
+          isError={!!errors.username}
           hookFormRegister={register('username')}
           extraInputClass="pl-3"
           size="md"
@@ -62,7 +62,7 @@ export function DetailForm(): ReactElement {
           type='email'
           head={<Svg className="w-6 h-6" id="email-icon" />}
           placeholder='Почта'
-          error={!!errors.email}
+          isError={!!errors.email}
           hookFormRegister={register('email')}
           size="md"
           extraInputClass="pl-3"

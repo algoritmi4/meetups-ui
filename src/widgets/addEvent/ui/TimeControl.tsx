@@ -22,7 +22,7 @@ export function TimeControl(): ReactElement {
       <div className='flex items-center relative mt-[18px]'>
         <LabeledInput
           hookFormRegister={register('start_date')}
-          error={!!errors.start_date?.message}
+          isError={!!errors.start_date?.message}
           type='date'
           placeholder='Начало'
           className={`w-[480px] text-[18px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}
@@ -38,7 +38,7 @@ export function TimeControl(): ReactElement {
         <div className='self-end relative'>
           <Input
             hookFormRegister={register('end_date')}
-            error={!!errors.end_date?.message}
+            isError={!!errors.end_date?.message}
             type='date'
             placeholder='Конец'
             className={`w-[480px] mt-[7px] ${watch('repeatable') ? "bg-select-disable" : ""}`}

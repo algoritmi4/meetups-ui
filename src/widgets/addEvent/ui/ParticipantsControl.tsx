@@ -43,7 +43,7 @@ export function ParticipantsControl({ currencies }: IParticipantsControlProps): 
       <div className={`flex items-center mt-[18px]`}>
         <LabeledInput
           hookFormRegister={register('participants_age', { valueAsNumber: true })}
-          error={!!errors.participants_age?.message}
+          isError={!!errors.participants_age?.message}
           type='number'
           placeholder='18'
           size="sm"

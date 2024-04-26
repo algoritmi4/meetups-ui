@@ -63,7 +63,7 @@ export function EnterEmailStep(): ReactElement  {
           head={<Svg className="w-6 h-6" id="email-icon" />}
           extraInputClass="pl-3"
           placeholder='Почта'
-          error={!!errors.email}
+          isError={!!errors.email}
           size="md"
           hookFormRegister={register('email')}
           className="text-[18px]"

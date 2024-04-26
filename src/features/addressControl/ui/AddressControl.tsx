@@ -114,7 +114,7 @@ export function AddressControl({ setValuesFunc, setValue, error }: IAddressContr
         <LabeledInput
           value={inputValue}
           onChange={onInputChange}
-          error={!!error}
+          isError={!!error}
           type="search"
           placeholder="Введите адрес"
           className="w-full text-[18px] mt-[7px]"

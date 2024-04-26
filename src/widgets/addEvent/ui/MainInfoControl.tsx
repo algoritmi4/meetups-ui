@@ -23,7 +23,7 @@ export function MainInfoControl({ categories }: IMainInfoProps): ReactElement {
           <LabeledInput
             hookFormRegister={register('name')}
             type='text'
-            error={!!errors.name?.message}
+            isError={!!errors.name?.message}
             placeholder='Введите название'
             maxLength={250}
             className="text-[18px] w-[480px] mt-[7px]"

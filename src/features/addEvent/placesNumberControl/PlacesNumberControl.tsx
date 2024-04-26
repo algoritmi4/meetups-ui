@@ -17,7 +17,7 @@ export function PlacesNumberControl({ isPlacesDisabled, hookFormRegister, error,
     <div className={'flex items-center'}>
       <LabeledInput
         hookFormRegister={hookFormRegister}
-        error={!!error}
+        isError={!!error}
         type='number'
         placeholder='25'
         className={`w-[70px] max-h-11 ml-3.5 text-[18px] ${isPlacesDisabled ? "bg-select-disable" : ""}`}

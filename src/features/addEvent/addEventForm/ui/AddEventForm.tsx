@@ -3,9 +3,9 @@ import { AddEventValidationSchema } from "../model/addEventFormSchema";
 import { UseFormHandleSubmit, useFormContext } from "react-hook-form";
 import { useCreateEventMutation } from "@/entities/event/api/eventApi";
 import { prepareDataToRequest } from "../model/prepareDataToRequest";
-import { Preloader } from "@/shared/ui/Preloader";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared";
+import FormLoader from "./FormLoader";
 
 
 interface IAddEventFormProps {
@@ -30,7 +30,7 @@ export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFor
   };
 
   if (isLoading) return (
-    <Preloader />
+    <FormLoader />
   )
 
   return (
