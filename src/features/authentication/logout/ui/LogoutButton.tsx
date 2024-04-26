@@ -8,7 +8,6 @@ export function LogoutButton(token: RefreshToken) {
   
   const [logoutTrigger] = useLogoutMutation();
   const navigate = useNavigate();
-
   const onConfirmLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
