@@ -45,7 +45,7 @@ function AddEventPage(): ReactElement {
   }, [methods.formState.errors])
 
   return (
-    <main className="w-full max-w-[1005px] mx-auto pb-[98px]">
+    <main className={`w-full max-w-[1005px] mx-auto ${isFormLoading ? "" : "pb-[98px]"}`}>
       <PageTitle />
       <FormProvider {...methods}>
         <AddEventForm handleSubmit={methods.handleSubmit} isLoading={isFormLoading}>

@@ -57,7 +57,7 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
           head={<Svg className="w-6 h-6" id="email-icon" />}
           extraInputClass="pl-3"
           placeholder='Почта'
-          error={!!errors.email}
+          isError={!!errors.email}
           size="md"
           hookFormRegister={register('email')}
           className="text-[18px]"
@@ -67,7 +67,7 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
           head={<Svg className="w-6 h-6" id="password-icon" />}
           placeholder='Пароль'
           extraInputClass="pl-3"
-          error={!!errors.password}
+          isError={!!errors.password}
           hookFormRegister={register('password')}
           size="md"
           className="mt-3.5 text-[18px] !pr-5"
