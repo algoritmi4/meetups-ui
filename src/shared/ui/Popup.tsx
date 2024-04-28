@@ -1,24 +1,48 @@
-import { ReactElement, ReactNode, useEffect } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, ReactElement, ReactNode } from "react";
 
 interface IPopupProps {
   children: ReactNode;
   isOpen: boolean;
+  onClose: () => void;
 }
 
-export function Popup({ children, isOpen }: IPopupProps): ReactElement {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '15px';
-    } else {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0px';
-    }
-  }, [isOpen]);
-
+export function Popup({ children, isOpen, onClose }: IPopupProps): ReactElement {
   return (
-    <div className={`fixed inset-0 bg-popup-bg z-40 duration-100 ${isOpen ? "opacity-1 visible" : "opacity-0 invisible"}`}>
-      {children}
-    </div>
+    <>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={onClose}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-200"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black opacity-40" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-200"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="bg-transparent text-left align-middle transition-all">
+                  {children}
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
   )
 }

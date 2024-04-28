@@ -2,6 +2,7 @@ import {ReactElement} from "react";
 import {IEvent} from "../model/types";
 import {getDateAndTime} from "../lib/getDateAndTime";
 import { Link } from "react-router-dom";
+import Svg from "@/shared/ui/Svg";
 
 export interface IEventCard {
   event: IEvent;
@@ -33,10 +34,10 @@ export function EventCard({ event }: IEventCard): ReactElement {
                     <div className="w-6 h-6 bg-event-card-people bg-no-repeat bg-center ml-1"></div>
                   </div>
                   {
-                    event.rating && (
-                      <div className="flex items-center mt-[8px]">
-                        <p className="text-[14px] font-medium">{event.rating}</p>
-                        <div className="bg-rating-star w-[16px] h-[16px]"></div>
+                    (!!event.average_rating || event.average_rating === 0) && (
+                      <div className="flex items-start mt-[8px] self-end">
+                        <p className="text-[14px] font-medium">{event.average_rating}</p>
+                        <Svg id='rating-star' extraUseClass="!fill-current" className='w-[18px] h-[18px] ml-2' />
                       </div>
                     )
                   }

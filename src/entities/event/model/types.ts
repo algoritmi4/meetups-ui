@@ -13,7 +13,7 @@ export interface IParticipant {
 export interface IEvent {
   id: number,
   name: string,
-  rating: string | null,
+  average_rating: number | null,
   image_url: string,
   description: string,
   start_date: string,
@@ -28,4 +28,9 @@ export interface IEvent {
   gallery: string[],
   free: boolean,
   cost: string
+}
+
+export interface IGetEventRequest {
+  search?: string;
+  categories?: string;
 }

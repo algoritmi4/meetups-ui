@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/shared/model";
-import { autocompleteServiceSetted, placesServiceSetted } from "@/widgets/mapWidget/model/addressControlSlice";
+import { autocompleteServiceSetted, placesServiceSetted } from "@/features/addressControl/model/addressControlSlice";
 import { ControlPosition, MapControl, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { ReactElement, useEffect } from "react";
 

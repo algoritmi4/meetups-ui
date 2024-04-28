@@ -12,7 +12,7 @@ export const baseQuery: BaseQueryFn<
 > = fetchBaseQuery({
   baseUrl: config.BASE_URL_API,
   prepareHeaders: (headers) => {
-    let accessToken = selectAccessToken();
+    const accessToken = selectAccessToken();
 
     if (accessToken) {
       headers.set('Authorization', `Bearer ${accessToken}`);

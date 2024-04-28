@@ -24,3 +24,8 @@ export interface IUploadImageResponse {
   url: string;
   test_url: string;
 }
+
+export interface ISelectInputOptions {
+  id: number;
+  name: string;
+}
