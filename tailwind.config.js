@@ -93,7 +93,7 @@ module.exports = {
         'map-marker-icon': "url('images/map-marker-icon.svg')",
         'burger-menu-icon': "url('images/burger-menu-icon.svg')",
         'right-arrow': "url('images/right-arrow.png')",
-        'black-right-arrow': "url('images/black-right-arrow.png')",
+        'black-right-arrow': "url('/images/black-right-arrow.png')",
         'heart-icon': "url('images/heart-icon.png')",
         'rating-star': "url('images/rating-star.png')",
         'text-fade-out': "linear-gradient(to right, transparent, #E5E5E3 50%)",

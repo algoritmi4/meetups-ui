@@ -1,29 +1,18 @@
 import {useGetEventQuery} from '@/entities/event/api/eventApi';
-import React, {ReactElement} from 'react';
+import {ReactElement} from 'react';
 import {skipToken} from '@reduxjs/toolkit/query/react'
-
 import {useParams} from 'react-router-dom';
-
-import { EventHeader } from './Head';
-import { TagRow } from './TagRow';
-import { EventDescription } from './EventDescription';
-import { CreatorDetails } from './CreatorDetails';
-import { LocationCard } from './LocationCard';
-import { ReviewsRow } from './ReviewsRow';
-
-type RouteParams = {
-    eventId: string;
-};
+import { CreatorDetails, EventDescription, EventHeader, EventLoader, Location, ReviewsRow, TagRow } from '@/widgets/eventPage';
 
 export function EventPage(): ReactElement {
-    const {eventId} = useParams<RouteParams>();
+    const {eventId} = useParams<{eventId: string}>();
     const {data: event, isLoading, isError, error} = useGetEventQuery(Number(eventId) ?? skipToken);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+      return <EventLoader />;
     }
 
-    if (error) {
+    if (isError) {
         if ('status' in error) {
             // you can access all properties of `FetchBaseQueryError` here
             const errMsg = 'error' in error ? error.error : JSON.stringify(error.data)
@@ -45,18 +34,16 @@ export function EventPage(): ReactElement {
     // isError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(error)}`);
 
     if (event) {
-        return (
-            <main className="event_detail_page bg-white w-full flex flex-col items-center pt-[60px]">
-                <EventHeader event={event}/>
-                <div className='w-full flex flex-col justify-start space-y-[90px] mb-[100px]'>
-                    <TagRow tags={event.tags}/>
-                    <EventDescription event={event}/>
-                    <CreatorDetails creator={event.created_by}/>
-                    <LocationCard event={event}/>
-                    <ReviewsRow eventId={event.id} rating={event.rating}/>
-                </div>
-            </main>
-        )
+      return (
+        <main className="bg-white w-full flex flex-col items-center pt-[60px] pb-[66px]">
+          <EventHeader event={event}/>
+          <TagRow tags={event.tags}/>
+          <EventDescription event={event}/>
+          <CreatorDetails creator={event.created_by}/>
+          <Location event={event}/>
+          <ReviewsRow eventId={event.id} rating={event.average_rating}/>
+        </main>
+      )
     }
 
     return <div>Event not found</div>;

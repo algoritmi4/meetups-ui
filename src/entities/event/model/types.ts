@@ -18,6 +18,8 @@ export interface IEvent {
   description: string,
   start_date: string,
   end_date: string | null,
+  start_time: string,
+  end_time: string | null,
   tags: IEventTag[] | [],
   address: string,
   category: IEventTag | null,
@@ -27,7 +29,8 @@ export interface IEvent {
   participants: IParticipant[],
   gallery: string[],
   free: boolean,
-  cost: string
+  cost: string,
+  any_participant_number: boolean
 }
 
 export interface IGetEventRequest {
