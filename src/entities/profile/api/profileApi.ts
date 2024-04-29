@@ -1,7 +1,7 @@
 import {baseApi} from '@/shared/api'
-import {ProfileDetailsDto} from "@/entities/profile/api/types";
-import {ProfileDetails, ProfileId} from "@/entities/profile/model/types";
-import {mapProfileDetails} from "@/entities/profile/lib/mapProfileDetails";
+import {ProfileDetailsDto, ProfileFollowingDto} from "@/entities/profile/api/types";
+import {ProfileDetails, ProfileId, ProfileFollowing} from "@/entities/profile/model/types";
+import {mapProfileDetails, mapProfileFollowing} from "@/entities/profile/lib/mapProfileDetails";
 
 
 export const profileApi = baseApi.injectEndpoints({
@@ -20,11 +20,20 @@ export const profileApi = baseApi.injectEndpoints({
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
     }),
+    profileFollowing: build.query<ProfileFollowing, ProfileId>({
+      query: ({userId}) => ({
+        url: `/users/${userId}/following/`,
+      }),
+      transformResponse: (response: ProfileFollowingDto) =>
+        mapProfileFollowing(response),
+    }),
+
 }),
 })
 
 export const {
   useProfileDetailsQuery,
   useMyDetailsQuery,
+  useProfileFollowingQuery,
 } = profileApi
  

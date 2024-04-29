@@ -2,18 +2,19 @@ import { ReactElement, ReactNode } from "react";
 import Svg from "@/shared/ui/Svg";
 import { BackButton } from "@/shared/ui/Buttons/BackButton";
 import { ProfileDetails } from "@/entities/profile/model/types";
+import ProfileAvatar from "./ProfileAvatar";
 
 interface IProfileData {
   profileData?: ProfileDetails;
   children: ReactNode;
   OnEditProfile?: () => void;
-  report?: ReactNode
+  optionButton?: ReactNode;
 }
-function ProfileInfo({
+export function ProfileInfo({
   profileData,
   children,
   OnEditProfile,
-  report
+  optionButton,
 }: IProfileData): ReactElement {
   const interstsList = profileData?.category_favorite.map(({ name }, id) => (
     <p
@@ -23,20 +24,14 @@ function ProfileInfo({
       {name}
     </p>
   ));
-  // const avaStyle = 'bg-neutral-800 bg-edit-photo bg-no-repeat bg-center'
+
   return (
     <section className="flex-auto flex flex-col basis-5/12 h-[1100px]">
-      <div
-        onClick={OnEditProfile}
-        // className="cursor-pointer w-[270px] h-[270px] mt-[56px] rounded-[200px] bg-neutral-800 bg-edit-photo bg-no-repeat bg-center"
-        className={`w-[270px] h-[270px] mt-[56px] rounded-[200px] opacity-100 ${OnEditProfile? "cursor-pointer bg-neutral-800 bg-edit-photo bg-no-repeat bg-center" : ''}`}
-      >
-        <img
-          className={`bg-neutral-800 bg-opacity-40 rounded-[200px] pointer-events-none ${OnEditProfile? "hover:opacity-60 pointer-events-auto" : ''}`}
-          src={`https://storage.googleapis.com/meetups-dev/media/${profileData?.image}`}
-          alt={`Аватар пользователя ${profileData?.username}`}
-        />
-      </div>
+      <ProfileAvatar
+        onEditProfile={OnEditProfile}
+        image={profileData?.image}
+        name={profileData?.username}
+      />
       <p className="text-zinc-800 font-semibold text-[32px] mt-[20px]">
         {profileData?.firstName}&nbsp;{profileData?.lastName}
       </p>
@@ -48,27 +43,37 @@ function ProfileInfo({
           viewBox="0 0 24 25"
           fill="none"
         />
-        <p className="text-indigo-600 text-xl font-semibold ml-[8px]">
-          {profileData?.city}
-        </p>
+        <div className="text-indigo-600 text-xl font-semibold ml-[8px]">
+          {profileData?.city ? (
+            profileData?.city
+          ) : (
+            <p className="text-zinc-400 text-[18px]">Укажите свой город</p>
+          )}
+        </div>
       </div>
       <div className="mt-[30px]">{children}</div>
       <p className="text-zinc-800 text-2xl font-semibold mt-[30px]">О себе</p>
-      <p className="max-w-[414px] h-[115px] text-zinc-800 text-lg font-normal text-pretty text-ellipsis overflow-hidden mt-[12px]">
-        {profileData?.bio}
-      </p>
-      <p className="text-zinc-800 text-2xl font-semibold mt-[30px]">Интересы</p>
-      <div className="flex flex-row-revers max-w-[414px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
-        {interstsList}
+      <div className="max-w-[414px] h-[115px] text-zinc-800 text-lg font-normal text-pretty text-ellipsis overflow-hidden mt-[12px]">
+        {profileData?.bio ? (
+          profileData?.bio
+        ) : (
+          <p className="text-zinc-400 text-[18px]">Расскажите о себе</p>
+        )}
       </div>
-      <div className="flex mt-[80px] ">
-        {report}
-      </div>
+      {interstsList?.length != 0 && (
+        <>
+          <p className="text-zinc-800 text-2xl font-semibold mt-[30px]">
+            Интересы
+          </p>
+          <div className="flex flex-row-revers max-w-[414px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
+            {interstsList}
+          </div>
+        </>
+      )}
+      {optionButton && optionButton}
       <div className="flex mt-auto ">
         <BackButton />
       </div>
     </section>
   );
 }
-
-export default ProfileInfo;

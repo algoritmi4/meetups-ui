@@ -21,4 +21,11 @@ export type ProfileDetailsDto = ProfileDto & {
   date_of_birth: string,
   category_favorite: IUserFavorite[] | []
 }
+   
+export type ProfileFollowingDto = {
+  id: number,
+  user: number,
+  follower: number,
+  status: string,
+}
   

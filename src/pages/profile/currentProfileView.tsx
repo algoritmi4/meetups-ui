@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import ProfileInfo from "@/widgets/Profile/ProfileInfo/ui/ProfileInfo";
+import { ProfileInfo } from "@/widgets/Profile/ProfileInfo";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
 import { Button } from "@/shared/ui/Buttons/Button";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ function CurrentProfileView(): ReactElement {
   const onEditProfile = () => {
     navigate("/profile/edit");
   };
+
   return (
     <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap min-h-[1000px]">
       {isProfileDataLoading ? (
@@ -19,7 +20,7 @@ function CurrentProfileView(): ReactElement {
           <Preloader />
         </div>
       ) : (
-        <ProfileInfo profileData={profileData} OnEditProfile={onEditProfile}>
+        <ProfileInfo profileData={profileData}>
           <Button onClick={onEditProfile} size="lg" importance="primary">
             Редактировать
           </Button>
@@ -32,3 +33,4 @@ function CurrentProfileView(): ReactElement {
 }
 
 export default CurrentProfileView;
+ 
