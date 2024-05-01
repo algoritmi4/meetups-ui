@@ -1,39 +1,16 @@
-import { useGetReviewsQuery } from "@/entities/review/api/reviewApi";
+import { IReview } from "@/entities/review/model/types";
 import { ReviewSlider } from "@/features/review";
 import Svg from "@/shared/ui/Svg";
 import { ReactElement } from "react";
 
 interface IReviewsRow {
-  eventId: number;
+  reviews: IReview[];
   rating: number | null;
 }
 
-export function ReviewsRow({eventId, rating}: IReviewsRow): ReactElement {
-  const {data: reviews, error, isLoading} = useGetReviewsQuery(eventId);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    if ('status' in error) {
-      // you can access all properties of `FetchBaseQueryError` here
-      const errMsg = 'error' in error ? error.error : JSON.stringify(error.data)
-
-      return (
-        <div>
-          <div>An error has occurred:</div>
-          <div>{errMsg}</div>
-        </div>
-      )
-    } else {
-      // you can access all properties of `SerializedError` here
-      return <div>{error.message}</div>
-    }
-  }
-
+export function ReviewsRow({reviews, rating}: IReviewsRow): ReactElement {
   return (
-    <section className="w-full">
+    <section className="relative w-full before:w-[198px] before:absolute before:right-[-45px] before:h-full before:bg-slider-fade-out before:z-10">
       <h2 className="text-text-black text-[28px] font-semibold mt-[92px]">
         Отзывы
       </h2>
@@ -48,8 +25,8 @@ export function ReviewsRow({eventId, rating}: IReviewsRow): ReactElement {
         )
       }
 
-      {reviews && reviews?.results.length > 0 ? (
-        <ReviewSlider reviews={reviews.results}></ReviewSlider>
+      {reviews && reviews.length > 0 ? (
+        <ReviewSlider reviews={reviews}></ReviewSlider>
       ) : (
         <div>No reviews yet.</div>
       )}

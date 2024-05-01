@@ -1,14 +1,14 @@
 
 export interface IReviewer {
-    id: number; // ID of the reviewer
-    username: string; // Username of the reviewer
-    image_url: string; // Image URL of the reviewer
+  id: number;
+  username: string;
+  image_url: string;
 }
 
 export interface IReview {
-    id: number; // ID of the review
-    rating: number; // Rating given in the review
-    created_by: IReviewer;
-    created_at: string; // Date-time when the review was created
-    review: string; // Text content of the review
+  id: number;
+  rating: number;
+  created_by: IReviewer;
+  created_at: string;
+  review: string;
 }

@@ -1,5 +1,5 @@
 import { baseApi } from "@/shared/api";
-import { IEvent, IGetEventRequest } from "../model/types";
+import { IDetailedEvent, IEvent, IGetEventRequest } from "../model/types";
 import { IApiResponse } from "@/shared/types";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
@@ -16,7 +16,7 @@ export const eventApi = baseApi.injectEndpoints({
         }
       })
     }),
-    getEvent: build.query<IEvent, number>({
+    getEvent: build.query<IDetailedEvent, number>({
       query: (id) => ({
         url: `/events/${id}/`,
         method: 'GET'
@@ -37,8 +37,41 @@ export const eventApi = baseApi.injectEndpoints({
         method: 'POST',
         body: eventInfo
       }),
+    }),
+    registerToEvent: build.mutation<void, number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/register/`,
+        method: 'POST'
+      }),
+    }),
+    leaveFromEvent: build.mutation<void, number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/leave/`,
+        method: 'POST'
+      }),
+    }),
+    likeEvent: build.mutation<void, number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/favorite/`,
+        method: 'POST'
+      })
+    }),
+    unlikeEvent: build.mutation<void, number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/favorite`,
+        method: 'DELETE'
+      })
     })
   })
 })
 
-export const { useGetEventsQuery, useGetEventQuery, useCreateEventMutation, useGetTopEventsQuery } = eventApi;
+export const {
+  useGetEventsQuery,
+  useGetEventQuery,
+  useCreateEventMutation,
+  useGetTopEventsQuery,
+  useRegisterToEventMutation,
+  useLeaveFromEventMutation,
+  useLikeEventMutation,
+  useUnlikeEventMutation
+} = eventApi;

@@ -9,17 +9,19 @@ export interface IEventCard {
 
 export function EventCard({ event }: IEventCard): ReactElement {
   return (
-      <Link to={`/events/${event.id}`} className="event_card flex flex-col max-w-[270px] mr-[45px]">
+      <div className="w-full flex flex-col max-w-[270px] mr-[45px]">
           <div className="flex justify-between">
             <p className="text-[14px] font-medium capitalize">{event.category?.name}</p>
             <Svg id="heart-icon" className="w-6 h-6 cursor-pointer" />
           </div>
-          <figure className="flex flex-col cursor-pointer rounded-12 max-h-[188px] mt-[7px]">
-              <img className="rounded-t-12 h-[143px] object-cover" src={`https://storage.googleapis.com/meetups-dev/media/${event.image_url}`} alt={`Изображение ивента ${event.name}`} />
-              <div className={`h-[45px] bg-gray rounded-b-12 flex items-center justify-center pl-[16px] pr-[7px] relative ${event.name.length > 21 && "before:w-[60px] before:rounded-b-[12px] before:absolute before:right-0 before:h-full before:bg-text-fade-out"}`}>
-                  <figcaption className="capitalize text-[20px] font-semibold text-text-black overflow-hidden whitespace-nowrap text-clip">{event.name}</figcaption>
-              </div>
-          </figure>
+          <Link to={`/events/${event.id}`}>
+            <figure className="group flex flex-col cursor-pointer rounded-12 max-h-[188px] mt-[7px] overflow-hidden">
+                <img className="group-hover:scale-105 duration-300 ease-in-out rounded-t-def h-[143px] object-cover" src={`https://storage.googleapis.com/meetups-dev/media/${event.image_url}`} alt={`Изображение ивента ${event.name}`} />
+                <div className={`h-[45px] bg-gray rounded-b-def flex items-center justify-center pl-[16px] pr-[7px] relative ${event.name.length > 21 && "before:w-[60px] before:rounded-b-[12px] before:absolute before:right-0 before:h-full before:bg-text-fade-out"}`}>
+                    <figcaption className="group-hover:font-bold capitalize text-[20px] font-semibold text-text-black overflow-hidden whitespace-nowrap text-clip">{event.name}</figcaption>
+                </div>
+            </figure>
+          </Link>
           <div className="flex justify-between mt-2.5">
             <div className="flex flex-col leading-def">
               <p className="text-[18px] font-medium">{new Date(event.start_date).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})}</p>
@@ -40,6 +42,6 @@ export function EventCard({ event }: IEventCard): ReactElement {
                 }
             </div>
           </div>
-      </Link>
+      </div>
   )
 }

@@ -124,7 +124,7 @@ export function AddressControl({ setValuesFunc, setValue, error }: IAddressContr
           extraLabelClass="text-[20px]"
         />
         {predictionResults.length > 0 && (
-          <ul className="w-full flex flex-col absolute top-[48px] bg-custom-gray rounded-[10px] z-50">
+          <ul className="w-full flex flex-col absolute top-[90px] bg-custom-gray rounded-[10px] z-50">
             {predictionResults.map(({place_id, description}) => {
               return (
                 <li

@@ -1,17 +1,18 @@
-import { IEvent } from "@/entities/event/model/types";
+import { IDetailedEvent } from "@/entities/event/model/types";
 import { HeaderDetails, HeaderGallery } from "@/features/eventPage";
 import { ReactElement } from "react";
 
 
 interface IEventHeader {
-    event: IEvent;
+  event: IDetailedEvent;
+  handleOpenParticipantsPopup: () => void;
 }
 
-export function EventHeader({event}: IEventHeader): ReactElement {
+export function EventHeader({ event, handleOpenParticipantsPopup }: IEventHeader): ReactElement {
   return (
-    <section className="flex h-[460px] rounded-[10px]">
-      <HeaderDetails event={event}/> 
-      <HeaderGallery image_url={event.image_url} gallery={event.gallery}/>
+    <section className="flex w-full h-[460px] rounded-[10px]">
+      <HeaderDetails event={event} handleOpenParticipantsPopup={handleOpenParticipantsPopup} />
+      <HeaderGallery event={event} />
     </section>
   )
 }

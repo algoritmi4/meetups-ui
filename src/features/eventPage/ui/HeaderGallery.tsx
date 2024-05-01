@@ -1,27 +1,35 @@
 import { ReactElement } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from "react-responsive-carousel";
+import { config } from "@/shared/config";
+import { IDetailedEvent } from "@/entities/event/model/types";
+import { SlickSlider } from "@/shared";
 
 interface IGallery {
-  image_url: string;
-  gallery: string[];
+  event: IDetailedEvent;
 }
 
-export function HeaderGallery({image_url, gallery}: IGallery): ReactElement {
-  const galleryPresented = gallery && gallery.length > 0;
-  const imageSrcRoot = "https://storage.googleapis.com/meetups-dev/media/"
+export function HeaderGallery({ event }: IGallery): ReactElement {
+  const imgsArr = [event.image_url, ...event.gallery];
 
-  const imgs = [image_url, ...gallery].map((v, i) => <div key={i}><img src={`${imageSrcRoot}${v}`} /></div>);
+  const imgs = imgsArr.map((el, index) => <img key={index} className="rounded-r-[15px]" src={`${config.BASE_IMAGE_URL}${el}`} alt={`Изображение ивента номер ${index}`} />);
+
+  const settings = {
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    speed: 400,
+    className: 'rounded-r-[15px]'
+  }
 
   return (
-      <div className="h-full rounded-r-[10px] shrink-0 w-[690px]">
-          {galleryPresented?
-              <Carousel dynamicHeight={false} className="h-full" showThumbs={true} showIndicators={false} infiniteLoop>
-                  {imgs}
-              </Carousel> :
-              <img src={`${imageSrcRoot}${image_url}`}
-                alt="Event Image" className="object-cover object-center w-full h-full rounded-r-[10px]"/>
-          }
-      </div>
+    <div className="h-full rounded-r-[15px] shrink-0 w-[690px]">
+      {
+        imgsArr.length > 1 ? (
+          <SlickSlider extraSettings={settings} arrowsExtraClasses={{rightArrow: 'right-[-40px] top-1/2 translate-y-[-50%]', leftArrow: 'left-[-40px] top-1/2 translate-y-[-50%]'}}>
+            {imgs}
+          </SlickSlider>
+        ) : (
+          <img src={`${config.BASE_IMAGE_URL}${event.image_url}`} alt="Изображение ивента" className="object-cover object-center w-full h-full rounded-r-[10px]"/>
+        )
+      }
+    </div>
   )
 }

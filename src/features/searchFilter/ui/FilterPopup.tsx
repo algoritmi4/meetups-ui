@@ -4,6 +4,7 @@ import { ICategory } from "../model/types";
 import { useAppDispatch, useAppSelector } from "@/shared/model";
 import { isPopupOpenSetted } from "../model/filterPopupSlice";
 import { categorySetted } from "../model/SearchFilterSlice";
+import Svg from "@/shared/ui/Svg";
 
 interface IFilterPopupProps {
   categories: ICategory[];
@@ -31,7 +32,7 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
   return (
     <Popup isOpen={isOpen} onClose={() => dispatch(isPopupOpenSetted(false))}>
       <div className="absolute flex flex-col top-[100px] left-[50%] translate-x-[-50%] bg-white min-w-[584px] rounded-[10px] px-[45px] py-[35px]">
-        <div onClick={() => dispatch(isPopupOpenSetted(false))} className="absolute top-[42px] right-[45px] bg-close-cross bg-no-repeat bg-cover bg-center w-6 h-6 cursor-pointer"></div>
+        <Svg onClick={() => dispatch(isPopupOpenSetted(false))} id="close-cross" className="absolute top-[42px] right-[45px] w-6 h-6 cursor-pointer duration-150 hoverscreen:hover:opacity-70" />
         <div className="flex items-center">
           <h2 className="text-[30px] font-semibold leading-[37.65px]">Фильтр</h2>
           <div className="bg-filter-icon w-6 h-6 bg-cover bg-no-repeat bg-center ml-3"></div>
