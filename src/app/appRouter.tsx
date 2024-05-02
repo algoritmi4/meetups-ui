@@ -9,6 +9,7 @@ import ResetPasswordPage from "@/pages/reset-password/ResetPasswordPage";
 import {selectAccessToken} from "@/shared/lib";
 import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
+import { EventPage } from '@/pages/event/EventPage';
 
 interface GuestGuardProps {
   children: ReactElement
@@ -40,6 +41,12 @@ export const appRouter = createBrowserRouter([
         element: (
           <HomePage/>
         ),
+      },
+      {
+        path: '/events/:eventId',
+        element: (
+          <EventPage/>
+        )
       },
       {
         path: '/event/add',

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   plugins: [
-    require('tailwind-scrollbar'),
+    require('tailwind-scrollbar')
   ],
   content: [
     "./index.html",
@@ -57,7 +57,6 @@ module.exports = {
         'text-black': 'rgb(46, 46, 46)',
         'text-red': 'rgb(187, 16, 16)',
         'popup-bg': 'rgba(26, 26, 26, .4)',
-        'text-light-gray': 'rgb(153, 153, 153)',
         'toggle-color': 'rgb(185, 185, 186, 1)',
         'select-disable': 'rgba(191, 189, 189, 1)',
         'but-disable': 'rgb(177, 177, 187)',
@@ -66,7 +65,8 @@ module.exports = {
         'but-primary-active': 'rgb(77, 75, 169)',
         'but-second': 'rgb(230, 229, 255)',
         'but-second-hover': 'rgb(216, 215, 241)',
-        'but-second-active': 'rgb(194, 193, 228)'
+        'but-second-active': 'rgb(194, 193, 228)',
+        'but-orange': 'rgb(246, 125, 125)'
       },
       padding: {
         "60": "60px",
@@ -93,7 +93,7 @@ module.exports = {
         'map-marker-icon': "url('images/map-marker-icon.svg')",
         'burger-menu-icon': "url('images/burger-menu-icon.svg')",
         'right-arrow': "url('images/right-arrow.png')",
-        'black-right-arrow': "url('images/black-right-arrow.png')",
+        'black-right-arrow': "url('/images/black-right-arrow.png')",
         'heart-icon': "url('images/heart-icon.png')",
         'rating-star': "url('images/rating-star.png')",
         'text-fade-out': "linear-gradient(to right, transparent, #E5E5E3 50%)",
@@ -109,7 +109,8 @@ module.exports = {
         'link-icon': "url('/images/link-icon.svg')",
         'chevron-left-purple': "url('/images/chevron-left-purple.svg')",
         'gallery-icon': "url('/images/gallery-icon.svg')",
-        'plus-icon': "url('/images/plus-icon.svg')"
+        'plus-icon': "url('/images/plus-icon.svg')",
+        'review-text-fade-out': "linear-gradient(90deg, rgba(243,243,245,0) 6%, rgba(243,243,245,1) 75%, rgba(243,243,245,1) 100%)"
       },
       borderRadius: {
         "12": "12px",

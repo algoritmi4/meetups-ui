@@ -73,9 +73,6 @@ export const addEventSchema = z.object({
     .max(99, { message: 'Максимальный возраст - 100' }),
   type: z
     .enum(['open', 'private']),
-  private_url: z
-    .string()
-    .nullable(),
   cost: z
     .string({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' })
     .min(1, { message: 'Обязательное поле' })
@@ -87,7 +84,6 @@ export const addEventSchema = z.object({
     .boolean({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' }),
   gallery: z
     .string({ invalid_type_error: 'Обязательное поле' })
-    .url({ message: 'В галерее могут быть только url' })
     .array(),
   tags: z
     .number()

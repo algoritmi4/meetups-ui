@@ -23,7 +23,7 @@ export function MapWidget({ text, setValue, setValuesFunc, error, position, zoom
     <>
       {withAddressControl && <AddressControl setValuesFunc={setValuesFunc} setValue={setValue} error={error} />}
       {text && <p className="text-[20px] font-normal leading-[25.1px] mb-[7px] mt-[15px]">{text}</p>}
-      <GoogleMap position={position} markersArr={markers} isLoading={isLoading} zoom={zoom} withAddressControl={withAddressControl} />
+      <GoogleMap position={position} markersArr={markers} isLoading={isLoading} zoom={zoom} withAddressControl={withAddressControl} extraClasses="rounded-[12px] "/>
     </>
   )
 }

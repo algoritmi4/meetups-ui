@@ -1,6 +1,6 @@
 import {ReactElement, ReactNode} from "react";
 import { AddEventValidationSchema } from "../model/addEventFormSchema";
-import { UseFormHandleSubmit, useFormContext } from "react-hook-form";
+import { UseFormHandleSubmit } from "react-hook-form";
 import { useCreateEventMutation } from "@/entities/event/api/eventApi";
 import { prepareDataToRequest } from "../model/prepareDataToRequest";
 import { useNavigate } from "react-router-dom";
@@ -16,9 +16,7 @@ interface IAddEventFormProps {
 
 export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFormProps): ReactElement {
   const navigate = useNavigate();
-  const [createEvent] = useCreateEventMutation();
-
-  const { formState: { isSubmitted } } = useFormContext<AddEventValidationSchema>();
+  const [createEvent, { isLoading: isCreateEventLoading }] = useCreateEventMutation();
 
   const onSubmit = (data: AddEventValidationSchema) => {
     const { dataToCreateEvent } = prepareDataToRequest(data);
@@ -41,7 +39,7 @@ export function AddEventForm({ children, handleSubmit, isLoading }: IAddEventFor
         size="lg"
         importance="primary"
         extraClass="self-start mt-10"
-        disabled={isSubmitted}
+        disabled={isCreateEventLoading}
       >Создать</Button>
     </form>
   )
