@@ -28,10 +28,10 @@ export type ProfileDetails = {
   category_favorite: IUserFavorite[] | []
 } 
 
+// 
 export type ProfileFollowing = {
   id: number,
   user: number,
   follower: number,
   status: string,
-}
-  
+} 

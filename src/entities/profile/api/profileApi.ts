@@ -20,13 +20,29 @@ export const profileApi = baseApi.injectEndpoints({
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
     }),
-    profileFollowing: build.query<ProfileFollowing, ProfileId>({
+    getProfileFollowing: build.query<ProfileFollowing[], ProfileId>({
       query: ({userId}) => ({
         url: `/users/${userId}/following/`,
       }),
-      transformResponse: (response: ProfileFollowingDto) =>
-        mapProfileFollowing(response),
     }),
+    getProfileFollowers: build.query<ProfileFollowing[], ProfileId>({
+      query: ({userId}) => ({
+        url: `/users/${userId}/followers/`,
+      }),
+    }),
+    postProfileFollow: build.mutation<void, ProfileId>({
+      query: ({userId}) => ({
+        url: `/users/${userId}/follow/`,
+        method: 'POST',
+      }),
+    }),
+    delProfileFollow: build.mutation<void, ProfileId>({
+      query: ({userId}) => ({
+        url: `/users/${userId}/unfollow/`,
+        method: 'DELETE',
+      }),
+    }),
+
 
 }),
 })
@@ -34,6 +50,9 @@ export const profileApi = baseApi.injectEndpoints({
 export const {
   useProfileDetailsQuery,
   useMyDetailsQuery,
-  useProfileFollowingQuery,
+  useGetProfileFollowingQuery,
+  useGetProfileFollowersQuery,
+  usePostProfileFollowMutation,
+  useDelProfileFollowMutation
 } = profileApi
  

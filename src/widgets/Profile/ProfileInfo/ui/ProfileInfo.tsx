@@ -1,26 +1,18 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
 import Svg from "@/shared/ui/Svg";
 import { BackButton } from "@/shared/ui/Buttons/BackButton";
-import { ProfileDetails } from "@/entities/profile/model/types";
 import ProfileAvatar from "./ProfileAvatar";
+import { IProfileData } from "../model/types";
 
-interface IProfileData {
-  profileData?: ProfileDetails;
-  children: ReactNode;
-  OnEditProfile?: () => void;
-  optionButton?: ReactNode;
-}
 export function ProfileInfo({
   profileData,
   children,
   OnEditProfile,
   optionButton,
 }: IProfileData): ReactElement {
+
   const interstsList = profileData?.category_favorite.map(({ name }, id) => (
-    <p
-      className="flex flex-nowrap mr-[22px] text-indigo-600 text-lg font-semibold cursor-pointer"
-      key={id}
-    >
+    <p className="flex flex-nowrap mr-[22px] text-indigo-600 text-lg font-semibold cursor-pointer" key={id}>
       {name}
     </p>
   ));

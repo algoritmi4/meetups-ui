@@ -1,10 +1,5 @@
 import { ReactElement } from "react";
-
-interface IProfileAvatar {
-  onEditProfile?: () => void;
-  image?: string;
-  name?: string;
-}
+import { IProfileAvatar } from "../model/types";
 
 function ProfileAvatar({
   onEditProfile,

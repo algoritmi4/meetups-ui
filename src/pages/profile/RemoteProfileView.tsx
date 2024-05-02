@@ -1,40 +1,90 @@
+import { useEffect, useState } from "react";
 import { ReactElement } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import {
   useProfileDetailsQuery,
   useMyDetailsQuery,
-  useProfileFollowingQuery,
+  useGetProfileFollowingQuery,
+  usePostProfileFollowMutation,
+  useDelProfileFollowMutation,
 } from "@/entities/profile/api/profileApi";
 import { Preloader } from "@/shared/ui/Preloader";
 import { ProfileInfo } from "@/widgets/Profile/ProfileInfo";
 import { Button } from "@/shared/ui/Buttons/Button";
 import isEqual from "lodash/isEqual";
 import NonFound from "@/pages/errors/NonFound";
+import { ProfileFollowButton } from "@/widgets/ProfileButton";
 
 function RemoteProfileView(): ReactElement {
+  const [isPageReady, setIsPageReady] = useState(false);
   const { userId = "0" } = useParams();
   const {
     data: profileData,
-    isLoading,
-    isSuccess,
+    isLoading: isLoadingRemoteUser,
+    isError: isErrorRemoteUser,
   } = useProfileDetailsQuery({ userId: userId });
-  const { data: currentProfileData } = useMyDetailsQuery();
+  const isPrivateUser = profileData?.is_private;
 
-  const {data: profileFollpwing} = useProfileFollowingQuery({userId: userId})
+  const { data: currentProfileData, isLoading: isLoadingCurrentUser } = useMyDetailsQuery();
 
-  console.log(profileFollpwing);
+  const {
+    data: profileFollow = [],
+    isLoading: isLoadingProfileFollow,
+    isSuccess: isSuccessFollowing,
+  } = useGetProfileFollowingQuery(
+    {
+      userId: String(currentProfileData?.id),
+    },
+    {
+      skip: !currentProfileData,
+    }
+  );
 
-  if (!isLoading && !isSuccess) {
+  const [userProfileFollowStatus, setUserProfileFollowStatus] = useState<string | undefined>(undefined);
+
+  const getProfileFollowStatus = (id: string) =>
+    profileFollow.find(({ user }) => {
+      return user === Number(id);
+    })?.status;
+
+  const [createFollowUser, { isLoading: isLoadingRequestGetFollow }] =
+    usePostProfileFollowMutation();
+  const [deleteFollowUser] = useDelProfileFollowMutation();
+  const followUser = () => {
+    createFollowUser({ userId: userId })
+      .unwrap()
+      .then((res) => {
+        if (res != undefined) {
+          return setUserProfileFollowStatus(res["status"]);
+        }
+      });
+  };
+
+  const unFollowUser = () => { deleteFollowUser({ userId: userId })
+      .unwrap()
+      .then(() => setUserProfileFollowStatus(undefined));
+  };
+
+  useEffect(() => {
+    if (isSuccessFollowing) {
+      setUserProfileFollowStatus(getProfileFollowStatus(userId));
+      setIsPageReady(true);
+    }
+  }, [isSuccessFollowing]);
+
+  if (isErrorRemoteUser) {
     return <NonFound />;
   }
 
   if (Number(isEqual(Number(userId), currentProfileData?.id))) {
     return <Navigate to="/profile/me" />;
   }
-
   return (
     <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap min-h-[1000px]">
-      {isLoading ? (
+      {isLoadingRemoteUser ||
+      isLoadingProfileFollow ||
+      !isPageReady ||
+      isLoadingCurrentUser ? (
         <div className="m-auto">
           <Preloader />
         </div>
@@ -53,23 +103,18 @@ function RemoteProfileView(): ReactElement {
             </div>
           }
         >
-          {profileData?.is_private ? (
-            <div>
-              m{" "}
-              <Button size="lg" importance="primary">
-                Подать заявку
-              </Button>
-            </div>
-          ) : (
-            <div className="flex flex-row">
-              <Button size="md" importance="primary">
-                Подписаться
-              </Button>
-              <Button size="md" importance="secondary" extraClass="ml-[20px]">
-                Написать
-              </Button>
-            </div>
-          )}
+          <div className="flex flex-row">
+            <ProfileFollowButton
+              onFollow={followUser}
+              onUnFollow={unFollowUser}
+              isPrivate={isPrivateUser}
+              isLoading={isLoadingRequestGetFollow}
+              status={userProfileFollowStatus}
+            />
+            <Button size="md" importance="secondary" extraClass="ml-[20px]">
+              Написать
+            </Button>
+          </div>
         </ProfileInfo>
       )}
     </section>
