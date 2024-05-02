@@ -5,8 +5,8 @@ import { CreatorDetails, EventDescription, EventHeader, EventLoader, Location, R
 import { ParticipantsPopup } from '@/features/eventPage/ui/ParticipantsPopup';
 import { EventsList } from '@/widgets/EventsList';
 import { useMyDetailsQuery } from '@/entities/profile/api/profileApi';
-import { isFavoriteSetted, isParticipantSetted } from './model/eventInfoSlice';
-import { useAppDispatch } from '@/shared/model';
+import { isFavoriteSetted, isParticipantSetted } from '../../entities/event/model/eventInfoSlice';
+import { useAppDispatch, useAppSelector } from '@/shared/model';
 import { EventPageContext } from './model/EventPageContext';
 import { mockParticipants, mockReviews } from './model/consts';
 import { useGetReviewsQuery } from '@/entities/review/api/reviewApi';
@@ -17,26 +17,55 @@ export function EventPage(): ReactElement {
   const [isParticipantPopupOpen, setIsParticipantPopupOpen] = useState(false);
   const { eventId } = useParams<{eventId: string}>();
 
-  const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error: profileError, isSuccess: isProfileSuccess } = useMyDetailsQuery();
-  const { data: event, isFetching: isEventFetching, isError: isEventError, error: eventError, isSuccess: isEventSuccess } = useGetEventQuery(Number(eventId));
-  const { data: topEvents = {results: []}, isLoading: isTopEventsLoading, isError: isTopEventsError, error: topEventsError } = useGetTopEventsQuery();
-  const { error: reviewsError, isLoading: isReviwesLoading, isError: isReviewsError } = useGetReviewsQuery(Number(eventId));
+  const {
+    data: profile,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    error: profileError
+  } = useMyDetailsQuery();
+
+  const {
+    data: event,
+    isFetching: isEventFetching,
+    isError: isEventError,
+    error: eventError,
+    isSuccess: isEventSuccess,
+    refetch: eventRefetch
+  } = useGetEventQuery(Number(eventId));
+
+  const {
+    data: topEvents = {results: []},
+    isLoading: isTopEventsLoading,
+    isError: isTopEventsError,
+    error: topEventsError
+  } = useGetTopEventsQuery();
+
+  const {
+    error: reviewsError,
+    isLoading: isReviwesLoading,
+    isError: isReviewsError
+  } = useGetReviewsQuery(Number(eventId));
 
   isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
   isProfileError && console.log(`Ошибка при получении профиля - ${JSON.stringify(profileError)}`);
   isReviewsError && console.log(`Ошибка при получении отзывов - ${JSON.stringify(reviewsError)}`);
 
   const isOwner = event?.created_by.id === profile?.id;
+  const { isFavorite } = useAppSelector((state) => state.eventInfo);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (isEventSuccess && isProfileSuccess) {
-      dispatch(isParticipantSetted(event?.participants.some((el) => el.id === profile?.id)));
-      dispatch(isFavoriteSetted(event?.is_favorite));
-      setIsPageReady(true);
-    }
-  }, [event, profile, dispatch, isEventSuccess, isProfileSuccess]);
+    eventRefetch()
+      .unwrap()
+      .then((res) => {
+        dispatch(isFavoriteSetted(res.is_favorite));
+        dispatch(isParticipantSetted(event?.participants.some((el) => el.id === profile?.id)));
+        setIsPageReady(true);
+      })
+      .catch((err) => console.log(err));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventId]);
 
   if (isEventFetching || isProfileLoading || isReviwesLoading || !isPageReady) {
     return <EventLoader />;
@@ -59,7 +88,7 @@ export function EventPage(): ReactElement {
 
   if (isEventSuccess) {
     return (
-      <EventPageContext.Provider value={isOwner}>
+      <EventPageContext.Provider value={{ isOwner, isFavorite }}>
         <main className="bg-white w-full flex flex-col pt-[60px] pb-[66px]">
           <ParticipantsPopup participants={[event.created_by, ...mockParticipants]} isOpen={isParticipantPopupOpen} handleClose={() => setIsParticipantPopupOpen(false)}/>
           <EventHeader event={event} handleOpenParticipantsPopup={() => setIsParticipantPopupOpen(true)} />

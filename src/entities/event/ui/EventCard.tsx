@@ -1,18 +1,47 @@
-import {ReactElement} from "react";
+import {ReactElement, useState} from "react";
 import {IEvent} from "../model/types";
 import { Link } from "react-router-dom";
 import Svg from "@/shared/ui/Svg";
+import { useLikeEventMutation, useUnlikeEventMutation } from "../api/eventApi";
 
 export interface IEventCard {
   event: IEvent;
 }
 
 export function EventCard({ event }: IEventCard): ReactElement {
+  const [isFavorite, setIsFavorite] = useState(event.is_favorite);
+
+  const [likeEvent] = useLikeEventMutation();
+  const [unlikeEvent] = useUnlikeEventMutation();
+
+  const onLike = () => {
+    setIsFavorite(true);
+
+    likeEvent(event.id)
+      .unwrap()
+      .then(() => {return})
+      .catch(() => setIsFavorite(false));
+  }
+
+  const onUnlike = () => {
+    setIsFavorite(false);
+
+    unlikeEvent(event.id)
+      .unwrap()
+      .then(() => {return})
+      .catch(() => setIsFavorite(true));
+  }
+
   return (
       <div className="w-full flex flex-col max-w-[270px] mr-[45px]">
           <div className="flex justify-between">
             <p className="text-[14px] font-medium capitalize">{event.category?.name}</p>
-            <Svg id="heart-icon" className="w-6 h-6 cursor-pointer" />
+            <Svg
+              id="heart-icon"
+              className="w-6 h-6 cursor-pointer"
+              onClick={isFavorite ? onUnlike : onLike}
+              extraUseClass={isFavorite ? "!fill-but-primary stroke-but-primary" : "stroke-text-black"}
+            />
           </div>
           <Link to={`/events/${event.id}`}>
             <figure className="group flex flex-col cursor-pointer rounded-12 max-h-[188px] mt-[7px] overflow-hidden">

@@ -28,7 +28,8 @@ export interface IEvent {
   tags: IEventTag[] | [],
   address: string,
   category: IEventTag | null,
-  participants_number: number
+  participants_number: number,
+  is_favorite: boolean
 }
 
 export interface IGetEventRequest {

@@ -58,7 +58,7 @@ export const eventApi = baseApi.injectEndpoints({
     }),
     unlikeEvent: build.mutation<void, number>({
       query: (event_id) => ({
-        url: `/events/${event_id}/favorite`,
+        url: `/events/${event_id}/favorite/`,
         method: 'DELETE'
       })
     })

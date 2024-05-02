@@ -1,5 +1,5 @@
 import { IDetailedEvent } from "@/entities/event/model/types";
-import { useEventActions } from "@/pages/event/lib/useEventActions";
+import { useEventActions } from "@/entities/event/lib/useEventActions";
 import { EventPageContext } from "@/pages/event/model/EventPageContext";
 import { Button } from "@/shared";
 import { useAppSelector } from "@/shared/model";
@@ -14,9 +14,10 @@ interface IHeaderDetailsProps {
 }
 
 export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDetailsProps): ReactElement {
-  const { isParticipant, isFavorite } = useAppSelector((state) => state.eventInfo);
+  const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { eventId } = useParams<{eventId: string}>();
-  const isOwner = useContext(EventPageContext);
+
+  const { isOwner, isFavorite } = useContext(EventPageContext);
 
   const { handleRegisterToEvent, handleLeaveFromEvent, handleLikeEvent, handleUnlikeEvent } = useEventActions(Number(eventId));
 

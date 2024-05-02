@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface IInitialState {
   isParticipant?: boolean;
-  isFavorite?: boolean;
+  isFavorite: boolean;
 }
 
 const initialState: IInitialState = {
-  isParticipant: false
+  isParticipant: false,
+  isFavorite: false
 }
 
 const eventInfoSlice = createSlice({
@@ -16,7 +17,7 @@ const eventInfoSlice = createSlice({
     isParticipantSetted: (state, { payload: isParticipant }: { payload: boolean | undefined }) => ({
       ...state, isParticipant
     }),
-    isFavoriteSetted: (state, { payload: isFavorite }: { payload: boolean | undefined }) => ({
+    isFavoriteSetted: (state, { payload: isFavorite }: { payload: boolean }) => ({
       ...state, isFavorite
     })
   }

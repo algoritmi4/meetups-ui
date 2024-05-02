@@ -1,6 +1,6 @@
 import { IDetailedEvent } from "@/entities/event/model/types";
 import { GoogleMap } from "@/features/googleMap";
-import { useEventActions } from "@/pages/event/lib/useEventActions";
+import { useEventActions } from "@/entities/event/lib/useEventActions";
 import { EventPageContext } from "@/pages/event/model/EventPageContext";
 import { Button } from "@/shared";
 import { useAppSelector } from "@/shared/model";
@@ -13,8 +13,8 @@ interface ILocationProps {
 }
 
 export function Location({event}: ILocationProps): ReactElement {
-  const isOwner = useContext(EventPageContext);
-  const { isParticipant, isFavorite } = useAppSelector((state) => state.eventInfo);
+  const { isOwner, isFavorite } = useContext(EventPageContext);
+  const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { eventId } = useParams<{eventId: string}>();
 
   const { handleRegisterToEvent, handleLeaveFromEvent, handleLikeEvent, handleUnlikeEvent } = useEventActions(Number(eventId));

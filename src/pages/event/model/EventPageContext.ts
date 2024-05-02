@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const EventPageContext = createContext(false);
+export const EventPageContext = createContext({ isOwner: false, isFavorite: false });

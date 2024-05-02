@@ -9,8 +9,11 @@ export function useEventActions(eventId: number) {
   const [likeEvent] = useLikeEventMutation();
   const [unlikeEvent] = useUnlikeEventMutation();
 
+  // In this responses I specifically change the state of the button without waiting
+  // for response from the server to prevent delay when clicking
   const handleRegisterToEvent = () => {
     dispatch(isParticipantSetted(true));
+
     registerToEvent(eventId)
       .unwrap()
       .then(() => {return})
@@ -19,6 +22,7 @@ export function useEventActions(eventId: number) {
 
   const handleLeaveFromEvent = () => {
     dispatch(isParticipantSetted(false));
+
     leaveFromEvent(eventId)
       .unwrap()
       .then(() => {return})
@@ -26,7 +30,7 @@ export function useEventActions(eventId: number) {
   }
 
   const handleLikeEvent = () => {
-    dispatch(isFavoriteSetted(true))
+    dispatch(isFavoriteSetted(true));
     likeEvent(eventId)
       .unwrap()
       .then(() => {return})
