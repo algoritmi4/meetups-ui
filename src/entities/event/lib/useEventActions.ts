@@ -1,6 +1,6 @@
 import { useLeaveFromEventMutation, useLikeEventMutation, useRegisterToEventMutation, useUnlikeEventMutation } from "@/entities/event/api/eventApi";
 import { useAppDispatch } from "@/shared/model";
-import { isFavoriteSetted, isParticipantSetted } from "../model/eventInfoSlice";
+import { eventChanged, isFavoriteSetted, isParticipantSetted } from "../model/eventInfoSlice";
 
 export function useEventActions(eventId: number) {
   const dispatch = useAppDispatch();
@@ -33,7 +33,9 @@ export function useEventActions(eventId: number) {
     dispatch(isFavoriteSetted(true));
     likeEvent(eventId)
       .unwrap()
-      .then(() => {return})
+      .then(() => {
+        dispatch(eventChanged(eventId));
+      })
       .catch(() => dispatch(isFavoriteSetted(false)));
   }
 
@@ -41,7 +43,9 @@ export function useEventActions(eventId: number) {
     dispatch(isFavoriteSetted(false));
     unlikeEvent(eventId)
       .unwrap()
-      .then(() => {return})
+      .then(() => {
+        dispatch(eventChanged(eventId));
+      })
       .catch(() => dispatch(isFavoriteSetted(true)));
   }
 

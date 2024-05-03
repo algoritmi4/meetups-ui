@@ -7,7 +7,7 @@ import { useAppSelector } from '@/shared/model';
 import { EventsList } from '@/widgets/EventsList';
 import { MapWidget } from '@/widgets/mapWidget';
 import { useGetMarkersQuery } from '@/widgets/mapWidget/api/markersApi';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 
 export function HomePage(): ReactElement {
   const { search, checkedCategories } = useAppSelector(state => state.searchFilter);
@@ -16,16 +16,14 @@ export function HomePage(): ReactElement {
     data: events = {results: []},
     isFetching: isEventsFetching,
     isError: isEventsError,
-    error: eventsError,
-    refetch: eventsRefetch
+    error: eventsError
   } = useGetEventsQuery({ search, categories: checkedCategories });
 
   const {
     data: topEvents = {results: []},
     isFetching: isTopEventsFetching,
     isError: isTopEventsError,
-    error: topEventsError,
-    refetch: topEventsRefetch
+    error: topEventsError
   } = useGetTopEventsQuery();
 
   const {
@@ -45,21 +43,6 @@ export function HomePage(): ReactElement {
   isEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(eventsError)}`);
   isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
   isCategoriesError && console.log(`Ошибка при получении категорий - ${JSON.stringify(categoriesError)}`);
-
-  // refetch events for update is_favorite state
-  // I was unable to synchronize the state of is_favorite field with server
-  useEffect(() => {
-    eventsRefetch()
-      .unwrap()
-      .then(() => {return})
-      .catch((err) => console.log(err))
-
-    topEventsRefetch()
-      .unwrap()
-      .then(() => {return})
-      .catch((err) => console.log(err))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <main className="w-full">
