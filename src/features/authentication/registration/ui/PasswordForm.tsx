@@ -31,7 +31,7 @@ export function PasswordForm(): ReactElement {
       registerTrigger({...data, password: password})
         .unwrap()
         .then(() => dispatch(passwordFilled({password: password})))
-        .catch((error) => setError('password', {message: error.data.detail}))
+        .catch((error: {data: {detail: string}}) => setError('password', {message: error.data.detail}))
     };
 
     const onPrev = () => dispatch(goBack());
@@ -41,7 +41,7 @@ export function PasswordForm(): ReactElement {
     }
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-[320px]">
+      <form onSubmit={(data) => void handleSubmit(onSubmit)(data)} className="flex flex-col w-full max-w-[320px]">
         <p className="text-neutral-500 text-base md:text-lg font-normal">Придумайте уникальный пароль</p>
         <PasswordInput
           type='password'
