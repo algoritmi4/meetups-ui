@@ -10,10 +10,17 @@ import {
 } from "@/entities/profile/api/profileApi";
 import { Preloader } from "@/shared/ui/Preloader";
 import { ProfileInfo } from "@/widgets/Profile/ProfileInfo";
+import { EventsList } from "@/widgets/EventsList";
 import { Button } from "@/shared/ui/Buttons/Button";
 import isEqual from "lodash/isEqual";
 import NonFound from "@/pages/errors/NonFound";
 import { ProfileFollowButton } from "@/widgets/ProfileButton";
+import {
+  useGetProfileCreatedEventsQuery,
+  useGetProfilePlannedEventsQuery,
+  useGetProfileVisitedEventsQuery,
+} from "@/widgets/Profile/ProfileEvents/api/profileEventsApi";
+
 
 function RemoteProfileView(): ReactElement {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -21,9 +28,42 @@ function RemoteProfileView(): ReactElement {
   const {
     data: profileData,
     isLoading: isLoadingRemoteUser,
+    isSuccess: isSuccessRemoteUser,
     isError: isErrorRemoteUser,
   } = useProfileDetailsQuery({ userId: userId });
   const isPrivateUser = profileData?.is_private;
+
+  const {
+    data: createdEvents = [],
+    isLoading: isCreatedEventsLoading,
+    isSuccess: isCreatedEventsSuccess,
+    isError: isCreatedEventsError,
+    error: eventsCreatedError,
+  } = useGetProfileCreatedEventsQuery(
+    { userId: String(profileData?.id) },
+    { skip: !isSuccessRemoteUser }
+  );
+  const {
+    data: plannedEvents = [],
+    isLoading: isPlannedEventsLoading,
+    isSuccess: isPlannedEventsSuccess,
+    isError: isPlannedEventsError,
+    error: eventsPlannedError,
+  } = useGetProfilePlannedEventsQuery(
+    { userId: String(profileData?.id) },
+    { skip: !isSuccessRemoteUser }
+  );
+  const {
+    data: visitedEvents = [],
+    isLoading: isVisitedEventsLoading,
+    isSuccess: isVisitedEventsSuccess,
+    isError: isVisitedEventsError,
+    error: eventsVisitedError,
+  } = useGetProfileVisitedEventsQuery(
+    { userId: String(profileData?.id) },
+    { skip: !isSuccessRemoteUser }
+  );
+
 
   const { data: currentProfileData, isLoading: isLoadingCurrentUser } = useMyDetailsQuery();
 
@@ -117,6 +157,26 @@ function RemoteProfileView(): ReactElement {
           </div>
         </ProfileInfo>
       )}
+            <div className="flex-auto flex flex-col basis-6/12">
+              <EventsList
+                listTitle="Созданные"
+                isLoading={isCreatedEventsLoading}
+                data={createdEvents}
+                extraClasses="mt-50"
+              />
+              <EventsList
+                listTitle="Планируется к посещению"
+                isLoading={isPlannedEventsLoading}
+                data={plannedEvents}
+                extraClasses="mt-50"
+              />
+              <EventsList
+                listTitle="Посещенные"
+                isLoading={isVisitedEventsLoading}
+                data={visitedEvents}
+                extraClasses="mt-50"
+              />
+            </div>
     </section>
   );
 }
