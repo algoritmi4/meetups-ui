@@ -15,7 +15,7 @@ export const sessionApi = baseApi.injectEndpoints({
             invalidatesTags: [SESSION_TAG],
             transformResponse: (response: SessionDto) => mapSession(response),
         }),
-        logout: build.mutation<{}, RefreshToken>({
+        logout: build.mutation<void, RefreshToken>({
             query: (body) => ({
                 url: `/logout/`,
                 method: 'POST',
@@ -23,7 +23,7 @@ export const sessionApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [SESSION_TAG],
         }),
-        register: build.mutation<null, RequestRegistrationBody>({
+        register: build.mutation<void, RequestRegistrationBody>({
             query: (body) => ({
               url: `/signup/`,
               method: 'POST',
@@ -31,7 +31,7 @@ export const sessionApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [SESSION_TAG]
         }),
-        checkEmail: build.mutation<null, RequestEmailCheckBody>({
+        checkEmail: build.mutation<void | null, RequestEmailCheckBody>({
             query: (body) => ({
               url: `/email-exists/`,
               method: 'POST',

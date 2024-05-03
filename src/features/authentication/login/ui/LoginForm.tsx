@@ -20,7 +20,7 @@ interface ILoginFormProps {
 export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
   const {
     setError,
-    formState: {errors, isValid, isSubmitting, isSubmitted},
+    formState: {errors, isValid, isSubmitted},
     handleSubmit,
     register,
     setValue,
@@ -40,8 +40,8 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
     setFormValuesInStorage(AUTH_FORM_VALUES_KEY, { email });
     loginTrigger({email, password})
         .unwrap()
-        .then((payload) => onComplete?.())
-        .catch((error) => setError('email', {message: error.data.detail}))
+        .then(() => onComplete?.())
+        .catch((error: {data: {detail: string}}) => setError('email', {message: error.data.detail}))
   }
 
   const onResetPasswordClick = useCallback(() => {
@@ -51,7 +51,7 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
 
   return (
     <FormWrapper redirectType='register' headerText='Вход в Аккаунт'>
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col px-0 w-full max-w-[320px] md:px-90">
+      <form noValidate onSubmit={(data) => void handleSubmit(onSubmit)(data)} className="flex flex-col px-0 w-full max-w-[320px] md:px-90">
         <Input
           type='email'
           head={<Svg className="w-6 h-6" id="email-icon" />}
