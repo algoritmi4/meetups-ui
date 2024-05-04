@@ -29,7 +29,7 @@ export function EventSlider({ events }: IEventSlider): ReactElement {
         break
       default:
         setWidth(103.7);
-        setSlidesToShow(2);
+        setSlidesToShow(4);
     }
   }, [events.length]);
 
@@ -37,7 +37,7 @@ export function EventSlider({ events }: IEventSlider): ReactElement {
     slidesToShow,
     slidesToScroll: 2,
     speed: 400,
-    className: `mt-3 w-[${width}%] min-h-[285px]`
+    className: `mt-3 w-[${width}%] min-h-[230px]`
   }
 
   return (

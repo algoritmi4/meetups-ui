@@ -11,7 +11,6 @@ import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
 import CurrentProfileView from "@/pages/profile/CurrentProfileView"
 import RemoteProfileView from "@/pages/profile/RemoteProfileView"
-
 import { EditProfile } from '@/features/profile';
 
 interface GuestGuardProps { 

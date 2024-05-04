@@ -7,12 +7,9 @@ interface IUserFavorite {
   id: number,
   name: string
 }
-// export type ProfileId = Brand<Id, 'ProfileId'>
-export type ProfileId = {userId: string};
+export interface ProfileId {userId: string};
 
-
-
-export type ProfileDetails = {
+export interface ProfileDetails {
   id: number
   username: string
   email: string
@@ -28,8 +25,7 @@ export type ProfileDetails = {
   category_favorite: IUserFavorite[] | []
 } 
 
-// 
-export type ProfileFollowing = {
+export interface ProfileFollowing {
   id: number,
   user: number,
   follower: number,

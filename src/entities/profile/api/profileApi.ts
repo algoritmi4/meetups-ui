@@ -3,7 +3,6 @@ import {ProfileDetailsDto, ProfileFollowingDto} from "@/entities/profile/api/typ
 import {ProfileDetails, ProfileId, ProfileFollowing} from "@/entities/profile/model/types";
 import {mapProfileDetails, mapProfileFollowing} from "@/entities/profile/lib/mapProfileDetails";
 
-
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     profileDetails: build.query<ProfileDetails, ProfileId>({
@@ -20,39 +19,36 @@ export const profileApi = baseApi.injectEndpoints({
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
     }),
-    getProfileFollowing: build.query<ProfileFollowing[], ProfileId>({
+    getFollowing: build.query<ProfileFollowing[], ProfileId>({
       query: ({userId}) => ({
         url: `/users/${userId}/following/`,
       }),
     }),
-    getProfileFollowers: build.query<ProfileFollowing[], ProfileId>({
+    getFollowers: build.query<ProfileFollowing[], ProfileId>({
       query: ({userId}) => ({
         url: `/users/${userId}/followers/`,
       }),
     }),
-    postProfileFollow: build.mutation<void, ProfileId>({
+    follow: build.mutation<void, ProfileId>({
       query: ({userId}) => ({
         url: `/users/${userId}/follow/`,
         method: 'POST',
       }),
     }),
-    delProfileFollow: build.mutation<void, ProfileId>({
+    unFollow: build.mutation<void, ProfileId>({
       query: ({userId}) => ({
         url: `/users/${userId}/unfollow/`,
         method: 'DELETE',
       }),
     }),
-
-
 }),
 })
 
 export const {
   useProfileDetailsQuery,
   useMyDetailsQuery,
-  useGetProfileFollowingQuery,
-  useGetProfileFollowersQuery,
-  usePostProfileFollowMutation,
-  useDelProfileFollowMutation
+  useGetFollowingQuery,
+  useGetFollowersQuery,
+  useFollowMutation,
+  useUnFollowMutation
 } = profileApi
- 

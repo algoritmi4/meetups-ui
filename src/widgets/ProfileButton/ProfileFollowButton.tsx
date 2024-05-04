@@ -16,6 +16,7 @@ export function ProfileFollowButton({
   isLoading,
   status,
 }: IProfileFollowButton): ReactElement {
+  
   return (
     <>
       {status && status === "ACCEPTED" && (

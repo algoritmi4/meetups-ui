@@ -3,14 +3,14 @@ interface IUserFavorite {
   name: string
 }
 
-export type ProfileDto = {
+export interface ProfileDto {
   id: number
   username: string
   first_name?: string
   last_name?: string
 }
 
-export type ProfileDetailsDto = ProfileDto & {
+export interface ProfileDetailsDto extends ProfileDto {
   email: string
   image_url: string,
   is_email_verified: boolean,
@@ -22,7 +22,7 @@ export type ProfileDetailsDto = ProfileDto & {
   category_favorite: IUserFavorite[] | []
 }
    
-export type ProfileFollowingDto = {
+export interface ProfileFollowingDto  {
   id: number,
   user: number,
   follower: number,

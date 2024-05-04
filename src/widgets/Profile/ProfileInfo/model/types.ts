@@ -12,4 +12,4 @@ export interface IProfileData {
     children: ReactNode;
     OnEditProfile?: () => void;
     optionButton?: ReactNode;
-  }  
+  }
