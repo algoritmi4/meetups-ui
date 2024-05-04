@@ -17,7 +17,7 @@ export function ProfileEventSlider({ events }: IEventSlider): ReactElement {
     slidesToShow: 2,
     slidesToScroll: 1,
     speed: 400,
-    className: `mt-3 w-[225px] min-h-[230px]`
+    className: `mt-3 min-w-[225px] min-h-[230px]`
   }
 
   return (

@@ -10,7 +10,7 @@ import {
 } from "@/entities/profile/api/profileApi";
 import { Preloader } from "@/shared/ui/Preloader";
 import { ProfileInfo } from "@/widgets/Profile/ProfileInfo";
-import { EventsList } from "@/widgets/EventsList";
+import {ProfileEventsList} from "@/widgets/Profile/ProfileEvents"
 import { Button } from "@/shared/ui/Buttons/Button";
 import isEqual from "lodash/isEqual";
 import NonFound from "@/pages/errors/NonFound";
@@ -159,19 +159,19 @@ function RemoteProfileView(): ReactElement {
         </ProfileInfo>
       )}
             <div className="flex-auto flex flex-col mr-[104px] max-w-[585px] basis-6/12">
-              <EventsList
+              <ProfileEventsList
                 listTitle="Созданные"
                 isLoading={isCreatedEventsLoading}
                 data={createdEvents}
                 extraClasses="mt-50 max-w-[690px]"
               />
-              <EventsList
+              <ProfileEventsList
                 listTitle="Планируется к посещению"
                 isLoading={isPlannedEventsLoading}
                 data={plannedEvents}
                 extraClasses="mt-50"
               />
-              <EventsList
+              <ProfileEventsList
                 listTitle="Посещенные"
                 isLoading={isVisitedEventsLoading}
                 data={visitedEvents}
