@@ -10,6 +10,7 @@ import {selectAccessToken} from "@/shared/lib";
 import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
 import { EventPage } from '@/pages/event/EventPage';
+import SecurityPage from '@/pages/security/SecurityPage';
 
 interface GuestGuardProps {
   children: ReactElement
@@ -59,6 +60,12 @@ export const appRouter = createBrowserRouter([
         element: (
           <NonFound/>
         ),
+      },
+      {
+        path: '/security',
+        element: (
+          <SecurityPage />
+        )
       }
     ]
   },

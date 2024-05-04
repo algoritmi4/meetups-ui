@@ -6,13 +6,17 @@ import { searchFilterSlice } from '@/features/searchFilter/model/SearchFilterSli
 import addressControlSlice from '@/features/addressControl/model/addressControlSlice';
 import filterPopupSlice from '@/features/searchFilter/model/filterPopupSlice';
 import eventInfoSlice from '@/entities/event/model/eventInfoSlice';
+import passwordPopupSlice from '@/features/security/model/passwordPopupSlice';
 
 export const rootReducer = combineReducers({
   session: SessionSlice.reducer,
   searchFilter: searchFilterSlice.reducer,
-  addressControl: addressControlSlice.reducer,
-  filterPopup: filterPopupSlice.reducer,
   eventInfo: eventInfoSlice.reducer,
+  addressControl: addressControlSlice.reducer,
+
+  filterPopup: filterPopupSlice.reducer,
+  passwordPopup: passwordPopupSlice.reducer,
+
   [baseApi.reducerPath]: baseApi.reducer,
   [jwtApi.reducerPath]: jwtApi.reducer,
   [registerFormSlice.name]: registerFormSlice.reducer,

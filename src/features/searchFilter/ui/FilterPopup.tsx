@@ -31,7 +31,7 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
 
   return (
     <Popup isOpen={isOpen} onClose={() => dispatch(isPopupOpenSetted(false))}>
-      <div className="absolute flex flex-col top-[100px] left-[50%] translate-x-[-50%] bg-white min-w-[584px] rounded-[10px] px-[45px] py-[35px]">
+      <div className="absolute flex flex-col top-[100px] left-[50%] translate-x-[-50%] bg-white min-w-[584px] rounded-def px-[45px] py-[35px]">
         <Svg onClick={() => dispatch(isPopupOpenSetted(false))} id="close-cross" className="absolute top-[42px] right-[45px] w-6 h-6 cursor-pointer duration-150 hoverscreen:hover:opacity-70" />
         <div className="flex items-center">
           <h2 className="text-[30px] font-semibold leading-[37.65px]">Фильтр</h2>
