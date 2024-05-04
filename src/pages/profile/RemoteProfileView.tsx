@@ -119,8 +119,9 @@ function RemoteProfileView(): ReactElement {
   if (Number(isEqual(Number(userId), currentProfileData?.id))) {
     return <Navigate to="/profile/me" />;
   }
+  console.log(createdEvents)
   return (
-    <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap min-h-[1000px]">
+    <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-nowrap min-h-[1000px]">
       {isLoadingRemoteUser ||
       isLoadingProfileFollow ||
       !isPageReady ||
@@ -157,12 +158,12 @@ function RemoteProfileView(): ReactElement {
           </div>
         </ProfileInfo>
       )}
-            <div className="flex-auto flex flex-col basis-6/12">
+            <div className="flex-auto flex flex-col mr-[104px] max-w-[585px] basis-6/12">
               <EventsList
                 listTitle="Созданные"
                 isLoading={isCreatedEventsLoading}
                 data={createdEvents}
-                extraClasses="mt-50"
+                extraClasses="mt-50 max-w-[690px]"
               />
               <EventsList
                 listTitle="Планируется к посещению"

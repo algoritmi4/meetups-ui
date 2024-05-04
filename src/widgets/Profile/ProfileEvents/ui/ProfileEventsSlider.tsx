@@ -7,37 +7,17 @@ interface IEventSlider {
   events: IEvent[];
 }
 
-export function EventSlider({ events }: IEventSlider): ReactElement {
+export function ProfileEventSlider({ events }: IEventSlider): ReactElement {
   const cards = events.map((el, index) => <EventCard key={index} event={el} />);
 
-  const [width, setWidth] = useState(103.7);
-  const [slidesToShow, setSlidesToShow] = useState(4);
-
   useEffect(() => {
-    switch (events.length) {
-      case 1:
-        setWidth(26);
-        setSlidesToShow(1);
-        break
-      case 2:
-        setWidth(52);
-        setSlidesToShow(2);
-        break
-      case 3:
-        setWidth(78);
-        setSlidesToShow(3);
-        break
-      default:
-        setWidth(103.7);
-        setSlidesToShow(2);
-    }
   }, [events.length]);
 
   const settings = {
-    slidesToShow,
-    slidesToScroll: 2,
+    slidesToShow: 2,
+    slidesToScroll: 1,
     speed: 400,
-    className: `mt-3 w-[${width}%] min-h-[285px]`
+    className: `mt-3 w-[225px] min-h-[230px]`
   }
 
   return (

@@ -1,1 +1,1 @@
-export { ProfileEvents } from "./ui/ProfileEvents";
+export { ProfileEventSlider } from "./ui/ProfileEventsSlider";

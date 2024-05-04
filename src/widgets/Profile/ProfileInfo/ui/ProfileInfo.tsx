@@ -18,7 +18,7 @@ export function ProfileInfo({
   ));
 
   return (
-    <section className="flex-auto flex flex-col basis-5/12 h-[1100px]">
+    <section className="flex-auto flex flex-col basis-5/12 h-[1100px] min-w-[414px] mr-[112px]">
       <ProfileAvatar
         onEditProfile={OnEditProfile}
         image={profileData?.image}

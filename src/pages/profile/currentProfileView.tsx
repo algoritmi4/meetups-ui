@@ -53,7 +53,7 @@ function CurrentProfileView(): ReactElement {
   );
 
   return (
-    <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap min-h-[1000px]">
+    <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-nowrap min-h-[1000px]">
       {isProfileDataLoading ? (
         <div className="m-auto">
           <Preloader />
