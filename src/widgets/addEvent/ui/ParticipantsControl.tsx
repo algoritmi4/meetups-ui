@@ -1,8 +1,7 @@
-import { AccessControl } from "@/features/addEvent/accessControl";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 import { PlacesNumberControl } from "@/features/addEvent/placesNumberControl";
 import { PriceControl } from "@/features/addEvent/priceControl";
-import { CheckboxWithLabel, LabeledInput } from "@/shared";
+import { CheckboxWithLabel, LabeledInput, SelectInput } from "@/shared";
 import { ISelectInputOptions } from "@/shared/model/types";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -10,6 +9,11 @@ import { Controller, useFormContext } from "react-hook-form";
 interface IParticipantsControlProps {
   currencies: ISelectInputOptions[];
 }
+
+const eventTypesArray = [
+  { id: 0, name: 'Публичное' },
+  { id: 1, name: 'По ссылке' },
+]
 
 export function ParticipantsControl({ currencies }: IParticipantsControlProps): ReactElement {
   const {
@@ -58,14 +62,18 @@ export function ParticipantsControl({ currencies }: IParticipantsControlProps): 
 
       <Controller
         control={control}
-        name="private_url"
+        name="type"
         render={({ field: { onChange, value } }) => (
-          <AccessControl
+          <SelectInput
             error={errors.type?.message}
-            control={control}
-            onChangeLink={onChange}
-            link={value}
-            type={watch('type')}
+            labelText='Доступ к мероприятию'
+            onChange={(option: ISelectInputOptions) => {
+              onChange(option.name === 'По ссылке' ? 'private' : 'open');
+            }}
+            value={value ? value === 'open' ? eventTypesArray[0] : eventTypesArray[1] : undefined}
+            options={eventTypesArray}
+            placeholder='Публичное/по ссылке'
+            extraBoxClass="mt-[18px]"
           />
         )}
       />

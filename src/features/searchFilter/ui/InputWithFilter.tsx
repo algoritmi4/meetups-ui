@@ -25,6 +25,7 @@ export function InputWithFilter() {
         value={inputValue}
         size="lg"
         className="w-[375px] max-h-11 text-[18px]"
+        extraInputClass="pl-3"
       />
       <div onClick={() => dispatch(isPopupOpenSetted(true))} className="bg-filter-icon w-6 h-6 bg-cover bg-no-repeat bg-center ml-5 cursor-pointer"></div>
     </div>

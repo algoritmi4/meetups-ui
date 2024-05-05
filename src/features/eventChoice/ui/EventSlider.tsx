@@ -41,7 +41,7 @@ export function EventSlider({ events }: IEventSlider): ReactElement {
   }
 
   return (
-    <SlickSlider extraSettings={settings} arrowsExtraClasses={{rightArrow: 'right-0 top-[110px]', leftArrow: 'left-[-30px] top-[110px]'}}>
+    <SlickSlider extraSettings={settings} arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}>
       {cards}
     </SlickSlider>
   )

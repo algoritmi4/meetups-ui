@@ -11,10 +11,6 @@ export const prepareDataToRequest = (data: AddEventValidationSchema) => {
     dataToCreateEvent.desired_participants_number = null;
   }
 
-  if (dataToCreateEvent.type === 'open') {
-    dataToCreateEvent.private_url = null;
-  }
-
   if (dataToCreateEvent.free) {
     dataToCreateEvent.cost = null;
     dataToCreateEvent.currency = null;

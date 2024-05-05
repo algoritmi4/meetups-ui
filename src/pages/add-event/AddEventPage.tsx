@@ -27,7 +27,6 @@ function AddEventPage(): ReactElement {
     defaultValues: {
       any_participant_number: false,
       schedule: [],
-      private_url: null,
       repeatable: false,
       free: false,
       tags: [],

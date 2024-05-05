@@ -32,11 +32,11 @@ export function EnterEmailStep(): ReactElement  {
     postResetPassword,
     { isLoading: isLoading }
   ] = useResetPasswordMutation();
+
   useFilledValue(AUTH_FORM_VALUES_KEY, setValue, [ValueTextField.EMAIL]);
+
   const handleNextStep = useChangeStep(AUTH_FORM_VALUES_KEY, resetPasswordPath, Step.CHECK_EMAIL);
-  const handlePrevStep = () => {
-    navigate('/login');
-  }
+  const handlePrevStep = () => navigate('/login');
 
   const onSubmit = useCallback(({email}: EmailValidationSchema) => {
     postResetPassword({email})
@@ -44,19 +44,18 @@ export function EnterEmailStep(): ReactElement  {
       .then(() => {
         handleNextStep({email});
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((err: {status: number}) => {
         if (err.status === 400) {
           setError('email', {message: 'Почта не зарегестрирована'})
         } else {
-          console.log(`Some server error ${err}`);
+          console.log(`Some server error ${JSON.stringify(err)}`);
         }
       })
   }, []);
 
   return (
     <FormWrapper redirectType='register' headerText='Забыли пароль?' >
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col px-0 md:px-90">
+      <form noValidate onSubmit={(data) => void handleSubmit(onSubmit)(data)} className="flex flex-col px-0 md:px-90">
         <p className='text-neutral-500 text-base md:text-lg font-normal w-80 mb-3 md:mb-5 mt-6 md:mt-5'>Для подтверждения личности введите вашу почту</p>
         <Input
           type='email'

@@ -47,7 +47,7 @@ export function DetailForm(): ReactElement {
     }
 
     return (
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-[320px]">
+      <form noValidate onSubmit={(data) => void handleSubmit(onSubmit)(data)} className="flex flex-col w-full max-w-[320px]">
         <p className="text-neutral-500 text-base md:text-lg font-normal mb-[10px]">Отображаемое другим людям</p>
         <Input
           type='text'

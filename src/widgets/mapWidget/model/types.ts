@@ -16,14 +16,14 @@ interface IFeaturesProperties {
 }
 
 interface IFeaturesGeometry {
-  type: string;
+  type?: string;
   coordinates: number[];
 }
 
 export interface IFeatures {
-  type: string;
-  id: number;
-  properties: IFeaturesProperties;
+  type?: string;
+  id?: number;
+  properties?: IFeaturesProperties;
   geometry: IFeaturesGeometry;
 }
 
