@@ -29,7 +29,7 @@ export function ProfileInfo({
   ));
 
   return (
-    <section className="flex-auto flex flex-col basis-5/12 h-[1100px] max-w-[420px] mr-[112px]">
+    <section className="flex-auto flex flex-col basis-5/12 min-h-[1027px] max-w-[420px] mr-[112px]">
       <ProfileAvatar
         image={profileData.image}
         name={profileData.username}
@@ -56,19 +56,22 @@ export function ProfileInfo({
       <div className="mt-[30px]">{children}</div>
       <p className="text-text-black text-2xl font-semibold mt-[30px]">О себе</p>
       <div className="flex flex-col max-w-[420px] mt-3">
-        <div ref={ref} className={`about w-full text-text-black font-normal break-words whitespace-pre-wrap overflow-y-hidden ${isAboutOpen ? "" : "max-h-[115px]"}`}>
-          <p className="w-full text-text-black text-[18px]">{profileData.bio || "Расскажите о себе"}</p>
+        <div ref={ref} className={`w-full text-text-black font-normal break-words whitespace-pre-wrap overflow-y-hidden ${isAboutOpen ? "" : "max-h-[115px]"}`}>
+          <p className="w-full text-text-black text-[18px] leading-[23px]">{profileData.bio || "Расскажите о себе"}</p>
         </div>
-        {isOverflowY ? (
+        {isOverflowY && (
           <Button
             type="button"
             onClick={() => setIsAboutOpen((state) => !state)}
             extraClass="!text-[14px] !leading-[18px] !text-[#737373] self-end mt-[9px]"
           >
             {isAboutOpen ? "скрыть" : "читать полностью"}
+            <Svg
+              id="slider-chevron"
+              className={`w-5 h-5 ml-1 ${isAboutOpen ? "rotate-[-90deg]" : "rotate-90"}`}
+              viewBox="0 0 36 36"
+            />
           </Button>
-        ) : (
-          <></>
         )}
       </div>
       {interstsList?.length != 0 && (
@@ -82,7 +85,7 @@ export function ProfileInfo({
         </>
       )}
       {optionButton && optionButton}
-      <div className="flex mt-auto ">
+      <div className="flex mt-auto">
         <BackButton />
       </div>
     </section>

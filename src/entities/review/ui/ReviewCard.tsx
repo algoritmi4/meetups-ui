@@ -3,6 +3,7 @@ import { IReview } from "../model/types";
 import { config } from "@/shared/config";
 import Svg from "@/shared/ui/Svg";
 import { Button } from "@/shared";
+import { useOverflowY } from "@/shared/lib/hooks/useOverflowY";
 
 export interface IReviewCard {
   review: IReview;
@@ -10,6 +11,8 @@ export interface IReviewCard {
 
 export function ReviewCard({ review }: IReviewCard): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { ref, isOverflowY } = useOverflowY();
 
   const renderStars = (rating: number) => {
     const starsArr = [];
@@ -50,21 +53,27 @@ export function ReviewCard({ review }: IReviewCard): ReactElement {
         </div>
       </div>
       <div className="flex flex-col grow bg-custom-gray rounded-r-[14px] rounded-es-[14px] px-6 py-[18px]">
-        <p className={`relative text-lg whitespace-pre-wrap break-words truncate font-light text-neutral-600 after:absolute after:w-[137px] after:h-[18px] after:bottom-0 after:right-0 after:bg-review-text-fade-out after:block ${isOpen ? "" : "max-h-[115px]"}`}>{review.review}</p>
+        <div ref={ref} className={`relative overflow-y-hidden ${isOpen ? "" : "max-h-[115px]"}`}>
+          <p className={`text-lg whitespace-pre-wrap break-words font-light text-neutral-600 after:absolute after:w-[137px] after:h-[18px] after:bottom-0 after:right-0 after:bg-review-text-fade-out after:block"}`}>{review.review}</p>
+        </div>
         <div className={`flex items-center justify-between ${isOpen ? "mt-[17px]" : "mt-auto"}`}>
           <p className="text-[14px] leading-[18px] text-[#737373]">{new Date(review.created_at).toLocaleDateString()}</p>
-          <Button
-            type="button"
-            extraClass="!text-[14px] !leading-[18px] !text-[#737373]"
-            onClick={handleIsOpenState}
-          >
-            {isOpen ? "свернуть" : "весь отзыв"}
-            <Svg
-              id="slider-chevron"
-              className={`w-5 h-5 ml-1 ${isOpen ? "rotate-[-90deg]" : "rotate-90"}`}
-              viewBox="0 0 36 36"
-            />
-          </Button>
+          {
+            isOverflowY && (
+              <Button
+                type="button"
+                extraClass="!text-[14px] !leading-[18px] !text-[#737373]"
+                onClick={handleIsOpenState}
+              >
+                {isOpen ? "свернуть" : "весь отзыв"}
+                <Svg
+                  id="slider-chevron"
+                  className={`w-5 h-5 ml-1 ${isOpen ? "rotate-[-90deg]" : "rotate-90"}`}
+                  viewBox="0 0 36 36"
+                />
+              </Button>
+            )
+          }
         </div>
       </div>
     </div>
