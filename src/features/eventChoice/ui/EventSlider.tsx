@@ -37,7 +37,7 @@ export function EventSlider({ events }: IEventSlider): ReactElement {
     slidesToShow,
     slidesToScroll: 2,
     speed: 400,
-    className: `mt-3 w-[${width}%] min-h-[285px]`
+    className: `mt-3 w-[${width}%] min-h-[230px]`
   }
 
   return (
