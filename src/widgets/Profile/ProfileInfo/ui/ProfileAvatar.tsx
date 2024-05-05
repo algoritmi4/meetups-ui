@@ -1,26 +1,37 @@
 import { ReactElement } from "react";
-import { IProfileAvatar } from "../model/types";
+import { useLocation, useNavigate } from "react-router-dom";
+
+interface IProfileAvatar {
+  image: string;
+  name: string;
+}
 
 function ProfileAvatar({
-  onEditProfile,
   image,
   name,
 }: IProfileAvatar): ReactElement {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isCurrentUser = location.pathname === '/profile/me';
+
   return (
     <div
-      onClick={onEditProfile}
-      className={`flex w-[250px] h-[250px] mt-[56px] rounded-[200px] opacity-100 shadow border border-stone-300 place-content-center ${
-        onEditProfile ?
-        "cursor-pointer bg-neutral-800 bg-edit-photo bg-no-repeat bg-center" : ''
-      }`}
+      onClick={isCurrentUser ? () => navigate('/profile/edit') : undefined}
+      className={`flex w-[250px] h-[250px] mt-[56px] rounded-circle shadow border border-select-disable place-content-center`}
     >
-      <img
-        className={`w-[236px] h-[236px] bg-opacity-40 rounded-[200px] pointer-events-none self-center ${
-          onEditProfile ? "hover:opacity-60 pointer-events-auto duration-150" : ''
+      <div
+        className={`relative w-[236px] h-[236px] bg-opacity-40 rounded-circle self-center ${
+          isCurrentUser ?
+          "cursor-pointer before:bg-edit-photo before:bg-no-repeat before:bg-center before:absolute before:inset-0 before:bg-edit-profile-shadow before:rounded-circle before:opacity-0 before:hoverscreen:hover:opacity-100 before:z-50 before:duration-150" : ''
         }`}
-        src={`https://storage.googleapis.com/meetups-dev/media/${image}`}
-        alt={`Аватар пользователя ${name}`}
-      />
+      >
+        <img
+          className="rounded-circle"
+          src={`https://storage.googleapis.com/meetups-dev/media/${image}`}
+          alt={`Аватар пользователя ${name}`}
+        />
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import {baseApi} from '@/shared/api'
-import {ProfileDetailsDto, ProfileFollowingDto} from "@/entities/profile/api/types";
-import {ProfileDetails, ProfileId, ProfileFollowing} from "@/entities/profile/model/types";
-import {mapProfileDetails, mapProfileFollowing} from "@/entities/profile/lib/mapProfileDetails";
+import {ProfileDetails, ProfileId, ProfileFollowing, IFollowResponse, ProfileDetailsDto} from "@/entities/profile/model/types";
+import {mapProfileDetails} from "@/entities/profile/lib/mapProfileDetails";
 
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -29,7 +28,7 @@ export const profileApi = baseApi.injectEndpoints({
         url: `/users/${userId}/followers/`,
       }),
     }),
-    follow: build.mutation<void, ProfileId>({
+    follow: build.mutation<IFollowResponse, ProfileId>({
       query: ({userId}) => ({
         url: `/users/${userId}/follow/`,
         method: 'POST',

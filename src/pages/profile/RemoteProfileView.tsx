@@ -8,33 +8,38 @@ import {
   useFollowMutation,
   useUnFollowMutation,
 } from "@/entities/profile/api/profileApi";
-import { Preloader } from "@/shared/ui/Preloader";
-import { ProfileInfo } from "@/widgets/Profile/ProfileInfo";
+import { ProfileInfo, ProfileLoader } from "@/widgets/Profile/ProfileInfo";
 import { Button } from "@/shared/ui/Buttons/Button";
-import isEqual from "lodash/isEqual";
-import NonFound from "@/pages/errors/NonFound";
 import { ProfileFollowButton } from "@/widgets/ProfileButton";
+import { IFollowStatus } from "@/entities/profile/model/types";
 
 function RemoteProfileView(): ReactElement {
-
   const [isPageReady, setIsPageReady] = useState(false);
-
   const { userId = "0" } = useParams();
+  const [followStatus, setFollowStatus] = useState<IFollowStatus>(undefined);
 
   const {
-    data: profileData,
+    data: remoteUser,
     isLoading: isLoadingRemoteUser,
     isError: isErrorRemoteUser,
+    error: errorRemoteUser,
+    isSuccess: isSuccessRemoteUser
   } = useProfileDetailsQuery({ userId: userId });
 
-  const isPrivateUser = profileData?.is_private;
-
-  const { data: currentProfileData, isLoading: isLoadingCurrentUser } = useMyDetailsQuery();
+  const {
+    data: currentProfileData,
+    isLoading: isLoadingProfileData,
+    isError: isErrorProfileData,
+    error: errorProfileData,
+    isSuccess: isSuccessProfileData
+  } = useMyDetailsQuery();
 
   const {
-    data: profileFollow = [],
-    isLoading: isLoadingProfileFollow,
-    isSuccess: isSuccessFollowing,
+    data: profileFollowingData = [],
+    isLoading: isLoadingFollowingData,
+    isError: isErrorFollowingData,
+    error: errorFollowingData,
+    isSuccess: isSuccessFollowingData,
   } = useGetFollowingQuery(
     {
       userId: String(currentProfileData?.id),
@@ -44,56 +49,68 @@ function RemoteProfileView(): ReactElement {
     }
   );
 
-  const [followStatus, setFollowStatus] = useState<string | undefined>(undefined);
+  isErrorRemoteUser && console.log(`Ошибка при получении remoteUser - ${JSON.stringify(errorRemoteUser)}`);
+  isErrorProfileData && console.log(`Ошибка при получении currentUser - ${JSON.stringify(errorProfileData)}`);
+  isErrorFollowingData && console.log(`Ошибка при получении информации о подписках пользователя - ${JSON.stringify(errorFollowingData)}`);
 
-  const [createFollowUser, { isLoading: isLoadingRequestGetFollow }] = useFollowMutation();
+  const isPrivateUser = remoteUser?.is_private;
 
-  const [deleteFollowUser] = useUnFollowMutation();
+  const [follow, { isLoading: isFollowLoading }] = useFollowMutation();
+  const [unfollow, { isLoading: isUnfollowLoading }] = useUnFollowMutation();
 
-  const followUser = () => {createFollowUser({ userId: userId })
-      .unwrap().then((res) => {
-        if (res != undefined) {
-          return setFollowStatus(res["status"]);
-        }
+  const followUser = () => {
+    follow({ userId: userId })
+      .unwrap()
+      .then((res) => {
+        setFollowStatus(res.status);
       })
       .catch((err) => console.log(err, 'Добавить пользователя не получилось'));
   };
 
-  const unFollowUser = () => { deleteFollowUser({ userId: userId })
+  const unfollowUser = () => {
+    unfollow({ userId: userId })
       .unwrap()
       .then(() => setFollowStatus(undefined))
       .catch((err) => console.log(err, 'Отписаться от пользователя не получилось'));
   };
 
   useEffect(() => {
-    if (isSuccessFollowing) {
-      setFollowStatus(() => profileFollow.find(({ user }) => {
-        return user === Number(userId);
-      })?.status);
+    if (isSuccessFollowingData) {
+      setFollowStatus(() => profileFollowingData.find(({ user }) =>
+        user === Number(userId)
+      )?.status);
+
       setIsPageReady(true);
     }
-  }, [isSuccessFollowing]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessFollowingData]);
 
-  if (isErrorRemoteUser) {
-    return <NonFound />;
+  if (isNaN(Number(userId))) {
+    return <h1>404 Page not found</h1>
   }
 
-  if (Number(isEqual(Number(userId), currentProfileData?.id))) {
+  if (Number(userId) === currentProfileData?.id) {
     return <Navigate to="/profile/me" />;
   }
-  
-  return (
-    <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-nowrap min-h-[1000px]">
-      {isLoadingRemoteUser ||
-      isLoadingProfileFollow ||
-      !isPageReady ||
-      isLoadingCurrentUser ? (
-        <div className="m-auto">
-          <Preloader />
-        </div>
-      ) : (
+
+  if (
+    isLoadingRemoteUser
+    || isLoadingFollowingData
+    || !isPageReady
+    || isLoadingProfileData
+  ) {
+    return (
+      <div className="m-auto">
+        <ProfileLoader />
+      </div>
+    )
+  }
+
+  if (isSuccessRemoteUser && isSuccessProfileData && isSuccessFollowingData) {
+    return (
+      <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-nowrap min-h-[1000px]">
         <ProfileInfo
-          profileData={profileData}
+          profileData={remoteUser}
           optionButton={
             <div className="flex mt-[80px] ">
               <Button
@@ -109,9 +126,9 @@ function RemoteProfileView(): ReactElement {
           <div className="flex flex-row">
             <ProfileFollowButton
               onFollow={followUser}
-              onUnFollow={unFollowUser}
+              onUnFollow={unfollowUser}
               isPrivate={isPrivateUser}
-              isLoading={isLoadingRequestGetFollow}
+              isLoading={isFollowLoading || isUnfollowLoading}
               status={followStatus}
             />
             <Button size="md" importance="secondary" extraClass="ml-[20px]">
@@ -119,9 +136,11 @@ function RemoteProfileView(): ReactElement {
             </Button>
           </div>
         </ProfileInfo>
-      )}
-    </section>
-  );
+      </section>
+    );
+  }
+
+  return <p>Пользователь не найден</p>
 }
 
 export default RemoteProfileView;

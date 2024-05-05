@@ -66,7 +66,8 @@ module.exports = {
         'but-primary-active': 'rgb(77, 75, 169)',
         'but-second': 'rgb(230, 229, 255)',
         'but-second-hover': 'rgb(216, 215, 241)',
-        'but-second-active': 'rgb(194, 193, 228)'
+        'but-second-active': 'rgb(194, 193, 228)',
+        'edit-profile-shadow': 'rgba(38, 38, 38, .42)'
       },
       padding: {
         "60": "60px",
@@ -111,7 +112,6 @@ module.exports = {
         'gallery-icon': "url('/images/gallery-icon.svg')",
         'plus-icon': "url('/images/plus-icon.svg')",
         'edit-photo': "url('/images/edit-photo.svg')",
-
       },
       borderRadius: {
         "12": "12px",
