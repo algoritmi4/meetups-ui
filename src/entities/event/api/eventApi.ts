@@ -1,5 +1,5 @@
 import { baseApi } from "@/shared/api";
-import { IDetailedEvent, IEvent, IGetEventRequest } from "../model/types";
+import {IDetailedEvent, IEvent, IGetEventRequest, IParticipant} from "../model/types";
 import { IApiResponse } from "@/shared/types";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
@@ -61,6 +61,12 @@ export const eventApi = baseApi.injectEndpoints({
         url: `/events/${event_id}/favorite/`,
         method: 'DELETE'
       })
+    }),
+    getEventParticipants: build.query<IParticipant[], number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/participants/`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -73,5 +79,6 @@ export const {
   useRegisterToEventMutation,
   useLeaveFromEventMutation,
   useLikeEventMutation,
-  useUnlikeEventMutation
+  useUnlikeEventMutation,
+  useGetEventParticipantsQuery
 } = eventApi;

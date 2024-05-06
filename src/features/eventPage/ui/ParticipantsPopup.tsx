@@ -1,17 +1,19 @@
-import { IconButton, Input, Popup } from "@/shared";
-import { ChangeEvent, ReactElement, useContext, useState } from "react";
-import { IParticipant } from "@/entities/event/model/types";
+import {IconButton, Input, Popup} from "@/shared";
+import {ChangeEvent, ReactElement, useContext, useState} from "react";
+import {IParticipant} from "@/entities/event/model/types";
 import Svg from "@/shared/ui/Svg";
-import { config } from "@/shared/config";
-import { EventPageContext } from "@/pages/event/model/EventPageContext";
+import {config} from "@/shared/config";
+import {EventPageContext} from "@/pages/event/model/EventPageContext";
+import {useGetEventParticipantsQuery} from "@/entities/event/api/eventApi.ts";
 
 interface IParticipantsPopupProps {
-  participants: IParticipant[];
+  eventId: number;
+  owner: IParticipant
   isOpen: boolean;
   handleClose: () => void;
 }
 
-export function ParticipantsPopup({ participants, isOpen, handleClose }: IParticipantsPopupProps): ReactElement {
+export function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipantsPopupProps): ReactElement {
   const [inputValue, setInputValue] = useState('');
   const isOwner = useContext(EventPageContext);
 
@@ -19,7 +21,15 @@ export function ParticipantsPopup({ participants, isOpen, handleClose }: IPartic
     setInputValue(e.target.value);
   }
 
+  const {
+    data: eventParticipants = [],
+    isLoading: isParticipantsLoading,
+    isError: isParticipantsError,
+    error: participantsError
+  } = useGetEventParticipantsQuery(eventId);
+  let participants: IParticipant[] = [owner, ...eventParticipants];
   const filteredParticipants = participants.filter((el) => el.username.toLocaleLowerCase().includes(inputValue.toLowerCase()));
+  isParticipantsError && console.log(`Ошибка при получении участников - ${JSON.stringify(participantsError)}`);
 
   return (
     <Popup isOpen={isOpen} onClose={handleClose}>

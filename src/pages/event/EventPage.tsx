@@ -1,15 +1,23 @@
 import {useGetEventQuery, useGetTopEventsQuery} from '@/entities/event/api/eventApi';
-import {ReactElement,  useEffect, useState} from 'react';
+import {ReactElement, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import { CreatorDetails, EventDescription, EventHeader, EventLoader, Location, ReviewsRow, TagRow } from '@/widgets/eventPage';
-import { ParticipantsPopup } from '@/features/eventPage/ui/ParticipantsPopup';
-import { EventsList } from '@/widgets/EventsList';
-import { useMyDetailsQuery } from '@/entities/profile/api/profileApi';
-import { isFavoriteSetted, isParticipantSetted } from '../../entities/event/model/eventInfoSlice';
-import { useAppDispatch, useAppSelector } from '@/shared/model';
-import { EventPageContext } from './model/EventPageContext';
-import { mockParticipants, mockReviews } from './model/consts';
-import { useGetReviewsQuery } from '@/entities/review/api/reviewApi';
+import {
+  CreatorDetails,
+  EventDescription,
+  EventHeader,
+  EventLoader,
+  Location,
+  ReviewsRow,
+  TagRow
+} from '@/widgets/eventPage';
+import {ParticipantsPopup} from '@/features/eventPage/ui/ParticipantsPopup';
+import {EventsList} from '@/widgets/EventsList';
+import {useMyDetailsQuery} from '@/entities/profile/api/profileApi';
+import {isFavoriteSetted, isParticipantSetted} from '@/entities/event/model/eventInfoSlice.ts';
+import {useAppDispatch, useAppSelector} from '@/shared/model';
+import {EventPageContext} from './model/EventPageContext';
+import {mockReviews} from './model/consts';
+import {useGetReviewsQuery} from '@/entities/review/api/reviewApi';
 
 export function EventPage(): ReactElement {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -90,7 +98,7 @@ export function EventPage(): ReactElement {
     return (
       <EventPageContext.Provider value={{ isOwner, isFavorite }}>
         <main className="bg-white w-full flex flex-col pt-[60px] pb-[66px]">
-          <ParticipantsPopup participants={[event.created_by, ...mockParticipants]} isOpen={isParticipantPopupOpen} handleClose={() => setIsParticipantPopupOpen(false)}/>
+          <ParticipantsPopup owner={event.created_by} eventId={event.id} isOpen={isParticipantPopupOpen} handleClose={() => setIsParticipantPopupOpen(false)}/>
           <EventHeader event={event} handleOpenParticipantsPopup={() => setIsParticipantPopupOpen(true)} />
           <TagRow tags={event.tags}/>
           <EventDescription event={event}/>
