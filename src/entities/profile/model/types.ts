@@ -24,7 +24,8 @@ export interface ProfileDetails {
 
 interface IUserFavorite {
   id: number,
-  name: string
+  name: string,
+  image_url: string,
 }
 
 export interface ProfileDto {
