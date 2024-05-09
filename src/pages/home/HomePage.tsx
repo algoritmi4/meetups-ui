@@ -1,4 +1,4 @@
-import {useGetEventsQuery, useGetTopEventsQuery} from '@/entities/event/api/eventApi';
+import {useGetEventsQuery} from '@/entities/event/api/eventApi';
 import {DateSlider} from '@/features/calendarFilter';
 import { useGetCategoriesQuery } from '@/features/searchFilter/api/categoriesApi';
 import { FilterPopup } from '@/features/searchFilter/ui/FilterPopup';
@@ -14,17 +14,17 @@ export function HomePage(): ReactElement {
 
   const {
     data: events = {results: []},
-    isFetching: isEventsFetching,
+    isLoading: isEventsFetching,
     isError: isEventsError,
     error: eventsError
-  } = useGetEventsQuery({ search, categories: checkedCategories });
+  } = useGetEventsQuery({ search, category__name__in: checkedCategories, ordering: 'start_date' });
 
   const {
     data: topEvents = {results: []},
-    isFetching: isTopEventsFetching,
+    isLoading: isTopEventsFetching,
     isError: isTopEventsError,
     error: topEventsError
-  } = useGetTopEventsQuery();
+  } = useGetEventsQuery({ ordering: '-average_rating' });
 
   const {
     data: categories = {results: []},

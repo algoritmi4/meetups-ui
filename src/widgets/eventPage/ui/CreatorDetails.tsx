@@ -1,4 +1,4 @@
-import { IParticipant } from "@/entities/event/model/types";
+import { IParticipant } from "@/entities/eventParticipants/model/types";
 import { EventPageContext } from "@/pages/event/model/EventPageContext";
 import { Button } from "@/shared";
 import Svg from "@/shared/ui/Svg";
@@ -9,7 +9,7 @@ interface ICreatorDetails {
 }
 
 export function CreatorDetails({creator}: ICreatorDetails): ReactElement {
-  const isOwner = useContext(EventPageContext);
+  const { isOwner } = useContext(EventPageContext);
 
   return (
     <section className="max-w-[1125px] mt-[90px] self-stretch text-xl leading-[1.3] text-text-black">

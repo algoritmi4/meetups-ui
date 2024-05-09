@@ -10,13 +10,13 @@ interface IGallery {
 export function HeaderGallery({ event }: IGallery): ReactElement {
   const imgsArr = [event.image_url, ...event.gallery];
 
-  const imgs = imgsArr.map((el, index) => <img key={index} className="rounded-r-[15px]" src={`${config.BASE_IMAGE_URL}${el}`} alt={`Изображение ивента номер ${index}`} />);
+  const imgs = imgsArr.map((el, index) => <img key={index} className="rounded-r-[15px] h-[460px] object-cover" src={`${config.BASE_IMAGE_URL}${el}`} alt={`Изображение ивента номер ${index}`} />);
 
   const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
     speed: 400,
-    className: 'rounded-r-[15px]'
+    className: 'rounded-r-[15px] h-full'
   }
 
   return (

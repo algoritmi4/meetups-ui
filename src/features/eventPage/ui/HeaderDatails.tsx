@@ -40,7 +40,7 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
       <div className="event_details flex flex-col space-y-[18px] text-[22px] text-neutral-800 mt-[30px]">
         <div className="flex items-center">
           <Svg id="calendar-icon" className="w-8 h-8 shrink-0" />
-          <p className="text-[26px] font-normal ml-2.5">{new Date(event.start_date).toLocaleDateString('ru-RU', {day: 'numeric', month: 'numeric'})}</p>
+          <p className="text-[26px] font-normal ml-2.5">{event.start_date ? new Date(event.start_date).toLocaleDateString('ru-RU', {day: 'numeric', month: 'numeric'}) : ''}</p>
         </div>
         <div className="flex items-center">
           <Svg id="clock-icon" className="w-8 h-8 shrink-0" />
@@ -48,7 +48,7 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
         </div>
         <div className="flex items-center">
           <Svg id="map-marker-icon" className="w-8 h-8 shrink-0" />
-          <p className="text-[18px] leading-def ml-2.5">{event.address}</p>
+          <p className="text-[18px] leading-def ml-2.5">{event.address ?? ''}</p>
         </div>
       </div>
       {
@@ -61,9 +61,7 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
               extraClass="self-start text-[18px] font-semibold"
             >Редактировать</Button>
             {
-              event.type === 'open' ? (
-                <></>
-              ) : (
+              event.type !== 'open' && (
                 <Popover className="relative ml-auto mr-[35px]">
                   <Popover.Panel className="absolute bottom-[50px] flex items-center border-1 border-solid border-main-blue rounded-[10px] h-[45px] w-[450px] bg-gray px-5 py-2 z-50">
                     <p className="truncate">{event.private_token}</p>
@@ -95,11 +93,15 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
         )
       }
       <div className="relative flex items-end justify-between mt-3">
-        <p className="text-[18px] font-medium">Вход: {`${event.cost ? `${event.cost.split('.')[0]} ${event.currency.name}` : "свободный"}`}</p>
-        <div onClick={event.any_participant_number ? undefined : handleOpenParticipantsPopup} className={`cursor-pointer absolute right-0 bottom-0 flex self-end ${event.any_participant_number ? "items-end" : "items-center"}`}>
+        <p className="text-[18px] leading-[23px] font-medium">Вход: {`${event.cost ? `${event.cost.split('.')[0]} ${event.currency.name}` : "свободный"}`}</p>
+        <Button
+          type="button"
+          onClick={handleOpenParticipantsPopup}
+          extraClass={`!absolute right-0 bottom-0 ${event.any_participant_number ? "!items-end" : "!items-center"}`}
+        >
           <p className={`${event.any_participant_number ? "text-[32px] leading-[40px]" : "text-[14px] leading-[18px]"}`}>{event.any_participant_number ? "∞" : "Список участников"}</p>
           <Svg className="w-8 h-8 ml-1" id="person-quantity-icon"/>
-        </div>
+        </Button>
       </div>
     </section>
   )
