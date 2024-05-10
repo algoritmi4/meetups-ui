@@ -62,6 +62,7 @@ function EditProfile(): ReactElement {
               <ProfileAvatar
                 image={profileData.image}
                 name={profileData.username}
+                extraClass="cursor-pointer before:bg-edit-photo before:bg-no-repeat before:bg-center before:absolute before:inset-0 before:bg-edit-profile-shadow before:rounded-circle before:opacity-0 before:hoverscreen:hover:opacity-100 before:z-50 before:duration-150"
               />
             </EditProfileForm>
           </FormProvider>
