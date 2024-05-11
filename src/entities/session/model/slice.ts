@@ -18,7 +18,7 @@ export const SessionSlice = createSlice({
         )
         builder.addMatcher(
             sessionApi.endpoints.logout.matchFulfilled,
-            (state) => {
+            () => {
                 localStorage.removeItem('access-token')
                 localStorage.removeItem('refresh-token')
             }
@@ -28,6 +28,13 @@ export const SessionSlice = createSlice({
             (state, { payload }) => {
                 localStorage.setItem('access-token', payload.access)
             }
+        ),
+        builder.addMatcher(
+          sessionApi.endpoints.confirmEmail.matchFulfilled,
+          (state, { payload }) => {
+            localStorage.setItem('access-token', payload.access)
+            localStorage.setItem('refresh-token', payload.refresh)
+          }
         )
     },
 })
