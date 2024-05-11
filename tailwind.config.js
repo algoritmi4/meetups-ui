@@ -67,6 +67,7 @@ module.exports = {
         'but-second-hover': 'rgb(216, 215, 241)',
         'but-second-active': 'rgb(194, 193, 228)',
         'but-orange': 'rgb(246, 125, 125)',
+        'edit-profile-shadow': 'rgba(38, 38, 38, .42)',
         'text-disable': 'rgb(172, 172, 173)'
       },
       padding: {
@@ -111,6 +112,7 @@ module.exports = {
         'chevron-left-purple': "url('/images/chevron-left-purple.svg')",
         'gallery-icon': "url('/images/gallery-icon.svg')",
         'plus-icon': "url('/images/plus-icon.svg')",
+        'edit-photo': "url('/images/edit-photo.svg')",
         'review-text-fade-out': "linear-gradient(90deg, rgba(243,243,245,0) 6%, rgba(243,243,245,1) 75%, rgba(243,243,245,1) 100%)"
       },
       borderRadius: {

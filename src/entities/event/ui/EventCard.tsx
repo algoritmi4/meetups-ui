@@ -70,7 +70,7 @@ export function EventCard({ event }: IEventCard): ReactElement {
                   <Svg viewBox="0 0 34 34" id="person-quantity-icon" className="w-6 h-6 ml-1" />
                 </div>
                 {
-                  (!!event.average_rating || event.average_rating === 0) && (
+                  (!!event.average_rating) && (
                     <div className="flex items-start mt-0.5 self-end">
                       <p className="text-[14px] font-medium">{event.average_rating}</p>
                       <Svg id='rating-star' extraUseClass="!fill-current" className='w-[18px] h-[18px] ml-[7px]' />

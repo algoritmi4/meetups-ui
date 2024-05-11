@@ -10,11 +10,14 @@ import {selectAccessToken} from "@/shared/lib";
 import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
 import { EventPage } from '@/pages/event/EventPage';
+import CurrentProfileView from "@/pages/profile/CurrentProfileView"
+import RemoteProfileView from "@/pages/profile/RemoteProfileView"
+import EditProfile from '@/pages/profile/EditProfile';
 import SecurityPage from '@/pages/security/SecurityPage';
 import ProxyConfirmEmailPage from '@/features/authentication/registration/ui/ProxyConfirmEmailPage';
 import ProxySecurityConfirmEmailPage from '@/features/security/ui/ProxySecurityConfirmEmailPage';
 
-interface GuestGuardProps {
+interface GuestGuardProps { 
   children: ReactElement
 }
 
@@ -34,7 +37,7 @@ function AuthGuard({children}: AuthGuardProps) {
   return children
 }
 
-export const appRouter = createBrowserRouter([
+export const appRouter = createBrowserRouter([ 
   {
     element: <BaseLayout />,
     errorElement: <div>error</div>,
@@ -50,6 +53,24 @@ export const appRouter = createBrowserRouter([
         element: (
           <EventPage/>
         )
+      },
+      {
+        path: '/profile/me',
+        element: (
+          <CurrentProfileView/>
+        ),
+      },
+      {
+        path: '/profile/:userId',
+        element: (
+          <RemoteProfileView/>
+        )
+      },
+      {
+        path: '/profile/edit',
+        element: (
+          <EditProfile/>
+        ),
       },
       {
         path: '/event/add',
