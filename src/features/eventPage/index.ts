@@ -1,2 +1,2 @@
-export { HeaderDetails } from './ui/HeaderDatails';
+export { HeaderDetails } from './ui/HeaderDetails';
 export { HeaderGallery } from './ui/HeaderGallery';
