@@ -11,6 +11,8 @@ import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
 import { EventPage } from '@/pages/event/EventPage';
 import SecurityPage from '@/pages/security/SecurityPage';
+import ProxyConfirmEmailPage from '@/features/authentication/registration/ui/ProxyConfirmEmailPage';
+import ProxySecurityConfirmEmailPage from '@/features/security/ui/ProxySecurityConfirmEmailPage';
 
 interface GuestGuardProps {
   children: ReactElement
@@ -66,6 +68,10 @@ export const appRouter = createBrowserRouter([
         element: (
           <SecurityPage />
         )
+      },
+      {
+        path: '/security/email/confirm',
+        element: <ProxySecurityConfirmEmailPage />
       }
     ]
   },
@@ -80,6 +86,10 @@ export const appRouter = createBrowserRouter([
       {
         path: 'register',
         element: <RegistrationPage/>,
+      },
+      {
+        path: 'register/email/confirm',
+        element: <ProxyConfirmEmailPage />
       },
       {
         path: 'password/reset/',

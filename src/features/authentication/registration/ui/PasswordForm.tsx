@@ -24,7 +24,8 @@ export function PasswordForm(): ReactElement {
     })
 
     const [
-      registerTrigger
+      registerTrigger,
+      { isLoading }
     ] = useRegisterMutation();
 
     const regUser = (password: string) => {
@@ -71,7 +72,7 @@ export function PasswordForm(): ReactElement {
           importance="primary"
           extraClass='mt-[60px] md:mt-6'
           size="xl"
-          disabled={isSubmitted}
+          disabled={(!isValid && isSubmitted) || isLoading}
         >Зарегистрироваться</Button>
         <Button
           onClick={onPrev}

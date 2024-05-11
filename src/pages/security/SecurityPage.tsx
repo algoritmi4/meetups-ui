@@ -1,11 +1,18 @@
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi";
 import { EmailControl, PasswordControl } from "@/features/security";
+import { securityPopupSetted } from "@/features/security/model/securityPopupSlice";
+import EmailSendedPopup from "@/features/security/ui/EmailSendedPopup";
 import PasswordPopup from "@/features/security/ui/PasswordPopup";
+import { Popup } from "@/shared";
+import { useAppDispatch, useAppSelector } from "@/shared/model";
 import { Preloader } from "@/shared/ui/Preloader";
 import { PageTitle } from "@/widgets/PageTitle";
 import { ReactElement } from "react";
 
 function SecurityPage(): ReactElement {
+  const { isOpen, popupType } = useAppSelector((state) => state.securityPopup);
+  const dispatch = useAppDispatch();
+
   const {
     data,
     isLoading: isProfileLoading,
@@ -18,7 +25,18 @@ function SecurityPage(): ReactElement {
 
   return (
     <main className="w-full min-h-[695px]">
-      <PasswordPopup />
+      <Popup
+        isOpen={isOpen}
+        onClose={() => dispatch(securityPopupSetted({ isOpen: false }))}
+      >
+        {
+          popupType === 'password' ? (
+            <PasswordPopup />
+          ) : (
+            <EmailSendedPopup />
+          )
+        }
+      </Popup>
       <PageTitle title="Безопасность и вход" />
       <section className="mt-10 grow">
         <h2 className="text-[28px] font-semibold">Данные аккаунта</h2>

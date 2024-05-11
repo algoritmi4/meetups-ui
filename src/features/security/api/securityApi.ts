@@ -1,9 +1,9 @@
 import { baseApi } from "@/shared/api";
-import { IChangePasswordInfo } from "../model/types";
+import { IChangePasswordRequest } from "../model/types";
 
 const securityApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    changePassword: build.mutation<void, IChangePasswordInfo>({
+    changePassword: build.mutation<void, IChangePasswordRequest>({
       query: ({ password, old_password }) => ({
         url: '/password/change/',
         method: 'POST',
@@ -12,8 +12,20 @@ const securityApi = baseApi.injectEndpoints({
           old_password
         }
       })
+    }),
+    changeEmail: build.mutation<void, string>({
+      query: (email) => ({
+        url: '/change/email/',
+        method: 'POST',
+        body: {
+          email
+        }
+      })
     })
   })
 })
 
-export const { useChangePasswordMutation } = securityApi;
+export const {
+  useChangePasswordMutation,
+  useChangeEmailMutation
+} = securityApi;

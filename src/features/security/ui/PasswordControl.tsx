@@ -6,7 +6,7 @@ import { ChangePasswordValidationSchema, changePasswordSchema } from "../model/c
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useChangePasswordMutation } from "../api/securityApi";
 import { useAppDispatch } from "@/shared/model";
-import { passwordPopupSetted } from "../model/passwordPopupSlice";
+import { securityPopupSetted } from "../model/securityPopupSlice";
 
 function PasswordControl(): ReactElement {
   const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ function PasswordControl(): ReactElement {
       .unwrap()
       .then(() => {
         reset();
-        dispatch(passwordPopupSetted(true));
+        dispatch(securityPopupSetted({ isOpen: true, popupType: 'password' }));
       })
   }
 
