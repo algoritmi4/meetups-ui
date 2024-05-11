@@ -13,7 +13,3 @@ export interface RequestRegistrationBody {
 export interface RequestEmailCheckBody {
   email: string;
 }
-
-export interface IConfirmEmailRequest {
-  confirmation_token: string;
-}

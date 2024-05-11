@@ -15,7 +15,6 @@ import RemoteProfileView from "@/pages/profile/RemoteProfileView"
 import EditProfile from '@/pages/profile/EditProfile';
 import SecurityPage from '@/pages/security/SecurityPage';
 import ProxyConfirmEmailPage from '@/features/authentication/registration/ui/ProxyConfirmEmailPage';
-import ProxySecurityConfirmEmailPage from '@/features/security/ui/ProxySecurityConfirmEmailPage';
 
 interface GuestGuardProps { 
   children: ReactElement
@@ -92,7 +91,7 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: '/security/email/confirm',
-        element: <ProxySecurityConfirmEmailPage />
+        element: <ProxyConfirmEmailPage type='security' />
       }
     ]
   },
@@ -110,7 +109,7 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: 'register/email/confirm',
-        element: <ProxyConfirmEmailPage />
+        element: <ProxyConfirmEmailPage type='register' />
       },
       {
         path: 'password/reset/',
