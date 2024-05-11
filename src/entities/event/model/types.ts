@@ -1,3 +1,5 @@
+import { IParticipant } from "@/entities/eventParticipants/model/types";
+
 export interface IEventTag {
   id: number,
   name: string
@@ -6,13 +8,6 @@ export interface IEventTag {
 interface IEventCurrency {
   name: string;
   id: number;
-}
-
-export interface IParticipant {
-  id: number,
-  username: string,
-  image_url: string,
-  bio?: string
 }
 
 export interface IEvent {
@@ -34,7 +29,30 @@ export interface IEvent {
 
 export interface IGetEventRequest {
   search?: string;
-  categories?: string;
+  category__name__in?: string;
+  ordering?: 'start_date' | 'average_rating' | 'participants_number' | '-start_date' | '-average_rating' | '-participants_number';
+  name?: string;
+  name_contains?: string;
+  start_date?: string;
+  start_date_gte?: string;
+  start_date_lte?: string;
+  end_date?: string;
+  end_date_gte?: string;
+  end_date_lte?: string;
+  average_rating__gte?: string;
+  average_rating__lte?: string;
+  tags?: string;
+  tags_in?: string;
+  category?: string;
+  category_in?: string;
+  city?: string;
+  city_in?: string;
+  free?: string;
+  participants_age?: string;
+  participants_age__gte?: string;
+  participants_age__lte?: string;
+  limit?: number;
+  offset?: number;
 }
 
 export interface IDetailedEvent {
@@ -64,5 +82,6 @@ export interface IDetailedEvent {
   is_visible: boolean,
   is_finished: boolean,
   private_token: string | null,
-  is_favorite: boolean
+  is_favorite: boolean,
+  is_participant: boolean
 }

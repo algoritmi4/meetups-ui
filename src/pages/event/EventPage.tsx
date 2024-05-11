@@ -1,15 +1,23 @@
-import {useGetEventQuery, useGetTopEventsQuery} from '@/entities/event/api/eventApi';
-import {ReactElement,  useEffect, useState} from 'react';
+import {useGetEventQuery, useGetEventsQuery} from '@/entities/event/api/eventApi';
+import {ReactElement, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import { CreatorDetails, EventDescription, EventHeader, EventLoader, Location, ReviewsRow, TagRow } from '@/widgets/eventPage';
-import { ParticipantsPopup } from '@/features/eventPage/ui/ParticipantsPopup';
-import { EventsList } from '@/widgets/EventsList';
-import { useMyDetailsQuery } from '@/entities/profile/api/profileApi';
-import { isFavoriteSetted, isParticipantSetted } from '../../entities/event/model/eventInfoSlice';
-import { useAppDispatch, useAppSelector } from '@/shared/model';
-import { EventPageContext } from './model/EventPageContext';
-import { mockParticipants, mockReviews } from './model/consts';
-import { useGetReviewsQuery } from '@/entities/review/api/reviewApi';
+import {
+  CreatorDetails,
+  EventDescription,
+  EventHeader,
+  EventLoader,
+  Location,
+  ReviewsRow,
+  TagRow
+} from '@/widgets/eventPage';
+import {EventsList} from '@/widgets/EventsList';
+import {useMyDetailsQuery} from '@/entities/profile/api/profileApi';
+import {isFavoriteSetted, isParticipantSetted} from '@/entities/event/model/eventInfoSlice.ts';
+import {useAppDispatch, useAppSelector} from '@/shared/model';
+import {EventPageContext} from './model/EventPageContext';
+import {mockReviews} from './model/consts';
+import {useGetReviewsQuery} from '@/entities/review/api/reviewApi';
+import { ParticipantsPopup } from '@/entities/eventParticipants';
 
 export function EventPage(): ReactElement {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -26,11 +34,10 @@ export function EventPage(): ReactElement {
 
   const {
     data: event,
-    isFetching: isEventFetching,
+    isLoading: isEventLoading,
     isError: isEventError,
     error: eventError,
-    isSuccess: isEventSuccess,
-    refetch: eventRefetch
+    isSuccess: isEventSuccess
   } = useGetEventQuery(Number(eventId));
 
   const {
@@ -38,7 +45,7 @@ export function EventPage(): ReactElement {
     isLoading: isTopEventsLoading,
     isError: isTopEventsError,
     error: topEventsError
-  } = useGetTopEventsQuery();
+  } = useGetEventsQuery({ ordering: '-average_rating' });
 
   const {
     error: reviewsError,
@@ -55,19 +62,19 @@ export function EventPage(): ReactElement {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    eventRefetch()
-      .unwrap()
-      .then((res) => {
-        dispatch(isFavoriteSetted(res.is_favorite));
-        dispatch(isParticipantSetted(event?.participants.some((el) => el.id === profile?.id)));
-        setIsPageReady(true);
-      })
-      .catch((err) => console.log(err));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
 
-  if (isEventFetching || isProfileLoading || isReviwesLoading || !isPageReady) {
+  useEffect(() => {
+    if (isEventSuccess) {
+      dispatch(isFavoriteSetted(event.is_favorite));
+      dispatch(isParticipantSetted(event.is_participant));
+      setIsPageReady(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEventSuccess, event]);
+
+  if (isEventLoading || isProfileLoading || isReviwesLoading || !isPageReady) {
     return <EventLoader />;
   }
 
@@ -90,14 +97,14 @@ export function EventPage(): ReactElement {
     return (
       <EventPageContext.Provider value={{ isOwner, isFavorite }}>
         <main className="bg-white w-full flex flex-col pt-[60px] pb-[66px]">
-          <ParticipantsPopup participants={[event.created_by, ...mockParticipants]} isOpen={isParticipantPopupOpen} handleClose={() => setIsParticipantPopupOpen(false)}/>
+          <ParticipantsPopup owner={event.created_by} eventId={event.id} isOpen={isParticipantPopupOpen} handleClose={() => setIsParticipantPopupOpen(false)}/>
           <EventHeader event={event} handleOpenParticipantsPopup={() => setIsParticipantPopupOpen(true)} />
           <TagRow tags={event.tags}/>
           <EventDescription event={event}/>
           <CreatorDetails creator={event.created_by}/>
           <Location event={event}/>
           <ReviewsRow reviews={mockReviews} rating={event.average_rating}/>
-          <EventsList listTitle="Рекомендации для Вас" isLoading={isTopEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
+          <EventsList listTitle="Рекомендации для Вас" isLoading={isTopEventsLoading} data={topEvents.results.filter((el) => el.id !== event.id)} extraClasses="mt-[50px]" />
         </main>
       </EventPageContext.Provider>
     )

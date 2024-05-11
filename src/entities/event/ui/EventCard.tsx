@@ -3,17 +3,13 @@ import {IEvent} from "../model/types";
 import { Link } from "react-router-dom";
 import Svg from "@/shared/ui/Svg";
 import { useLikeEventMutation, useUnlikeEventMutation } from "../api/eventApi";
-import { useAppDispatch, useAppSelector } from "@/shared/model";
-import { eventChanged } from "../model/eventInfoSlice";
 
 export interface IEventCard {
   event: IEvent;
 }
 
 export function EventCard({ event }: IEventCard): ReactElement {
-  const dispatch = useAppDispatch();
-  const { changedEvents } = useAppSelector((state) => state.eventInfo);
-  const [isFavorite, setIsFavorite] = useState(changedEvents.some((el) => el === event.id) ? !event.is_favorite : event.is_favorite);
+  const [isFavorite, setIsFavorite] = useState(event.is_favorite);
 
   const [likeEvent] = useLikeEventMutation();
   const [unlikeEvent] = useUnlikeEventMutation();
@@ -23,9 +19,7 @@ export function EventCard({ event }: IEventCard): ReactElement {
 
     likeEvent(event.id)
       .unwrap()
-      .then(() => {
-        dispatch(eventChanged(event.id));
-      })
+      .then(() => {return})
       .catch(() => setIsFavorite(false));
   }
 
@@ -34,9 +28,7 @@ export function EventCard({ event }: IEventCard): ReactElement {
 
     unlikeEvent(event.id)
       .unwrap()
-      .then(() => {
-        dispatch(eventChanged(event.id));
-      })
+      .then(() => {return})
       .catch(() => setIsFavorite(true));
   }
 

@@ -10,7 +10,7 @@ interface IEventHeader {
 
 export function EventHeader({ event, handleOpenParticipantsPopup }: IEventHeader): ReactElement {
   return (
-    <section className="flex w-full h-[460px] rounded-[10px]">
+    <section className="flex w-full h-[460px] rounded-[15px] shadow">
       <HeaderDetails event={event} handleOpenParticipantsPopup={handleOpenParticipantsPopup} />
       <HeaderGallery event={event} />
     </section>

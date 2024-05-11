@@ -1,35 +1,24 @@
 import { baseApi } from "@/shared/api";
-import { IDetailedEvent, IEvent, IGetEventRequest } from "../model/types";
+import {IDetailedEvent, IEvent, IGetEventRequest} from "../model/types";
 import { IApiResponse } from "@/shared/types";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
 export const eventApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getEvents: build.query<IApiResponse<IEvent[]>, IGetEventRequest>({
-      query: ({ search, categories }) => ({
+      query: (params) => ({
         url: '/events/',
         method: 'GET',
-        params: {
-          search,
-          category__name__in: categories,
-          ordering: 'start_date'
-        }
-      })
+        params
+      }),
+      providesTags: ['EVENTS_TAG']
     }),
     getEvent: build.query<IDetailedEvent, number>({
       query: (id) => ({
         url: `/events/${id}/`,
         method: 'GET'
-      })
-    }),
-    getTopEvents: build.query<IApiResponse<IEvent[]>, void>({
-        query: () => ({
-          url: '/events/',
-          method: 'GET',
-          params: {
-            ordering: '-average_rating'
-          }
-        })
+      }),
+      providesTags: ['EVENTS_TAG']
     }),
     createEvent: build.mutation<void, AddEventValidationSchema>({
       query: (eventInfo) => ({
@@ -54,14 +43,16 @@ export const eventApi = baseApi.injectEndpoints({
       query: (event_id) => ({
         url: `/events/${event_id}/favorite/`,
         method: 'POST'
-      })
+      }),
+      invalidatesTags: ['EVENTS_TAG']
     }),
     unlikeEvent: build.mutation<void, number>({
       query: (event_id) => ({
         url: `/events/${event_id}/favorite/`,
         method: 'DELETE'
-      })
-    })
+      }),
+      invalidatesTags: ['EVENTS_TAG']
+    }),
   })
 })
 
@@ -69,7 +60,6 @@ export const {
   useGetEventsQuery,
   useGetEventQuery,
   useCreateEventMutation,
-  useGetTopEventsQuery,
   useRegisterToEventMutation,
   useLeaveFromEventMutation,
   useLikeEventMutation,
