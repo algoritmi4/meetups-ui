@@ -33,7 +33,6 @@ export const SessionSlice = createSlice({
           sessionApi.endpoints.confirmEmail.matchFulfilled,
           (state, { payload }) => {
             localStorage.setItem('access-token', payload.access)
-            localStorage.setItem('refresh-token', payload.refresh)
           }
         )
     },
