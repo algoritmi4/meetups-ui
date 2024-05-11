@@ -67,7 +67,8 @@ module.exports = {
         'but-second-hover': 'rgb(216, 215, 241)',
         'but-second-active': 'rgb(194, 193, 228)',
         'but-orange': 'rgb(246, 125, 125)',
-        'edit-profile-shadow': 'rgba(38, 38, 38, .42)'
+        'edit-profile-shadow': 'rgba(38, 38, 38, .42)',
+        'text-disable': 'rgb(172, 172, 173)'
       },
       padding: {
         "60": "60px",

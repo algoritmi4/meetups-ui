@@ -8,7 +8,8 @@ import { useGetCategoriesQuery } from "@/features/searchFilter/api/categoriesApi
 import { useFormActions } from "@/features/addEvent/addEventForm/model/useFormActions";
 import { useGetTagsQuery } from "@/entities/tags/api/tagsApi";
 import { useGetCurrenciesQuery } from "@/features/addEvent/priceControl/api/currencyApi";
-import { PageTitle, ParticipantsControl, TimeControl, MediaControl, MainInfoControl } from "@/widgets/addEvent";
+import { ParticipantsControl, TimeControl, MediaControl, MainInfoControl } from "@/widgets/addEvent";
+import { PageTitle } from "@/widgets/PageTitle";
 
 function AddEventPage(): ReactElement {
   const { data: categories = {results: []}, isError: isCategoriesError, error: categoriesError, isLoading: isCategoriesLoading, isSuccess: isCategoriesSuccess } = useGetCategoriesQuery();
@@ -45,7 +46,7 @@ function AddEventPage(): ReactElement {
 
   return (
     <main className={`w-full max-w-[1005px] mx-auto ${isFormLoading ? "" : "pb-[98px]"}`}>
-      <PageTitle />
+      <PageTitle title="Создайте мероприятие" />
       <FormProvider {...methods}>
         <AddEventForm handleSubmit={methods.handleSubmit} isLoading={isFormLoading}>
           <MainInfoControl categories={categories.results}/>
