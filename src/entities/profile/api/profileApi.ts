@@ -46,6 +46,7 @@ export const profileApi = baseApi.injectEndpoints({
 export const {
   useProfileDetailsQuery,
   useMyDetailsQuery,
+  useLazyMyDetailsQuery,
   useGetFollowingQuery,
   useGetFollowersQuery,
   useFollowMutation,

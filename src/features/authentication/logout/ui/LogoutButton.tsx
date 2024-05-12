@@ -1,15 +1,15 @@
 import { RefreshToken } from "@/shared/model/types.ts";
 import { useLogoutMutation } from "@/entities/session/api/sessionApi.ts";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import Svg from "@/shared/ui/Svg";
+import { MouseEvent } from "react";
 
 export function LogoutButton(token: RefreshToken) {
   const navigate = useNavigate();
 
   const [logoutTrigger] = useLogoutMutation();
 
-  const onConfirmLogout = (e: React.MouseEvent<HTMLElement>) => {
+  const onConfirmLogout = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
 

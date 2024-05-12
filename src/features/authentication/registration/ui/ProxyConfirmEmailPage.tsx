@@ -1,3 +1,4 @@
+import { useLazyMyDetailsQuery } from "@/entities/profile/api/profileApi";
 import { useLazyConfirmEmailQuery } from "@/entities/session/api/sessionApi";
 import { ReactElement, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -13,13 +14,20 @@ function ProxyConfirmEmailPage({ type }: IProxyConfirmEmailPageProps): ReactElem
   const token = searchParams.get('token');
 
   const [confirmEmail] = useLazyConfirmEmailQuery();
+  const [getProfile] = useLazyMyDetailsQuery();
 
   useEffect(() => {
     if (!token) {
       navigate('/', { replace: true });
     } else {
       confirmEmail(token)
-        .then(() => navigate(type === 'security' ? '/security' : '/', { replace: true }))
+        .then(() => {
+          navigate(type === 'security' ? '/security' : '/', { replace: true });
+          type === 'security' && getProfile()
+            .unwrap()
+            .then(() => {return})
+            .catch((err) => console.log(err))
+        })
         .catch((err) => {
           navigate(type === 'security' ? '/security' : '/', { replace: true });
           console.log(err);
