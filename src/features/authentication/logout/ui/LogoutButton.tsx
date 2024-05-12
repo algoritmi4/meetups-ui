@@ -5,18 +5,18 @@ import { useNavigate } from "react-router-dom";
 import Svg from "@/shared/ui/Svg";
 
 export function LogoutButton(token: RefreshToken) {
-  
-  const [logoutTrigger] = useLogoutMutation();
   const navigate = useNavigate();
+
+  const [logoutTrigger] = useLogoutMutation();
+
   const onConfirmLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
+
     logoutTrigger(token)
       .unwrap()
       .then(() => navigate("/"))
-      .catch((error) => {
-        throw new Error(error.data.details);
-      });
+      .catch((error) => console.log(error));
   };
 
   return (

@@ -35,6 +35,7 @@ export function SelectInput({
 
       onChange && onChange(options[0]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSelectOption = (option: ISelectInputOptions) => {

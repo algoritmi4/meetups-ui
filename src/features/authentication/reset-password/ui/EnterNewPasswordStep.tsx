@@ -44,6 +44,7 @@ export function EnterNewPasswordStep({onComplete}: ILoginFormProps): ReactElemen
         onComplete?.();
       })
       .catch(err => console.log(err))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (

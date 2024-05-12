@@ -62,7 +62,6 @@ export function EventPage(): ReactElement {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
 
   useEffect(() => {
