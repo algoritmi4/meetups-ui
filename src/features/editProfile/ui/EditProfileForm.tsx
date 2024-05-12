@@ -23,9 +23,11 @@ export function EditProfileForm({
     useEditProfileMutation();
 
   const onSubmit = (data: EditProfileValidationSchema) => {
+    console.log('patch info')
     editProfile(data)
       .unwrap()
-      .then(() => navigate("/profile/me"));
+      .then(() => navigate("/profile/me"))
+      .catch((err) => console.log(err));
   };
 
   if (isLoading) return <Preloader />;

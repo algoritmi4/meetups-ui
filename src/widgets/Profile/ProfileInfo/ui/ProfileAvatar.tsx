@@ -18,9 +18,9 @@ function ProfileAvatar({
     <div
       onClick={onClick ? onClick : undefined}
       className={`flex w-[250px] h-[250px] mt-[56px] rounded-circle shadow border border-select-disable place-content-center`}>
-      <div className={`relative w-[236px] h-[236px] bg-opacity-40 rounded-circle self-center ${extraClass ? extraClass : ""}`}>
+      <div className={`relative flex w-[236px] h-[236px] bg-opacity-40 rounded-circle self-center ${extraClass ? extraClass : ""}`}>
         <img
-          className="rounded-circle"
+          className="w-[236px] h-[236px] rounded-circle self-center"
           src={`https://storage.googleapis.com/meetups-dev/media/${image}`}
           alt={`Аватар пользователя ${name}`}
         />

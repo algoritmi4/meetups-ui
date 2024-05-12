@@ -1,6 +1,5 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { BackButton } from "@/shared/ui/Buttons/BackButton";
-import { ProfileAvatar } from "@/widgets/Profile/ProfileInfo";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
 import { ProfileLoader } from "@/widgets/Profile/ProfileInfo";
 import { EditProfileForm } from "@/features/editProfile/ui/EditProfileForm";
@@ -11,6 +10,7 @@ import {
   editProfileFormSchema,
 } from "@/features/editProfile/model/editProfileFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { EditProfileInfo } from "@/features/editProfile/ui/EditProfileInfo";
 
 function EditProfile(): ReactElement {
   const {
@@ -33,7 +33,22 @@ function EditProfile(): ReactElement {
   const methods = useForm<EditProfileValidationSchema>({
     resolver: zodResolver(editProfileFormSchema),
     mode: "onBlur",
+    defaultValues: {
+      username: profileData?.username,
+      first_name: profileData?.firstName,
+      last_name: profileData?.lastName,
+      city: profileData?.city,
+      bio: profileData?.bio 
+    }
+
   });
+
+  useEffect(() => {
+    console.log(methods.formState.errors);
+    console.log(methods.getValues());
+  }, [methods.formState.errors])
+
+
 
   if (isProfileDataLoading) {
     return (
@@ -59,11 +74,7 @@ function EditProfile(): ReactElement {
               handleSubmit={methods.handleSubmit}
               isLoading={isFormLoading}
             >
-              <ProfileAvatar
-                image={profileData.image}
-                name={profileData.username}
-                extraClass="cursor-pointer before:bg-edit-photo before:bg-no-repeat before:bg-center before:absolute before:inset-0 before:bg-edit-profile-shadow before:rounded-circle before:opacity-0 before:hoverscreen:hover:opacity-100 before:z-50 before:duration-150"
-              />
+              <EditProfileInfo {...profileData} />
             </EditProfileForm>
           </FormProvider>
         </div>
