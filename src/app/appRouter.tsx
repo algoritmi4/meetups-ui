@@ -1,12 +1,10 @@
-import type {ReactElement} from 'react'
-import {createBrowserRouter, Navigate} from 'react-router-dom'
+import {createBrowserRouter} from 'react-router-dom'
 import NonFound from "@/pages/errors/NonFound";
 import LoginPage from "@/pages/login/LoginPage";
 import RegistrationPage from "@/pages/register/RegistrationPage";
 import BaseLayout from "@/app/layouts/baseLayout.tsx";
 import {AuthLayout} from "@/app/layouts/authLayout";
 import ResetPasswordPage from "@/pages/reset-password/ResetPasswordPage";
-import {selectAccessToken} from "@/shared/lib";
 import AddEventPage from "@/pages/add-event/AddEventPage";
 import {HomePage} from "@/pages/home/HomePage.tsx";
 import { EventPage } from '@/pages/event/EventPage';
@@ -15,28 +13,19 @@ import RemoteProfileView from "@/pages/profile/RemoteProfileView"
 import EditProfile from '@/pages/profile/EditProfile';
 import SecurityPage from '@/pages/security/SecurityPage';
 import ProxyConfirmEmailPage from '@/features/authentication/registration/ui/ProxyConfirmEmailPage';
+import AuthGuard from './guards/AuthGuard';
 
-interface GuestGuardProps { 
-  children: ReactElement
-}
+// interface GuestGuardProps {
+//   children: ReactElement
+// }
 
-function GuestGuard({children}: GuestGuardProps) {
-  if (!selectAccessToken()) return <Navigate to="/login"/>
+// function GuestGuard({children}: GuestGuardProps) {
+//   if (!selectAccessToken()) return <Navigate to="/login"/>
 
-  return children
-}
+//   return children
+// }
 
-interface AuthGuardProps {
-  children: ReactElement
-}
-
-function AuthGuard({children}: AuthGuardProps) {
-  if (selectAccessToken()) return <Navigate to="/"/>
-
-  return children
-}
-
-export const appRouter = createBrowserRouter([ 
+const appRouter = createBrowserRouter([ 
   {
     element: <BaseLayout />,
     errorElement: <div>error</div>,
@@ -122,3 +111,5 @@ export const appRouter = createBrowserRouter([
     ]
   },
 ])
+
+export default appRouter;

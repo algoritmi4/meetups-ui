@@ -1,5 +1,5 @@
 import { AddEventForm } from "@/features/addEvent/addEventForm";
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { MapWidget } from "@/widgets/mapWidget";
 import { FormProvider, useForm } from "react-hook-form";
 import { AddEventValidationSchema, addEventSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
@@ -38,11 +38,6 @@ function AddEventPage(): ReactElement {
   });
 
   const { onSelectAddress } = useFormActions({ setValue: methods.setValue, clearErrors: methods.clearErrors });
-
-  useEffect(() => {
-    console.log(methods.formState.errors);
-    console.log(methods.getValues());
-  }, [methods.formState.errors])
 
   return (
     <main className={`w-full max-w-[1005px] mx-auto ${isFormLoading ? "" : "pb-[98px]"}`}>

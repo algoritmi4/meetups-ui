@@ -1,11 +1,10 @@
-import React from "react";
 import { IItem } from "../model/types";
 import { Link } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Svg from "@/shared/ui/Svg";
+import { forwardRef } from "react";
 
-export const MenuItem = React.forwardRef(({ img, name, link }: IItem, ref) => {
-  
+export const MenuItem = forwardRef(({ img, name, link }: IItem) => {
   return (
     <Menu.Item>
       <Link to={link} className="w-[100%] hover:bg-slate-200">
@@ -22,3 +21,5 @@ export const MenuItem = React.forwardRef(({ img, name, link }: IItem, ref) => {
     </Menu.Item>
   );
 });
+
+MenuItem.displayName = 'MenuItem';

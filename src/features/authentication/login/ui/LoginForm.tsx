@@ -47,6 +47,7 @@ export function LoginForm({onComplete}: ILoginFormProps): ReactElement {
   const onResetPasswordClick = useCallback(() => {
     const values = getValues();
     setFormValuesInStorage(AUTH_FORM_VALUES_KEY, { email: values.email });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
 
   return (

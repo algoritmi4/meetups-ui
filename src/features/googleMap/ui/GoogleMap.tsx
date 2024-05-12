@@ -8,9 +8,7 @@ import { useAppSelector } from "@/shared/model";
 import { AddressMapControl } from "./AddressMapControl";
 import ImplementMarkerMapControl from "./ImplementMarkerMapControl";
 import MapSkeleton from "./MapSkeleton";
-
-const mapId = import.meta.env.VITE_APP_GOOGLE_MAP_ID as string;
-const apiKey = import.meta.env.VITE_APP_GOOGLE_MAP_API_KEY as string;
+import { config } from "@/shared/config";
 
 interface IGoogleMapProps {
   position: ICoordinates;
@@ -32,8 +30,8 @@ export function GoogleMap({ position, markersArr, isLoading, zoom, extraClasses,
         !apiIsLoaded || isLoading ? (
           <MapSkeleton />
         ) : (
-          <APIProvider language="ru-RU" apiKey={apiKey}>
-            <Map zoom={zoom} center={position} mapId={mapId} disableDefaultUI={true} className={`w-full h-[365px] rounded-[12px] ${extraClasses}`}>
+          <APIProvider language="ru-RU" apiKey={config.GOOGLE_MAP_API_KEY}>
+            <Map zoom={zoom} center={position} mapId={config.GOOGLE_MAP_ID} disableDefaultUI={true} className={`w-full h-[365px] rounded-[12px] ${extraClasses}`}>
               {
                 withAddressControl && (
                   <>

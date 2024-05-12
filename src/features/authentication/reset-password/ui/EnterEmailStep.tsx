@@ -51,6 +51,7 @@ export function EnterEmailStep(): ReactElement  {
           console.log(`Some server error ${JSON.stringify(err)}`);
         }
       })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
