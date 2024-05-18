@@ -4,7 +4,6 @@ import { MapMarker } from "@/entities/mapMarker/mapMarker";
 import { ICoordinates } from "../model/types";
 import { IFeatures } from "@/widgets/mapWidget/model/types";
 import { MapHandler } from "./MapHandler";
-import { useAppSelector } from "@/shared/model";
 import { AddressMapControl } from "./AddressMapControl";
 import ImplementMarkerMapControl from "./ImplementMarkerMapControl";
 import MapSkeleton from "./MapSkeleton";
@@ -17,10 +16,18 @@ interface IGoogleMapProps {
   zoom: number;
   extraClasses?: string;
   withAddressControl?: boolean;
+  onMapClick?: ({ latitude, longitude }: { latitude: number, longitude: number }) => void;
 }
 
-export function GoogleMap({ position, markersArr, isLoading, zoom, extraClasses, withAddressControl }: IGoogleMapProps): ReactElement {
-  const { implementMarker } = useAppSelector((state) => state.addressControl);
+export function GoogleMap({
+  position,
+  markersArr,
+  isLoading,
+  zoom,
+  extraClasses,
+  withAddressControl,
+  onMapClick
+}: IGoogleMapProps): ReactElement {
   const markers = markersArr.map((marker, index) => <MapMarker key={index} position={{lng: marker.geometry.coordinates[0], lat: marker.geometry.coordinates[1]}} />);
   const apiIsLoaded = useApiIsLoaded();
 
@@ -31,18 +38,15 @@ export function GoogleMap({ position, markersArr, isLoading, zoom, extraClasses,
           <MapSkeleton />
         ) : (
           <APIProvider language="ru-RU" apiKey={config.GOOGLE_MAP_API_KEY}>
-            <Map zoom={zoom} center={position} mapId={config.GOOGLE_MAP_ID} disableDefaultUI={true} className={`w-full h-[365px] rounded-[12px] ${extraClasses}`}>
+            <Map zoom={zoom} center={position} mapId={config.GOOGLE_MAP_ID} disableDefaultUI={true} className={`w-full h-[365px] rounded-[12px] shadow ${extraClasses}`}>
               {
                 withAddressControl && (
                   <>
-                    <ImplementMarkerMapControl />
+                    <ImplementMarkerMapControl onMapClick={onMapClick} />
                     <AddressMapControl />
                     <MapHandler />
                   </>
                 )
-              }
-              {
-                implementMarker && <MapMarker position={implementMarker} />
               }
               {markers}
             </Map>

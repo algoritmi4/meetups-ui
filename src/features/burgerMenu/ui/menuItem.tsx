@@ -2,11 +2,11 @@ import { IItem } from "../model/types";
 import { Link } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Svg from "@/shared/ui/Svg";
-import { forwardRef } from "react";
+import { Fragment } from "react";
 
-export const MenuItem = forwardRef(({ img, name, link }: IItem) => {
+export const MenuItem = ({ img, name, link }: IItem) => {
   return (
-    <Menu.Item>
+    <Menu.Item as={Fragment}>
       <Link to={link} className="w-[100%] hover:bg-slate-200">
         <div className="flex">
             <Svg
@@ -20,6 +20,6 @@ export const MenuItem = forwardRef(({ img, name, link }: IItem) => {
       </Link>
     </Menu.Item>
   );
-});
+};
 
 MenuItem.displayName = 'MenuItem';

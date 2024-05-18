@@ -1,7 +1,12 @@
 import { AddEventValidationSchema } from "./addEventFormSchema";
 
-export const prepareDataToRequest = (data: AddEventValidationSchema) => {
-  const dataToCreateEvent = data;
+interface IPrepareDataToRequestProps {
+  data: AddEventValidationSchema;
+  toEdit: boolean;
+}
+
+export const prepareDataToRequest = ({ data, toEdit }: IPrepareDataToRequestProps): Partial<AddEventValidationSchema> => {
+  const dataToCreateEvent: Partial<AddEventValidationSchema> = data;
 
   if (!dataToCreateEvent.repeatable) {
     dataToCreateEvent.schedule = null;
@@ -31,5 +36,14 @@ export const prepareDataToRequest = (data: AddEventValidationSchema) => {
     dataToCreateEvent.end_time = null;
   }
 
-  return { dataToCreateEvent };
+  if (toEdit && !dataToCreateEvent.city_north_east_point?.latitude) {
+    delete dataToCreateEvent.address;
+    delete dataToCreateEvent.city;
+    delete dataToCreateEvent.country;
+    delete dataToCreateEvent.city_north_east_point;
+    delete dataToCreateEvent.city_south_west_point;
+    delete dataToCreateEvent.location;
+  }
+
+  return dataToCreateEvent;
 }

@@ -3,17 +3,17 @@ import { z } from "zod";
 export const addEventSchema = z.object({
   name: z
     .string()
-    .min(1, { message: 'Обязательное поле' })
+    .min(1, { message: 'Назовите ваше мероприятие' })
     .max(250, { message: 'Максимальная длина - 250 символов' }),
   category: z
-    .number()
-    .min(1, { message: 'Обязательное поле' }),
+    .number({ required_error: 'Выберите одну из  категорий', invalid_type_error: 'Это обязательное поле' })
+    .min(1, { message: 'Выберите одну из  категорий' }),
   image_url: z
-    .string()
-    .min(1, { message: 'Обязательное поле' }),
+    .string({ required_error: 'Если у вас возникают проблемы с загрузкой, попробуйте выбрать фотографию меньшего размера', invalid_type_error: 'Это обязательное поле' })
+    .min(1, { message: 'Если у вас возникают проблемы с загрузкой, попробуйте выбрать фотографию меньшего размера' }),
   description: z
     .string()
-    .min(1, { message: 'Обязательное поле' })
+    .min(1, { message: 'Это обязательное поле' })
     .max(250, { message: 'Максимальная длина - 250 символов' }),
   start_date: z
     .string()
@@ -28,18 +28,18 @@ export const addEventSchema = z.object({
     .string()
     .nullable(),
   repeatable: z
-    .boolean({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' }),
+    .boolean({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' }),
   schedule: z.object({
     day_of_week: z.enum(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']),
-    time: z.string({ invalid_type_error: 'Обязательное поле' })
+    time: z.string({ invalid_type_error: 'Это обязательное поле' })
   }).array().nullable(),
   address: z
-    .string()
-    .min(1, { message: 'Обязательное поле' })
+    .string({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' })
+    .min(1, { message: 'Это обязательное поле' })
     .max(250, { message: 'Максимальная длина - 250 символов' }),
   city: z
-    .string()
-    .min(1, { message: 'Сломался поиск адреса' }),
+    .string({ required_error: 'Укажите адрес, включающий в себя населенный пункт'})
+    .min(1, { message: 'Укажите адрес, включающий в себя населенный пункт' }),
   country: z
     .string()
     .min(1, { message: 'Сломался поиск адреса' }),
@@ -59,31 +59,32 @@ export const addEventSchema = z.object({
       longitude: z.string()
     }),
   desired_participants_number: z
-    .number()
+    .number({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' })
     .int({ message: 'Укажите целое чисто'})
     .nonnegative({ message: 'Кол-во участников должно быть >= 0' })
     .max(10000000, { message: 'Кол-во участников должно быть < 10000000' })
     .nullable(),
   any_participant_number: z
-    .boolean({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' }),
+    .boolean({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' }),
   participants_age: z
-    .number()
+    .number({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' })
     .int({ message: 'Укажите целое чисто'})
     .nonnegative({ message: 'Возраст должен быть >= 0' })
-    .max(99, { message: 'Максимальный возраст - 100' }),
+    .max(99, { message: 'Максимальный возраст - 100' })
+    .nullable(),
   type: z
-    .enum(['open', 'private']),
+    .enum(['open', 'private'], { required_error: 'Это обязательное поле' }),
   cost: z
-    .string({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' })
-    .min(1, { message: 'Обязательное поле' })
+    .string({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' })
+    .min(1, { message: 'Это обязательное поле' })
     .nullable(),
   currency: z
     .number()
     .nullable(),
   free: z
-    .boolean({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' }),
+    .boolean({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' }),
   gallery: z
-    .string({ invalid_type_error: 'Обязательное поле' })
+    .string({ invalid_type_error: 'Это обязательное поле' })
     .array(),
   tags: z
     .number()
@@ -95,14 +96,17 @@ export const addEventSchema = z.object({
   message: 'Ивент должен заканчиваться после начала',
   path: ['end_date']
 }).refine((data) => data.repeatable || data.start_date, {
-  message: 'Заполните дату и время проведения ивента',
+  message: 'Введите дату начала мероприятия',
   path: ['start_date']
 }).refine((data) => data.repeatable || data.start_time, {
-  message: 'Заполните дату и время проведения ивента',
+  message: 'Введите время начала мероприятия',
   path: ['start_time']
 }).refine((data) => !data.repeatable || (data.schedule && data.schedule.length > 0), {
   message: 'Заполните расписание',
   path: ['schedule']
+}).refine((data) => data.address && data.city, {
+  message: 'Укажите адрес, включающий в себя населенный пункт',
+  path: ['address']
 })
 
 export type AddEventValidationSchema = z.infer<typeof addEventSchema>;

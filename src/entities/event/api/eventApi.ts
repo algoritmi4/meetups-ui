@@ -1,5 +1,5 @@
 import { baseApi } from "@/shared/api";
-import {IDetailedEvent, IEvent, IGetEventRequest} from "../model/types";
+import {IDetailedEvent, IEditEventRequest, IEvent, IGetEventRequest} from "../model/types";
 import { IApiResponse } from "@/shared/types";
 import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
 
@@ -20,10 +20,17 @@ export const eventApi = baseApi.injectEndpoints({
       }),
       providesTags: ['EVENTS_TAG']
     }),
-    createEvent: build.mutation<void, AddEventValidationSchema>({
+    createEvent: build.mutation<void, Partial<AddEventValidationSchema>>({
       query: (eventInfo) => ({
         url: '/events/',
         method: 'POST',
+        body: eventInfo
+      }),
+    }),
+    editEvent: build.mutation<void, IEditEventRequest>({
+      query: ({ eventInfo, eventId }) => ({
+        url: `/events/${eventId}/`,
+        method: 'PATCH',
         body: eventInfo
       }),
     }),
@@ -60,6 +67,7 @@ export const {
   useGetEventsQuery,
   useGetEventQuery,
   useCreateEventMutation,
+  useEditEventMutation,
   useRegisterToEventMutation,
   useLeaveFromEventMutation,
   useLikeEventMutation,
