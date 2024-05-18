@@ -42,7 +42,7 @@ export function PlacesNumberControl(): ReactElement {
             onChange={(state: boolean) => {
               onChange(state);
 
-              state && setValue('desired_participants_number', null);
+              state && setValue('desired_participants_number', null, { shouldDirty: true });
 
               clearErrors('desired_participants_number');
             }}

@@ -22,6 +22,6 @@ export const defaultFormValues = {
   location: undefined,
   desired_participants_number: NaN,
   participants_age: NaN,
-  cost: '',
-  currency: undefined
+  cost: null,
+  currency: null
 }

@@ -3,9 +3,10 @@ import { AddEventValidationSchema } from "./addEventFormSchema";
 interface IPrepareDataToRequestProps {
   data: AddEventValidationSchema;
   toEdit: boolean;
+  dirtyFields: Record<string, boolean | undefined>;
 }
 
-export const prepareDataToRequest = ({ data, toEdit }: IPrepareDataToRequestProps): Partial<AddEventValidationSchema> => {
+export const prepareDataToRequest = ({ data, toEdit, dirtyFields }: IPrepareDataToRequestProps): Partial<AddEventValidationSchema> => {
   const dataToCreateEvent: Partial<AddEventValidationSchema> = data;
 
   if (!dataToCreateEvent.repeatable) {
@@ -36,13 +37,16 @@ export const prepareDataToRequest = ({ data, toEdit }: IPrepareDataToRequestProp
     dataToCreateEvent.end_time = null;
   }
 
-  if (toEdit && !dataToCreateEvent.city_north_east_point?.latitude) {
-    delete dataToCreateEvent.address;
-    delete dataToCreateEvent.city;
-    delete dataToCreateEvent.country;
-    delete dataToCreateEvent.city_north_east_point;
-    delete dataToCreateEvent.city_south_west_point;
-    delete dataToCreateEvent.location;
+  if (toEdit) {
+    const filteredData: Record<string, unknown> = {};
+
+    for (const key in dirtyFields) {
+      if (dirtyFields[key]) {
+        filteredData[key as keyof AddEventValidationSchema] = dataToCreateEvent[key as keyof AddEventValidationSchema];
+      }
+    }
+
+    return filteredData;
   }
 
   return dataToCreateEvent;

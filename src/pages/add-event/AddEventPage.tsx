@@ -12,7 +12,7 @@ import { ParticipantsControl, TimeControl, MediaControl, MainInfoControl } from 
 import { PageTitle } from "@/widgets/PageTitle";
 import { useParams } from "react-router-dom";
 import { useGetEventQuery } from "@/entities/event/api/eventApi";
-import { getRemoveExtraFields } from "@/features/addEvent/addEventForm/model/useRemoveExtraFields";
+import { removeExtraFields } from "@/features/addEvent/addEventForm/model/removeExtraFields";
 import { defaultFormValues } from "@/features/addEvent/addEventForm/model/constants";
 
 interface IAddEventPageProps {
@@ -71,7 +71,7 @@ function AddEventPage({ type }: IAddEventPageProps): ReactElement {
 
   useEffect(() => {
     if (type ==='edit' && isEventSuccess) {
-      const editFormValues = getRemoveExtraFields(event);
+      const editFormValues = removeExtraFields(event);
 
       methods.reset(editFormValues);
     } else {

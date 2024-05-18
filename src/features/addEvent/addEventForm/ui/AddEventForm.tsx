@@ -32,7 +32,7 @@ export function AddEventForm({ children, isLoading, isSuccess, isError, type }: 
       if (Object.keys(dirtyFields).length === 0) {
         navigate(`/events/${eventId}`)
       } else {
-        const dataToCreateEvent = prepareDataToRequest({ data, toEdit: true });
+        const dataToCreateEvent = prepareDataToRequest({ data, toEdit: true, dirtyFields: dirtyFields as Record<string, boolean | undefined> });
 
         editEvent({ eventId: Number(eventId), eventInfo: dataToCreateEvent })
           .unwrap()
@@ -40,7 +40,7 @@ export function AddEventForm({ children, isLoading, isSuccess, isError, type }: 
           .catch((err) => console.log(err));
       }
     } else {
-      const dataToCreateEvent = prepareDataToRequest({ data, toEdit: false });
+      const dataToCreateEvent = prepareDataToRequest({ data, toEdit: false, dirtyFields: dirtyFields as Record<string, boolean | undefined> });
 
       createEvent(dataToCreateEvent)
         .unwrap()

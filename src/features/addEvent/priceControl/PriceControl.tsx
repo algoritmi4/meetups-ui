@@ -64,7 +64,8 @@ export function PriceControl({ currencies }: IPriceControlProps): ReactElement {
             onChange={(state: boolean) => {
               onChange(state);
 
-              state ? setValue('cost', null) : setValue('cost', '');
+              state ? setValue('cost', null, { shouldDirty: true, shouldValidate: true }) : setValue('cost', '', { shouldDirty: true });
+              state ? setValue('currency', null, { shouldDirty: true, shouldValidate: true }) : setValue('currency', 1, { shouldDirty: true });
 
               clearErrors('cost');
             }}

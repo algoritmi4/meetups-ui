@@ -30,6 +30,7 @@ export const addEventSchema = z.object({
   repeatable: z
     .boolean({ required_error: 'Это обязательное поле', invalid_type_error: 'Это обязательное поле' }),
   schedule: z.object({
+    id: z.number().optional(),
     day_of_week: z.enum(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']),
     time: z.string({ invalid_type_error: 'Это обязательное поле' })
   }).array().nullable(),

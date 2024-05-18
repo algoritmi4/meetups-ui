@@ -1,7 +1,7 @@
 import { IDetailedEvent } from "@/entities/event/model/types";
 import { AddEventValidationSchema } from "./addEventFormSchema";
 
-export const getRemoveExtraFields = (event: IDetailedEvent): AddEventValidationSchema => {
+export const removeExtraFields = (event: IDetailedEvent): AddEventValidationSchema => {
   return {
     name: event.name,
     category: event.category.id,
@@ -23,8 +23,8 @@ export const getRemoveExtraFields = (event: IDetailedEvent): AddEventValidationS
     any_participant_number: event.any_participant_number,
     participants_age: event.participants_age,
     type: event.type,
-    cost: event.cost.split('.')[0],
-    currency: event.currency.id,
+    cost: event.cost ? event.cost.split('.')[0] : null,
+    currency: event.currency ? event.currency.id : null,
     free: event.free,
     gallery: event.gallery,
     tags: event.tags.map((el) => el.id)

@@ -33,6 +33,7 @@ export const eventApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: eventInfo
       }),
+      invalidatesTags: ['EVENTS_TAG']
     }),
     registerToEvent: build.mutation<void, number>({
       query: (event_id) => ({
