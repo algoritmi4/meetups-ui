@@ -80,11 +80,6 @@ function AddEventPage({ type }: IAddEventPageProps): ReactElement {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEventSuccess, type]);
 
-  useEffect(() => {
-    console.log(methods.getValues());
-    console.log(methods.formState.errors);
-  }, [methods.formState.errors])
-
   return (
     <main className={`w-full max-w-[1005px] mx-auto ${isFormLoading ? "" : "pb-[98px]"}`}>
       <PageTitle title={`${type === 'edit' ? "Редактируйте" : "Создайте"} мероприятие`} />

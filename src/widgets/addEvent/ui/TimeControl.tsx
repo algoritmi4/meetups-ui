@@ -13,8 +13,7 @@ export function TimeControl(): ReactElement {
     register,
     formState: { errors },
     control,
-    watch,
-    clearErrors
+    watch
   } = useFormContext<AddEventValidationSchema>();
 
   return (
@@ -106,11 +105,9 @@ export function TimeControl(): ReactElement {
           render={({ field: { onChange, value } }) => (
             <PeriodicControl
               isPeriodic={watch('repeatable')}
-              control={control}
               onChange={onChange}
               schedule={value ?? []}
               error={errors.schedule?.message}
-              clearErrors={clearErrors}
             />
           )}
         />
