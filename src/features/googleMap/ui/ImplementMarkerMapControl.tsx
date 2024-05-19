@@ -18,6 +18,7 @@ function ImplementMarkerMapControl({ onMapClick }: IImplementMarkerMapControlPro
       const lat = mapMouseEvent.latLng.lat();
 
       onMapClick && onMapClick({ latitude: lat, longitude: lng });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]
   )
 
