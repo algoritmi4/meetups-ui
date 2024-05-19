@@ -10,6 +10,7 @@ import { Preloader } from "@/shared/ui/Preloader";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDebounce } from "use-debounce";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 interface IParticipantsPopupProps {
   eventId: number;
@@ -44,7 +45,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
   const {
     data: profile,
     isSuccess: isProfileSuccess
-  } = useMyDetailsQuery();
+  } = useMyDetailsQuery(skipToken);
 
   isError && console.log(`Ошибка при получении участников - ${JSON.stringify(error)}`);
 
@@ -75,7 +76,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
       .catch((err) => console.log(err));
   }
 
-  const collectPartisipants = useCallback(() => {
+  const collectPartiсipants = useCallback(() => {
     if (isProfileSuccess) {
       const currentUserArr: IParticipant[] = isParticipant && profile?.username.toLowerCase().includes(debouncedValue.toLowerCase())
       ? [{ username: profile.username, id: profile.id, image_url: profile.image }]
@@ -99,7 +100,18 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
   
       return { participants, participantsCount };
     } else {
-      return { participants: [], participantsCount: 0 };
+      const ownerArr: IParticipant[] = isOwnerShown ? [owner] : [];
+
+      const participants = [
+        ...ownerArr,
+        ...data.results
+      ];
+
+      let participantsCount = data.count - deletedParticipants.length;
+
+      isOwnerShown ? participantsCount += 1 : null;
+
+      return { participants, participantsCount };
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deletedParticipants, isParticipant, data]);
@@ -128,7 +140,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
             </div>
           ) : isSuccess ? (
             <>
-              <p className="mt-3 font-semibold">{`Всего идёт: ${collectPartisipants().participantsCount}`}</p>
+              <p className="mt-3 font-semibold">{`Всего идёт: ${collectPartiсipants().participantsCount}`}</p>
                 <InfiniteScroll
                   dataLength={data.results.length}
                   hasMore={!!data.next}
@@ -138,7 +150,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
                   className="pr-[22px] rounded-l-[20px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-[#F3F3F5] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-text-light-gray [&::-webkit-scrollbar-thumb]:rounded-[10px]"
                 >
                   {
-                    collectPartisipants().participants.map((el) => (
+                    collectPartiсipants().participants.map((el) => (
                       <ParticipantCard
                         key={el.id}
                         participant={el}

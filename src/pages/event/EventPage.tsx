@@ -96,7 +96,12 @@ export function EventPage(): ReactElement {
     return (
       <EventPageContext.Provider value={{ isOwner, isFavorite }}>
         <main className="bg-white w-full flex flex-col pt-[60px] pb-[66px]">
-          <ParticipantsPopup owner={event.created_by} eventId={event.id} isOpen={isParticipantPopupOpen} handleClose={() => setIsParticipantPopupOpen(false)}/>
+          <ParticipantsPopup
+            owner={event.created_by}
+            eventId={event.id}
+            isOpen={isParticipantPopupOpen}
+            handleClose={() => setIsParticipantPopupOpen(false)}
+          />
           <EventHeader event={event} handleOpenParticipantsPopup={() => setIsParticipantPopupOpen(true)} />
           <TagRow tags={event.tags}/>
           <EventDescription event={event}/>
