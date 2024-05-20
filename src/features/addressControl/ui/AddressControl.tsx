@@ -88,7 +88,7 @@ export function AddressControl({ setValuesFunc }: IAddressControlProps): ReactEl
       setPredictionResults([]);
       setInputValue(placeDetails.formatted_address ?? '');
       clearErrors('address');
-      setValue('address', placeDetails.formatted_address ?? '');
+      setValue('address', placeDetails.formatted_address ?? '', { shouldDirty: true });
       reset((state) => ({
         ...state,
         city: '',
