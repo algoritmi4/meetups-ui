@@ -1,4 +1,6 @@
 import { IParticipant } from "@/entities/eventParticipants/model/types";
+import { AddEventValidationSchema } from "@/features/addEvent/addEventForm/model/addEventFormSchema";
+import { IDay } from "@/features/addEvent/periodicControl/model/types";
 
 export interface IEventTag {
   id: number,
@@ -67,7 +69,7 @@ export interface IDetailedEvent {
   end_time: string | null,
   tags: IEventTag[] | [],
   address: string,
-  category: IEventTag | null,
+  category: IEventTag,
   participants_number: number,
   desired_participants_number: number,
   created_by: IParticipant,
@@ -83,5 +85,15 @@ export interface IDetailedEvent {
   is_finished: boolean,
   private_token: string | null,
   is_favorite: boolean,
-  is_participant: boolean
+  is_participant: boolean,
+  repeatable: boolean,
+  schedule: IDay[],
+  city: string,
+  country: string,
+  participants_age: number
+}
+
+export interface IEditEventRequest {
+  eventInfo: Partial<AddEventValidationSchema>;
+  eventId: number;
 }

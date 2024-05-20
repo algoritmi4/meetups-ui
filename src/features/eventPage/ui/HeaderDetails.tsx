@@ -6,7 +6,7 @@ import { useAppSelector } from "@/shared/model";
 import Svg from "@/shared/ui/Svg";
 import { Popover } from "@headlessui/react";
 import { ReactElement, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface IHeaderDetailsProps {
   event: IDetailedEvent;
@@ -14,6 +14,8 @@ interface IHeaderDetailsProps {
 }
 
 export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDetailsProps): ReactElement {
+  const navigate = useNavigate();
+
   const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { eventId } = useParams<{eventId: string}>();
 
@@ -56,6 +58,7 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
           <div className="flex mt-auto">
             <Button
               type="button"
+              onClick={() => navigate(`/events/${event.id}/edit`)}
               importance="primary"
               size="md"
               extraClass="self-start text-[18px] font-semibold"
