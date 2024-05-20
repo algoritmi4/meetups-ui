@@ -19,7 +19,8 @@ export interface ProfileDetails {
   bio: string,
   age: number,
   date_of_birth: string,
-  category_favorite: IUserFavorite[] | []
+  category_favorite: IUserFavorite[] | [],
+  gender: string,
 }
 
 interface IUserFavorite {
@@ -44,7 +45,8 @@ export interface ProfileDetailsDto extends ProfileDto {
   bio: string,
   age: number,
   date_of_birth: string,
-  category_favorite: IUserFavorite[] | []
+  category_favorite: IUserFavorite[] | [],
+  gender: string,
 }
 
 export type IFollowStatus = 'ACCEPTED' | 'PENDING' | 'DECLINED' | undefined;

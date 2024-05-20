@@ -40,7 +40,7 @@ export function ProfileInfo({
     <section className="flex-auto flex flex-col basis-5/12 min-h-[1027px] max-w-[420px] mr-[112px]">
       <ProfileAvatar image={profileData.image} name={profileData.username} />
       <p className="text-zinc-800 font-semibold text-[32px] mt-[20px]">
-        {profileData.firstName}&nbsp;{profileData.lastName}
+        {profileData.username}
       </p>
       <div className="flex flex-row mt-[10px] cursor-pointer">
         <Svg

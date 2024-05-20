@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { BackButton } from "@/shared/ui/Buttons/BackButton";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
 import { ProfileLoader } from "@/widgets/Profile/ProfileInfo";
@@ -35,20 +35,12 @@ function EditProfile(): ReactElement {
     mode: "onBlur",
     defaultValues: {
       username: profileData?.username,
-      first_name: profileData?.firstName,
-      last_name: profileData?.lastName,
+      gender: profileData?.gender,
+      date_of_birth: profileData?.date_of_birth,
       city: profileData?.city,
-      bio: profileData?.bio 
-    }
-
+      bio: profileData?.bio,
+    },
   });
-
-  useEffect(() => {
-    console.log(methods.formState.errors);
-    console.log(methods.getValues());
-  }, [methods.formState.errors])
-
-
 
   if (isProfileDataLoading) {
     return (
@@ -73,6 +65,7 @@ function EditProfile(): ReactElement {
             <EditProfileForm
               handleSubmit={methods.handleSubmit}
               isLoading={isFormLoading}
+              userId={String(profileData.id)}
             >
               <EditProfileInfo {...profileData} />
             </EditProfileForm>

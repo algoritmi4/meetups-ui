@@ -9,6 +9,7 @@ export const profileApi = baseApi.injectEndpoints({
       query: ({userId}) => ({
         url: `/users/${userId}/`,
       }),
+      providesTags: ['PROFILE_TAG'],
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
     }),
@@ -18,6 +19,8 @@ export const profileApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
+      providesTags: ['PROFILE_TAG'],
+
     }),
     getFollowing: build.query<ProfileFollowing[], ProfileId>({
       query: ({userId}) => ({
@@ -41,15 +44,14 @@ export const profileApi = baseApi.injectEndpoints({
         method: 'DELETE',
       }),
     }),
-    editProfile: build.mutation<ProfileId, EditProfileValidationSchema>({
-      query: (userId, ...patch) => ({
+    editProfile: build.mutation<EditProfileValidationSchema, ProfileId>({
+      query: ({userId, ...patch}) => ({
         url: `/users/${userId}/`,
         method: 'PATCH',
         body: patch
       }),
+      invalidatesTags: ['PROFILE_TAG']
     }),
-
-    
 }),
 })
 

@@ -14,6 +14,7 @@ export function mapProfileDetails(dto: ProfileDetailsDto): ProfileDetails {
     bio: dto.bio,
     age: dto.age,
     date_of_birth: dto.date_of_birth,
-    category_favorite: dto.category_favorite
+    category_favorite: dto.category_favorite,
+    gender: dto.gender
   }
 }

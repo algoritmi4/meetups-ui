@@ -5,7 +5,7 @@ import { ProfileAvatar } from "@/widgets/Profile/ProfileInfo";
 
 interface IProfileImageControlProps {
   name?: string;
-  avatar?: string;
+  avatar: string;
   error?: string;
   value?: string;
   onChange?: (image_url: string) => void;
@@ -31,7 +31,7 @@ export function ProfileImageControl({
         isImageUpload: true,
         src: `https://storage.googleapis.com/meetups-dev/media/${res.url}`,
       });
-      onChange && onChange(res.url);
+      onChange ? onChange(res.url) : '';
     });
   };
 

@@ -10,12 +10,14 @@ interface IEditProfileFormProps {
   children: ReactNode;
   handleSubmit: UseFormHandleSubmit<EditProfileValidationSchema>;
   isLoading: boolean;
+  userId: string;
 }
 
 export function EditProfileForm({
   children,
   handleSubmit,
   isLoading,
+  userId,
 }: IEditProfileFormProps): ReactElement {
 
   const navigate = useNavigate();
@@ -23,10 +25,9 @@ export function EditProfileForm({
     useEditProfileMutation();
 
   const onSubmit = (data: EditProfileValidationSchema) => {
-    console.log('patch info')
-    editProfile(data)
+    editProfile({userId, ...data})
       .unwrap()
-      .then(() => navigate("/profile/me"))
+      .then(() => navigate("/profile/me", { replace: true }))
       .catch((err) => console.log(err));
   };
 
