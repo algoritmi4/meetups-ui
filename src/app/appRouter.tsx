@@ -43,6 +43,12 @@ const appRouter = createBrowserRouter([
         )
       },
       {
+        path: '/events/:eventId/edit',
+        element: (
+          <AddEventPage type='edit' />
+        )
+      },
+      {
         path: '/profile/me',
         element: (
           <CurrentProfileView/>
@@ -63,7 +69,7 @@ const appRouter = createBrowserRouter([
       {
         path: '/event/add',
         element: (
-          <AddEventPage/>
+          <AddEventPage type='add' />
         ),
       },
       {
