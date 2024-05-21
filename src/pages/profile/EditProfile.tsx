@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { BackButton } from "@/shared/ui/Buttons/BackButton";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
 import { ProfileLoader } from "@/widgets/Profile/ProfileInfo";
@@ -11,6 +11,8 @@ import {
 } from "@/features/editProfile/model/editProfileFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EditProfileInfo } from "@/features/editProfile/ui/EditProfileInfo";
+import { defaultProfileFormValues } from "@/features/editProfile/model/constants";
+import { removeProfileExtraFields } from "@/features/editProfile/model/removeProfileExtraFields";
 
 function EditProfile(): ReactElement {
   const {
@@ -33,14 +35,17 @@ function EditProfile(): ReactElement {
   const methods = useForm<EditProfileValidationSchema>({
     resolver: zodResolver(editProfileFormSchema),
     mode: "onBlur",
-    defaultValues: {
-      username: profileData?.username,
-      gender: profileData?.gender,
-      date_of_birth: profileData?.date_of_birth,
-      city: profileData?.city,
-      bio: profileData?.bio,
-    },
+    defaultValues: defaultProfileFormValues,
   });
+
+  useEffect(() => {
+    if (isProfileDataSuccess) {
+      const editFormValues = removeProfileExtraFields(profileData);
+      methods.reset(editFormValues);
+    } else {
+      methods.reset(defaultProfileFormValues);
+    }
+  }, [isProfileDataSuccess]);
 
   if (isProfileDataLoading) {
     return (

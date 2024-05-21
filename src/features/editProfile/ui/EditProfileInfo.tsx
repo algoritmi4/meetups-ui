@@ -3,7 +3,12 @@ import { Controller, useFormContext } from "react-hook-form";
 import { ProfileDetails } from "@/entities/profile/model/types";
 import { EditProfileValidationSchema } from "../model/editProfileFormSchema";
 import { ProfileImageControl } from "./ProfileImageControl";
-import { LabeledInput, LargeTextInput, SelectInput } from "@/shared";
+import {
+  LabeledInput,
+  LargeTextInput,
+  SelectInput,
+  SwitchInput,
+} from "@/shared";
 import { ISelectInputOptions } from "@/shared/model/types";
 
 export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
@@ -27,6 +32,8 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
           return genderOption[0];
         case "FEMALE":
           return genderOption[1];
+        default:
+          return undefined;
       }
     })();
 
@@ -115,11 +122,32 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
       <LargeTextInput
         hookFormValues={register("bio")}
         error={errors.city?.message}
-        labelText="Описание"
+        labelText="О себе"
         placeholder="Расскажите подробнее"
         extraBoxClass={"mt-[18px] w-full"}
         maxLength={410}
       />
+      <div className="mt-[24px]">
+        <p className="text-[20px]">Приватность профиля</p>
+        <Controller
+          control={control}
+          name="is_private"
+          render={({ field: { onChange, value } }) => (
+            <SwitchInput
+              labelText={"Сделать приватным"}
+              extraBoxClass={"mt-[18px]"}
+              onChange={(state: boolean) => {
+                onChange(state);
+              }}
+              value={value}
+            />
+          )}
+        />
+        <p className="mt-[14px] text-neutral-400 max-w-[480px]">
+          Если у Вас приватный профиль, люди не смогут видеть ваши созданные,
+          запланированные и посещенные мероприятия без подписки на Вас
+        </p>
+      </div>
     </div>
   );
 }

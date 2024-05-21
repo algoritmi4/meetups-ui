@@ -13,10 +13,8 @@ export const editProfileFormSchema = z.object({
     .max(30, { message: "Максимальная длина - 30 символов" })
     .nullable(),
   gender: z.string().optional(),
-  genderSelect: z.string().array(),
-  // is_private: z
-  // .boolean({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' })
-  // .nullable(),
+  is_private: z
+  .boolean({ required_error: 'Обязательное поле', invalid_type_error: 'Обязательное поле' }),
   bio: z
     .string()
     .min(1, { message: "Обязательное поле" })
@@ -25,7 +23,7 @@ export const editProfileFormSchema = z.object({
   // category_favorite: z
   // .string().array()
   // .nullable(),
-  date_of_birth: z.string().nullable(),
+  date_of_birth: z.string().nullable()
 });
 
 export type EditProfileValidationSchema = z.infer<typeof editProfileFormSchema>;
