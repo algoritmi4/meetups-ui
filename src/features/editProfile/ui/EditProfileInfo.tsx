@@ -135,7 +135,7 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
           render={({ field: { onChange, value } }) => (
             <SwitchInput
               labelText={"Сделать приватным"}
-              extraBoxClass={"mt-[18px]"}
+              extraBoxClass={"mt-[18px] text-[10px]"}
               onChange={(state: boolean) => {
                 onChange(state);
               }}
