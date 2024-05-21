@@ -90,7 +90,7 @@ function RemoteProfileView(): ReactElement {
   }
 
   if (Number(userId) === currentProfileData?.id) {
-    return <Navigate to="/profile/me" />;
+    return <Navigate to="/profile/me, { replace: true }" />;
   }
 
   if (
