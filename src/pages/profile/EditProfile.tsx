@@ -45,6 +45,7 @@ function EditProfile(): ReactElement {
     } else {
       methods.reset(defaultProfileFormValues);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isProfileDataSuccess]);
 
   if (isProfileDataLoading) {
