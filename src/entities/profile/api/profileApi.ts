@@ -19,7 +19,7 @@ export const profileApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
-      providesTags: ['PROFILE_TAG'],
+      providesTags: ['PROFILE_TAG', 'SESSION_TAG'],
 
     }),
     getFollowing: build.query<ProfileFollowing[], ProfileId>({

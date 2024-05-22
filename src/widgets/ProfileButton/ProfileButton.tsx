@@ -1,6 +1,7 @@
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
 import { Menu } from "@headlessui/react";
 import { BurgerMenu } from "@/features/burgerMenu";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export function ProfileButton() {
   const { data: profileData } = useMyDetailsQuery();
