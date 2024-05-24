@@ -17,7 +17,12 @@ export function Location({event}: ILocationProps): ReactElement {
   const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { eventId } = useParams<{eventId: string}>();
 
-  const { handleRegisterToEvent, handleLeaveFromEvent, handleLikeEvent, handleUnlikeEvent } = useEventActions(Number(eventId));
+  const {
+    handleRegisterToEvent,
+    handleLeaveFromEvent,
+    handleLikeEvent,
+    handleUnlikeEvent
+  } = useEventActions(Number(eventId));
 
   return (
     <section className="w-full mt-[90px]">
@@ -41,6 +46,7 @@ export function Location({event}: ILocationProps): ReactElement {
               id="heart-icon"
               extraUseClass={`stroke-white ${isFavorite ? "!fill-white" : ""}`}
               className="w-6 h-6 ml-5 cursor-pointer duration-150 hoverscreen:hover:opacity-70"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={isFavorite ? handleUnlikeEvent : handleLikeEvent}
             />
           </div>

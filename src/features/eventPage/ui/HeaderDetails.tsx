@@ -63,6 +63,7 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
         id="heart-icon"
         extraUseClass={isFavorite ? "!fill-but-primary stroke-but-primary" : "stroke-text-black"}
         className="absolute top-[76px] right-[30px] w-6 h-6 cursor-pointer duration-150 hoverscreen:hover:opacity-70"
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={isFavorite ? handleUnlikeEvent : handleLikeEvent}
       />
       <div className="event_details flex flex-col space-y-[18px] text-[22px] text-neutral-800 mt-[30px]">
