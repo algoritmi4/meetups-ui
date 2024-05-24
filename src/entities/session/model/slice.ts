@@ -2,12 +2,10 @@ import {createSlice} from '@reduxjs/toolkit'
 import {jwtApi} from "@/shared/api";
 import {sessionApi} from "@/entities/session";
 
-
-export const SessionSlice = createSlice({
+const SessionSlice = createSlice({
     name: 'base',
     initialState: {},
-    reducers: {
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addMatcher(
             sessionApi.endpoints.login.matchFulfilled,
@@ -37,3 +35,5 @@ export const SessionSlice = createSlice({
         )
     },
 })
+
+export default SessionSlice;

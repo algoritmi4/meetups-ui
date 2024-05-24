@@ -5,7 +5,7 @@ import { Button } from "@/shared";
 import { useAppSelector } from "@/shared/model";
 import Svg from "@/shared/ui/Svg";
 import { Popover } from "@headlessui/react";
-import { ReactElement, useContext } from "react";
+import { ReactElement, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 interface IHeaderDetailsProps {
@@ -15,17 +15,43 @@ interface IHeaderDetailsProps {
 
 export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDetailsProps): ReactElement {
   const navigate = useNavigate();
+  const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] = useState(false);
 
   const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { eventId } = useParams<{eventId: string}>();
 
   const { isOwner, isFavorite } = useContext(EventPageContext);
 
-  const { handleRegisterToEvent, handleLeaveFromEvent, handleLikeEvent, handleUnlikeEvent } = useEventActions(Number(eventId));
+  const {
+    handleRegisterToEvent,
+    handleLeaveFromEvent,
+    handleLikeEvent,
+    handleUnlikeEvent
+  } = useEventActions(Number(eventId));
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(event.private_token ?? '')
       .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+  }
+
+  const onRegisterToEvent = () => {
+    setIsRegisterButtonDisabled(true);
+
+    handleRegisterToEvent()
+      .then(() => {
+        setIsRegisterButtonDisabled(false);
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const onLeaveFromEvent = () => {
+    setIsRegisterButtonDisabled(true);
+
+    handleLeaveFromEvent()
+      .then(() => {
+        setIsRegisterButtonDisabled(false);
+      })
       .catch((err) => console.log(err))
   }
 
@@ -91,7 +117,8 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
             importance={isParticipant ? 'secondary' : 'primary'}
             extraClass="self-start text-[18px] font-semibold mt-auto"
             size="md"
-            onClick={isParticipant ? handleLeaveFromEvent : handleRegisterToEvent}
+            onClick={isParticipant ? onLeaveFromEvent : onRegisterToEvent}
+            disabled={isRegisterButtonDisabled}
           >{isParticipant ? "Не смогу прийти" : "Присоединиться"}</Button>
         )
       }

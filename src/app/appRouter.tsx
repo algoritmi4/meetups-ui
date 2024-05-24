@@ -13,34 +13,22 @@ import RemoteProfileView from "@/pages/profile/RemoteProfileView"
 import EditProfile from '@/pages/profile/EditProfile';
 import SecurityPage from '@/pages/security/SecurityPage';
 import ProxyConfirmEmailPage from '@/features/authentication/registration/ui/ProxyConfirmEmailPage';
-import AuthGuard from './guards/AuthGuard';
+import RouteGuard from './guards/RouteGuard';
 
-// interface GuestGuardProps {
-//   children: ReactElement
-// }
-
-// function GuestGuard({children}: GuestGuardProps) {
-//   if (!selectAccessToken()) return <Navigate to="/login"/>
-
-//   return children
-// }
-
-const appRouter = createBrowserRouter([ 
+const appRouter = createBrowserRouter([
   {
-    element: <BaseLayout />,
+    element: <RouteGuard type="guest"><BaseLayout /></RouteGuard>,
     errorElement: <div>error</div>,
     children: [
       {
-        path: '/',
+        path: '/security',
         element: (
-          <HomePage/>
-        ),
+          <SecurityPage />
+        )
       },
       {
-        path: '/events/:eventId',
-        element: (
-          <EventPage/>
-        )
+        path: '/security/email/confirm',
+        element: <ProxyConfirmEmailPage type='security' />
       },
       {
         path: '/events/:eventId/edit',
@@ -71,27 +59,35 @@ const appRouter = createBrowserRouter([
         element: (
           <AddEventPage type='add' />
         ),
+      }
+    ]
+  },
+  {
+    element: <BaseLayout />,
+    errorElement: <div>error</div>,
+    children: [
+      {
+        path: '/',
+        element: (
+          <HomePage/>
+        ),
+      },
+      {
+        path: '/events/:eventId',
+        element: (
+          <EventPage/>
+        )
       },
       {
         path: '*',
         element: (
           <NonFound/>
         ),
-      },
-      {
-        path: '/security',
-        element: (
-          <SecurityPage />
-        )
-      },
-      {
-        path: '/security/email/confirm',
-        element: <ProxyConfirmEmailPage type='security' />
       }
     ]
   },
   {
-    element: <AuthGuard><AuthLayout/></AuthGuard>,
+    element: <RouteGuard type="auth"><AuthLayout/></RouteGuard>,
     errorElement: <div>error</div>,
     children: [
       {

@@ -1,8 +1,9 @@
-import {ReactElement, useState} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import {IEvent} from "../model/types";
 import { Link } from "react-router-dom";
 import Svg from "@/shared/ui/Svg";
 import { useLikeEventMutation, useUnlikeEventMutation } from "../api/eventApi";
+import { useMyDetailsQuery } from "@/entities/profile/api/profileApi";
 
 export interface IEventCard {
   event: IEvent;
@@ -10,6 +11,10 @@ export interface IEventCard {
 
 export function EventCard({ event }: IEventCard): ReactElement {
   const [isFavorite, setIsFavorite] = useState(event.is_favorite);
+
+  const {
+    isError
+  } = useMyDetailsQuery();
 
   const [likeEvent] = useLikeEventMutation();
   const [unlikeEvent] = useUnlikeEventMutation();
@@ -31,6 +36,12 @@ export function EventCard({ event }: IEventCard): ReactElement {
       .then(() => {return})
       .catch(() => setIsFavorite(true));
   }
+
+  useEffect(() => {
+    if (isError) {
+      setIsFavorite(false);
+    }
+  }, [isError]);
 
   return (
       <div className="w-full flex flex-col max-w-[270px] mr-[45px]">
