@@ -3,12 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { ProfileDetails } from "@/entities/profile/model/types";
 import { EditProfileValidationSchema } from "../model/editProfileFormSchema";
 import { ProfileImageControl } from "./ProfileImageControl";
-import {
-  LabeledInput,
-  LargeTextInput,
-  SelectInput,
-  SwitchInput,
-} from "@/shared";
+import { LabeledInput, LargeTextInput, SelectInput } from "@/shared";
 import { ISelectInputOptions } from "@/shared/model/types";
 
 export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
@@ -127,27 +122,6 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
         extraBoxClass={"mt-[18px] w-full"}
         maxLength={410}
       />
-      <div className="mt-[24px]">
-        <p className="text-[20px]">Приватность профиля</p>
-        <Controller
-          control={control}
-          name="is_private"
-          render={({ field: { onChange, value } }) => (
-            <SwitchInput
-              labelText={"Сделать приватным"}
-              extraBoxClass={"mt-[18px] text-[10px]"}
-              onChange={(state: boolean) => {
-                onChange(state);
-              }}
-              value={value}
-            />
-          )}
-        />
-        <p className="mt-[14px] text-neutral-400 max-w-[480px]">
-          Если у Вас приватный профиль, люди не смогут видеть ваши созданные,
-          запланированные и посещенные мероприятия без подписки на Вас
-        </p>
-      </div>
     </div>
   );
 }

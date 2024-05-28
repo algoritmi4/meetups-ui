@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EditProfileInfo } from "@/features/editProfile/ui/EditProfileInfo";
 import { defaultProfileFormValues } from "@/features/editProfile/model/constants";
 import { removeProfileExtraFields } from "@/features/editProfile/model/removeProfileExtraFields";
+import { useGetCategoriesQuery } from "@/features/searchFilter/api/categoriesApi";
+import { EditOptions } from "@/features/editProfile/ui/EditOptions";
 
 function EditProfile(): ReactElement {
   const {
@@ -22,6 +24,13 @@ function EditProfile(): ReactElement {
     error: errorProfileData,
     isSuccess: isProfileDataSuccess,
   } = useMyDetailsQuery();
+
+  const {
+    data: categories = { results: [] },
+    isSuccess: isCategoriesSuccess,
+    isError: isCategoriesError,
+    error: categoriesError,
+  } = useGetCategoriesQuery();
 
   isErrorProfileData &&
     console.log(
@@ -56,7 +65,7 @@ function EditProfile(): ReactElement {
     );
   }
 
-  if (isProfileDataSuccess) {
+  if (isProfileDataSuccess && isCategoriesSuccess) {
     return (
       <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap">
         <div className="w-full mt-[60px] mb-[50px] flex flex-nowrap justify-between">
@@ -74,6 +83,10 @@ function EditProfile(): ReactElement {
               userId={String(profileData.id)}
             >
               <EditProfileInfo {...profileData} />
+              <EditOptions
+                categories={categories.results}
+                isSuccess={isProfileDataSuccess}
+              />
             </EditProfileForm>
           </FormProvider>
         </div>

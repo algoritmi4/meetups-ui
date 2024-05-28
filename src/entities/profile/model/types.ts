@@ -1,7 +1,3 @@
-interface IUserFavorite {
-  id: number,
-  name: string
-}
 export interface ProfileId {
   userId: string;
 }
@@ -23,7 +19,7 @@ export interface ProfileDetails {
   gender: string,
 }
 
-interface IUserFavorite {
+export interface IUserFavorite {
   id: number,
   name: string,
   image_url: string,

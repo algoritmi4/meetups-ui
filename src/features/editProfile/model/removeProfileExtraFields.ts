@@ -11,5 +11,6 @@ export const removeProfileExtraFields = (
     city: profileData.city,
     bio: profileData.bio,
     is_private: profileData.is_private,
+    category_favorite: profileData.category_favorite,
   };
 };

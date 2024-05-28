@@ -23,7 +23,10 @@ export function ProfileInfo({
 
   const interstsList = profileData.category_favorite.map(
     ({ name, image_url, id }) => (
-      <div className="flex flex-row flex-wrap" key={id}>
+      <div
+        className="flex flex-row flex-wrap mt-[12px] cursor-pointer"
+        key={id}
+      >
         <img
           className="w-[24px] h-[24px] flex-nowrap"
           src={`https://storage.googleapis.com/meetups-dev/media/${image_url}`}
@@ -93,8 +96,8 @@ export function ProfileInfo({
           <p className="text-zinc-800 text-2xl font-semibold mt-[30px]">
             Интересы
           </p>
-          <div className="flex flex-row-revers max-w-[414px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
-          {interstsList}
+          <div className="flex flex-row-revers flex-wrap max-w-[550px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
+            {interstsList}
           </div>
         </>
       )}
