@@ -4,6 +4,7 @@ import { EditProfileValidationSchema } from "../model/editProfileFormSchema";
 import { EditFavoriteList } from "./EditFavoriteList";
 import { SwitchInput } from "@/shared";
 import { ICategory } from "@/features/searchFilter/model/types";
+import { privateOptionText } from "../model/constants";
 
 interface IEditOptions {
   categories: ICategory[] | [];
@@ -12,7 +13,6 @@ interface IEditOptions {
 
 export function EditOptions({ categories }: IEditOptions): ReactElement {
   const {
-    formState: { errors },
     control,
   } = useFormContext<EditProfileValidationSchema>();
 
@@ -47,8 +47,7 @@ export function EditOptions({ categories }: IEditOptions): ReactElement {
           )}
         />
         <p className="mt-[14px] text-neutral-400 max-w-[480px]">
-          Если у Вас приватный профиль, люди не смогут видеть ваши созданные,
-          запланированные и посещенные мероприятия без подписки на Вас
+          {privateOptionText}
         </p>
       </div>
     </div>

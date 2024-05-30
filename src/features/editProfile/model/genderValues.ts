@@ -3,19 +3,18 @@ export const genderOption = [
   { id: 1, name: "Женский" },
   { id: 3, name: "Не выбрано" },
 ];
-export const getGenderValue = (value: string) =>
-  (() => {
-    switch (value) {
-      case "NONE":
-        return genderOption[2];
-      case "MALE":
-        return genderOption[0];
-      case "FEMALE":
-        return genderOption[1];
-      default:
-        return undefined;
-    }
-  })();
+export const getGenderValue = (value: string) => {
+  switch (value) {
+    case "NONE":
+      return genderOption[2];
+    case "MALE":
+      return genderOption[0];
+    case "FEMALE":
+      return genderOption[1];
+    default:
+      return undefined;
+  }
+};
 
 export const setGenderValue = (name: string) => {
   switch (name) {

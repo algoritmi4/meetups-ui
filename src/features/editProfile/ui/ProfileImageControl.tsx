@@ -2,6 +2,7 @@ import { ReactElement, useState } from "react";
 import { FileInputWithDrag } from "@/shared";
 import { useUploadImage } from "@/shared/lib/hooks/useUploadImage";
 import { ProfileAvatar } from "@/widgets/Profile/ProfileInfo";
+import { editProfileAvatarClass } from "../model/constants";
 
 interface IProfileImageControlProps {
   name?: string;
@@ -18,37 +19,32 @@ export function ProfileImageControl({
   value,
   onChange,
 }: IProfileImageControlProps): ReactElement {
-  const [imageState, setImageState] = useState({
-    isImageUpload: false,
-    src: "",
-  });
   const { onUploadImage } = useUploadImage();
 
   const onUploadMainImage = (file: File) => {
     onUploadImage(file, (res) => {
-      setImageState({
-        isImageUpload: true,
-        src: `https://storage.googleapis.com/meetups-dev/media/${res.url}`,
-      });
-      onChange ? onChange(res.url) : "";
+      onChange && onChange(res.url);
     });
   };
 
   return (
-    <FileInputWithDrag uploadImageFunc={onUploadMainImage} error={error}>
-      {imageState.isImageUpload ? (
+    <>
+      <FileInputWithDrag uploadImageFunc={onUploadMainImage} error={error}>
         <ProfileAvatar
-          image={value ? `${value}` : imageState.src}
-          name={name ? name : ""}
-          extraClass="cursor-pointer before:bg-edit-photo before:bg-no-repeat before:bg-center before:absolute before:inset-0 before:bg-edit-profile-shadow before:rounded-circle before:opacity-0 before:hoverscreen:hover:opacity-100 before:z-50 before:duration-150"
-        />
-      ) : (
-        <ProfileAvatar
-          image={avatar ? avatar : ""}
+          image={value ? value : avatar}
           name={name ?? ""}
-          extraClass="cursor-pointer before:bg-edit-photo before:bg-no-repeat before:bg-center before:absolute before:inset-0 before:bg-edit-profile-shadow before:rounded-circle before:opacity-0 before:hoverscreen:hover:opacity-100 before:z-50 before:duration-150"
+          extraClass={editProfileAvatarClass}
         />
+      </FileInputWithDrag>
+      {error && (
+        <p
+          className={
+            "text-input-error max-w-[460px] ml-[22px] mt-2.5 leading-[20px]"
+          }
+        >
+          {error}
+        </p>
       )}
-    </FileInputWithDrag>
+    </>
   );
 }

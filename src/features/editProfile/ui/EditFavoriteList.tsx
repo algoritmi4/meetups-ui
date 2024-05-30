@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Transition } from "@headlessui/react";
 import Svg from "@/shared/ui/Svg";
 import { ICategory } from "@/features/searchFilter/model/types";
 import { Button } from "@/shared";
@@ -77,7 +77,7 @@ export function EditFavoriteList({
     <div className="mt-[18px]">
       <p className="text-[20px] mt-[18px]">Интересы</p>
       {value?.length != 0 && (
-        <div className="flex flex-row-revers flex-wrap max-w-[550px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
+        <div className="flex flex-wrap max-w-[550px] mt-[14px]">
           {interestsList}
         </div>
       )}
@@ -94,9 +94,18 @@ export function EditFavoriteList({
                 {open ? "Готово" : "Добавить"}
               </Button>
             </Disclosure.Button>
-            <Disclosure.Panel className="flex flex-wrap w-[550px] bg-zinc-100 rounded-[10px] pt-[4px] pb-[16px] px-[22px] mt-[4px]">
-              {categoriesList}
-            </Disclosure.Panel>
+            <Transition
+              enter="transition duration-150 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <Disclosure.Panel className="absolute z-10 opacity flex flex-wrap max-w-[500px] bg-zinc-100 rounded-[10px] pt-[4px] pb-[16px] px-[4px] mt-[4px]">
+                {categoriesList}
+              </Disclosure.Panel>
+            </Transition>
           </>
         )}
       </Disclosure>

@@ -11,7 +11,13 @@ import {
   setGenderValue,
 } from "../model/genderValues";
 
-export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
+interface IEditProfileInfo {
+  profileData?: ProfileDetails;
+}
+
+export function EditProfileInfo({
+  profileData,
+}: IEditProfileInfo): ReactElement {
   const {
     register,
     formState: { errors },
@@ -19,15 +25,15 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
   } = useFormContext<EditProfileValidationSchema>();
 
   return (
-    <div className="flex flex-wrap justify-between">
+    <div className="flex flex-wrap justify-between text-text-black">
       <div>
         <Controller
           control={control}
           name="image_url"
           render={({ field: { onChange, value } }) => (
             <ProfileImageControl
-              name={profileData.username}
-              avatar={profileData.image}
+              name={profileData?.username}
+              avatar={profileData?.image ?? '0'}
               error={errors.image_url?.message}
               value={value ? value : ""}
               onChange={onChange}
@@ -42,7 +48,7 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
           isError={!!errors.username?.message}
           placeholder="Введите имя"
           maxLength={30}
-          className="text-text-black text-[18px] w-[480px] mt-[7px]"
+          className="text-[18px] w-[480px] mt-[7px]"
           labelText="Имя"
           extraLabelClass="text-[20px] mt-[18px]"
           size="lg"
@@ -53,7 +59,7 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
           isError={!!errors.city?.message}
           placeholder="Введите свой город"
           maxLength={30}
-          className="text-text-black text-[18px] w-[480px] mt-[7px]"
+          className="text-[18px] w-[480px] mt-[7px]"
           labelText="Местоположение"
           extraLabelClass="text-[20px] mt-[18px]"
           size="lg"
@@ -80,11 +86,11 @@ export function EditProfileInfo(profileData: ProfileDetails): ReactElement {
           isError={!!errors.date_of_birth?.message}
           type="date"
           placeholder="Дата рождения"
-          className={`w-[480px] text-text-black text-[18px] mt-[7px]`}
+          className={`w-[480px]  text-[18px] mt-[7px]`}
           size="lg"
           max="9999-12-31"
           labelText="Дата рождения"
-          extraLabelClass="text-text-black text-[20px] mt-[18px]"
+          extraLabelClass="text-[20px] mt-[18px]"
         />
       </div>
       <LargeTextInput

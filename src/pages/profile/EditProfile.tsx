@@ -1,6 +1,5 @@
 import { ReactElement, useEffect } from "react";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
-import { ProfileLoader } from "@/widgets/Profile/ProfileInfo";
 import { EditProfileForm } from "@/features/editProfile/ui/EditProfileForm";
 import Svg from "@/shared/ui/Svg";
 import { FormProvider, useForm } from "react-hook-form";
@@ -25,12 +24,8 @@ function EditProfile(): ReactElement {
     isSuccess: isProfileDataSuccess,
   } = useMyDetailsQuery();
 
-  const {
-    data: categories = { results: [] },
-    isSuccess: isCategoriesSuccess,
-    isError: isCategoriesError,
-    error: categoriesError,
-  } = useGetCategoriesQuery();
+  const { data: categories = { results: [] }, isSuccess: isCategoriesSuccess } =
+    useGetCategoriesQuery();
 
   isErrorProfileData &&
     console.log(
@@ -40,6 +35,7 @@ function EditProfile(): ReactElement {
     );
 
   const isFormLoading = isProfileDataLoading || !isProfileDataSuccess;
+  const isFormDataSuccess = isProfileDataSuccess && isCategoriesSuccess;
 
   const methods = useForm<EditProfileValidationSchema>({
     resolver: zodResolver(editProfileFormSchema),
@@ -57,48 +53,38 @@ function EditProfile(): ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isProfileDataSuccess]);
 
-  if (isProfileDataLoading) {
-    return (
-      <div className="m-auto">
-        <ProfileLoader />
-      </div>
-    );
-  }
-
-  if (isProfileDataSuccess && isCategoriesSuccess) {
-    return (
-      <>
-        <PageTitle title={"Редактирование профиля"} />
-        <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap">
-          <div className="basis-4/6 flex flex-wrap">
-            <FormProvider {...methods}>
-              <EditProfileForm
-                handleSubmit={methods.handleSubmit}
-                isLoading={isFormLoading}
-                userId={String(profileData.id)}
-              >
-                <EditProfileInfo {...profileData} />
-                <EditOptions
-                  categories={categories.results}
-                  isSuccess={isProfileDataSuccess}
-                />
-              </EditProfileForm>
-            </FormProvider>
-          </div>
-          <div className="basis-2/6 mt-[67px] pl-[149px]">
-            <Svg
-              id="profile-pencil"
-              width="215"
-              height="215"
-              viewBox="0 0 215 215"
-              fill="none"
-            />
-          </div>
-        </section>
-      </>
-    );
-  }
-  return <p>Ошибка сервера. Попробуйте перезагрузить страницу</p>;
+  return (
+    <>
+      <PageTitle title={"Редактирование профиля"} />
+      <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-wrap">
+        <div className="basis-4/6 flex flex-wrap">
+          <FormProvider {...methods}>
+            <EditProfileForm
+              handleSubmit={methods.handleSubmit}
+              isLoading={isFormLoading}
+              isDataSuccess={isFormDataSuccess}
+              userId={String(profileData?.id) ?? "0"}
+            >
+              <EditProfileInfo profileData={profileData} />
+              <EditOptions
+                categories={categories.results}
+                isSuccess={isProfileDataSuccess}
+              />
+            </EditProfileForm>
+          </FormProvider>
+        </div>
+        <div className="basis-2/6 mt-[67px] pl-[149px]">
+          <Svg
+            id="profile-pencil"
+            width="215"
+            height="215"
+            viewBox="0 0 215 215"
+            fill="none"
+          />
+        </div>
+      </section>
+    </>
+  );
 }
 
 export default EditProfile;
