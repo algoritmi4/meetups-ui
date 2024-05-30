@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 import { FileInputWithDrag } from "@/shared";
 import { useUploadImage } from "@/shared/lib/hooks/useUploadImage";
 import { ProfileAvatar } from "@/widgets/Profile/ProfileInfo";
