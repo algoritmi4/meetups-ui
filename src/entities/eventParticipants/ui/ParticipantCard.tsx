@@ -4,7 +4,6 @@ import { IParticipant } from "../model/types";
 import { IconButton } from "@/shared";
 import { useNavigate } from "react-router-dom";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi";
-import { skipToken } from "@reduxjs/toolkit/query";
 
 interface IParticipantCardProps {
   participant: IParticipant;
@@ -26,7 +25,7 @@ function ParticipantCard({
 
   const {
     isSuccess: isProfileSuccess
-  } = useMyDetailsQuery(skipToken);
+  } = useMyDetailsQuery();
 
   const onKick = (user_id: number) => {
     setIsButtonDisabled(true);

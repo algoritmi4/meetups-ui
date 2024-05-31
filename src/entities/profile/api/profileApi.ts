@@ -1,6 +1,7 @@
 import {baseApi} from '@/shared/api'
 import {ProfileDetails, ProfileId, ProfileFollowing, IFollowResponse, ProfileDetailsDto} from "@/entities/profile/model/types";
 import {mapProfileDetails} from "@/entities/profile/lib/mapProfileDetails";
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -12,11 +13,20 @@ export const profileApi = baseApi.injectEndpoints({
           mapProfileDetails(response),
     }),
     myDetails: build.query<ProfileDetails, void>({
-      query: () => ({
-        url: `/me`,
-      }),
-      transformResponse: (response: ProfileDetailsDto) =>
-          mapProfileDetails(response),
+      queryFn: async (arg, api, extraOptions, baseQuery) => {
+        const result = await baseQuery({
+          url: `/me`,
+          method: 'GET'
+        });
+
+        if (result.error?.status === 401) {
+          return { error: result.error.data as FetchBaseQueryError };
+        }
+
+        const mappedData = mapProfileDetails(result.data as ProfileDetailsDto);
+
+        return { data: mappedData };
+      },
       providesTags: ['SESSION_TAG']
     }),
     getFollowing: build.query<ProfileFollowing[], ProfileId>({

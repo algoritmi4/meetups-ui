@@ -22,6 +22,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
   const [inputValue, setInputValue] = useState('');
   const [offset, setOffset] = useState(0);
   const [deletedParticipants, setDeletedParticipants] = useState<number[]>([]);
+  const { isAuthorized } = useAppSelector((state) => state.session);
 
   const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { isOwner } = useContext(EventPageContext);
@@ -44,7 +45,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
   const {
     data: profile,
     isSuccess: isProfileSuccess
-  } = useMyDetailsQuery();
+  } = useMyDetailsQuery(undefined, { skip: !isAuthorized });
 
   isError && console.log(`Ошибка при получении участников - ${JSON.stringify(error)}`);
 

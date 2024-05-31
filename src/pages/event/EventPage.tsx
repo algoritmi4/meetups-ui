@@ -24,10 +24,11 @@ export function EventPage(): ReactElement {
   const dispatch = useAppDispatch();
   const [isParticipantPopupOpen, setIsParticipantPopupOpen] = useState(false);
   const { eventId } = useParams<{eventId: string}>();
+  const { isAuthorized } = useAppSelector((state) => state.session);
 
   const {
     data: profile
-  } = useMyDetailsQuery();
+  } = useMyDetailsQuery(undefined, { skip: !isAuthorized });
 
   const {
     data: event,
