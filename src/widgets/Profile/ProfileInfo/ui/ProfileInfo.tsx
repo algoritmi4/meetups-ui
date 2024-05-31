@@ -23,7 +23,10 @@ export function ProfileInfo({
 
   const interstsList = profileData.category_favorite.map(
     ({ name, image_url, id }) => (
-      <div className="flex flex-row flex-wrap" key={id}>
+      <div
+        className="flex flex-row flex-wrap mt-[12px] cursor-pointer"
+        key={id}
+      >
         <img
           className="w-[24px] h-[24px] flex-nowrap"
           src={`https://storage.googleapis.com/meetups-dev/media/${image_url}`}
@@ -40,7 +43,7 @@ export function ProfileInfo({
     <section className="flex-auto flex flex-col basis-5/12 min-h-[1027px] max-w-[420px] mr-[112px]">
       <ProfileAvatar image={profileData.image} name={profileData.username} />
       <p className="text-zinc-800 font-semibold text-[32px] mt-[20px]">
-        {profileData.firstName}&nbsp;{profileData.lastName}
+        {profileData.username}
       </p>
       <div className="flex flex-row mt-[10px] cursor-pointer">
         <Svg
@@ -93,8 +96,8 @@ export function ProfileInfo({
           <p className="text-zinc-800 text-2xl font-semibold mt-[30px]">
             Интересы
           </p>
-          <div className="flex flex-row-revers max-w-[414px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
-          {interstsList}
+          <div className="flex flex-row-revers flex-wrap max-w-[550px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
+            {interstsList}
           </div>
         </>
       )}

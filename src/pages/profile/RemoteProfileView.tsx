@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReactElement } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   useProfileDetailsQuery,
   useMyDetailsQuery,
@@ -14,6 +14,7 @@ import { ProfileFollowButton } from "@/widgets/ProfileButton";
 import { IFollowStatus } from "@/entities/profile/model/types";
 
 function RemoteProfileView(): ReactElement {
+  const navigate = useNavigate();
   const [isPageReady, setIsPageReady] = useState(false);
   const { userId = "0" } = useParams();
   const [followStatus, setFollowStatus] = useState<IFollowStatus>(undefined);
@@ -23,7 +24,7 @@ function RemoteProfileView(): ReactElement {
     isLoading: isLoadingRemoteUser,
     isError: isErrorRemoteUser,
     error: errorRemoteUser,
-    isSuccess: isSuccessRemoteUser
+    isSuccess: isSuccessRemoteUser,
   } = useProfileDetailsQuery({ userId: userId });
 
   const {
@@ -31,7 +32,7 @@ function RemoteProfileView(): ReactElement {
     isLoading: isLoadingProfileData,
     isError: isErrorProfileData,
     error: errorProfileData,
-    isSuccess: isSuccessProfileData
+    isSuccess: isSuccessProfileData,
   } = useMyDetailsQuery();
 
   const {
@@ -49,9 +50,20 @@ function RemoteProfileView(): ReactElement {
     }
   );
 
-  isErrorRemoteUser && console.log(`Ошибка при получении remoteUser - ${JSON.stringify(errorRemoteUser)}`);
-  isErrorProfileData && console.log(`Ошибка при получении currentUser - ${JSON.stringify(errorProfileData)}`);
-  isErrorFollowingData && console.log(`Ошибка при получении информации о подписках пользователя - ${JSON.stringify(errorFollowingData)}`);
+  isErrorRemoteUser &&
+    console.log(
+      `Ошибка при получении remoteUser - ${JSON.stringify(errorRemoteUser)}`
+    );
+  isErrorProfileData &&
+    console.log(
+      `Ошибка при получении currentUser - ${JSON.stringify(errorProfileData)}`
+    );
+  isErrorFollowingData &&
+    console.log(
+      `Ошибка при получении информации о подписках пользователя - ${JSON.stringify(
+        errorFollowingData
+      )}`
+    );
 
   const isPrivateUser = remoteUser?.is_private;
 
@@ -64,46 +76,50 @@ function RemoteProfileView(): ReactElement {
       .then((res) => {
         setFollowStatus(res.status);
       })
-      .catch((err) => console.log(err, 'Добавить пользователя не получилось'));
+      .catch((err) => console.log(err, "Добавить пользователя не получилось"));
   };
 
   const unfollowUser = () => {
     unfollow({ userId: userId })
       .unwrap()
       .then(() => setFollowStatus(undefined))
-      .catch((err) => console.log(err, 'Отписаться от пользователя не получилось'));
+      .catch((err) =>
+        console.log(err, "Отписаться от пользователя не получилось")
+      );
   };
 
   useEffect(() => {
     if (isSuccessFollowingData) {
-      setFollowStatus(() => profileFollowingData.find(({ user }) =>
-        user === Number(userId)
-      )?.status);
+      setFollowStatus(
+        () =>
+          profileFollowingData.find(({ user }) => user === Number(userId))
+            ?.status
+      );
 
       setIsPageReady(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessFollowingData]);
 
   if (isNaN(Number(userId))) {
-    return <h1>404 Page not found</h1>
+    return <h1>404 Page not found</h1>;
   }
 
   if (Number(userId) === currentProfileData?.id) {
-    return <Navigate to="/profile/me" />;
+    navigate("/profile/me", { replace: true });
   }
 
   if (
-    isLoadingRemoteUser
-    || isLoadingFollowingData
-    || !isPageReady
-    || isLoadingProfileData
+    isLoadingRemoteUser ||
+    isLoadingFollowingData ||
+    !isPageReady ||
+    isLoadingProfileData
   ) {
     return (
       <div className="m-auto">
         <ProfileLoader />
       </div>
-    )
+    );
   }
 
   if (isSuccessRemoteUser && isSuccessProfileData && isSuccessFollowingData) {
@@ -140,7 +156,7 @@ function RemoteProfileView(): ReactElement {
     );
   }
 
-  return <p>Пользователь не найден</p>
+  return <p>Пользователь не найден</p>;
 }
 
 export default RemoteProfileView;

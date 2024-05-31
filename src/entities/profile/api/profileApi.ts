@@ -1,7 +1,7 @@
 import {baseApi} from '@/shared/api'
 import {ProfileDetails, ProfileId, ProfileFollowing, IFollowResponse, ProfileDetailsDto} from "@/entities/profile/model/types";
 import {mapProfileDetails} from "@/entities/profile/lib/mapProfileDetails";
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { EditProfileValidationSchema } from '@/features/editProfile/model/editProfileFormSchema';
 
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -9,25 +9,18 @@ export const profileApi = baseApi.injectEndpoints({
       query: ({userId}) => ({
         url: `/users/${userId}/`,
       }),
+      providesTags: ['PROFILE_TAG'],
       transformResponse: (response: ProfileDetailsDto) =>
           mapProfileDetails(response),
     }),
     myDetails: build.query<ProfileDetails, void>({
-      queryFn: async (arg, api, extraOptions, baseQuery) => {
-        const result = await baseQuery({
-          url: `/me`,
-          method: 'GET'
-        });
+      query: () => ({
+        url: `/me`,
+      }),
+      transformResponse: (response: ProfileDetailsDto) =>
+          mapProfileDetails(response),
+      providesTags: ['PROFILE_TAG', 'SESSION_TAG'],
 
-        if (result.error?.status === 401) {
-          return { error: result.error.data as FetchBaseQueryError };
-        }
-
-        const mappedData = mapProfileDetails(result.data as ProfileDetailsDto);
-
-        return { data: mappedData };
-      },
-      providesTags: ['SESSION_TAG']
     }),
     getFollowing: build.query<ProfileFollowing[], ProfileId>({
       query: ({userId}) => ({
@@ -51,6 +44,14 @@ export const profileApi = baseApi.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    editProfile: build.mutation<EditProfileValidationSchema, ProfileId>({
+      query: ({userId, ...patch}) => ({
+        url: `/users/${userId}/`,
+        method: 'PATCH',
+        body: patch
+      }),
+      invalidatesTags: ['PROFILE_TAG']
+    }),
 }),
 })
 
@@ -61,5 +62,6 @@ export const {
   useGetFollowingQuery,
   useGetFollowersQuery,
   useFollowMutation,
-  useUnFollowMutation
+  useUnFollowMutation,
+  useEditProfileMutation,
 } = profileApi
