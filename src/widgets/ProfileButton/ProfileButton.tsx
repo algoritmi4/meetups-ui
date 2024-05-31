@@ -9,7 +9,13 @@ export function ProfileButton() {
     <Menu>
       <div className="relative">
         <Menu.Button className="text-base ml-5">
-          {profileData && <img className="w-[50px] h-[50px] rounded-full" src={`https://storage.googleapis.com/meetups-dev/media/${profileData.image}`} alt={`Аватар пользователя ${profileData.username}`} /> }
+          {profileData && (
+            <img
+              className="w-[50px] h-[50px] rounded-full"
+              src={`https://storage.googleapis.com/meetups-dev/media/${profileData.image}`}
+              alt={`Аватар пользователя ${profileData.username}`}
+            />
+          )}
         </Menu.Button>
         <BurgerMenu />
       </div>
