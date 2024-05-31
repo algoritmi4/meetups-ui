@@ -24,7 +24,7 @@ function EditProfile(): ReactElement {
     isSuccess: isProfileDataSuccess,
   } = useMyDetailsQuery();
 
-  const { data: categories = { results: [] }, isSuccess: isCategoriesSuccess } =
+  const { data: categories = { results: [] }, isLoading: isCategoriesLoading, isSuccess: isCategoriesSuccess } =
     useGetCategoriesQuery();
 
   isErrorProfileData &&
@@ -34,7 +34,7 @@ function EditProfile(): ReactElement {
       )}`
     );
 
-  const isFormLoading = isProfileDataLoading || !isProfileDataSuccess;
+  const isFormLoading = isProfileDataLoading || !isCategoriesLoading;
   const isFormDataSuccess = isProfileDataSuccess && isCategoriesSuccess;
 
   const methods = useForm<EditProfileValidationSchema>({
