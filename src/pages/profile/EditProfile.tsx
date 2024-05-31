@@ -34,7 +34,7 @@ function EditProfile(): ReactElement {
       )}`
     );
 
-  const isFormLoading = isProfileDataLoading || !isCategoriesLoading;
+  const isFormLoading = isProfileDataLoading || isCategoriesLoading;
   const isFormDataSuccess = isProfileDataSuccess && isCategoriesSuccess;
 
   const methods = useForm<EditProfileValidationSchema>({
