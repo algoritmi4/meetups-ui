@@ -12,16 +12,18 @@ import { ReactElement } from 'react';
 export function HomePage(): ReactElement {
   const { search, checkedCategories } = useAppSelector(state => state.searchFilter);
 
+  const category_in = checkedCategories.join(',');
+
   const {
     data: events = {results: []},
-    isLoading: isEventsFetching,
+    isLoading: isEventsLoading,
     isError: isEventsError,
     error: eventsError
-  } = useGetEventsQuery({ search, category__name__in: checkedCategories, ordering: 'start_date' });
+  } = useGetEventsQuery({ search, category_in, ordering: 'start_date' });
 
   const {
     data: topEvents = {results: []},
-    isLoading: isTopEventsFetching,
+    isLoading: isTopEventsLoading,
     isError: isTopEventsError,
     error: topEventsError
   } = useGetEventsQuery({ ordering: '-average_rating' });
@@ -45,14 +47,14 @@ export function HomePage(): ReactElement {
   isCategoriesError && console.log(`Ошибка при получении категорий - ${JSON.stringify(categoriesError)}`);
 
   return (
-    <main className="w-full">
+    <main className="w-full pb-[174px]">
       <FilterPopup categories={categories.results}/>
       <HomePageTitle />
       <DateSlider />
-      <EventsList listTitle="Ближайшие" isLoading={isEventsFetching} data={events.results} extraClasses="mt-14 mb-[50px]" />
+      <EventsList listTitle="Ближайшие" isLoading={isEventsLoading} data={events.results} extraClasses="mt-14 mb-[50px]" />
       <MapWidget position={{ lat: 53.9, lng: 27.56667 }} zoom={14} markers={markers.features} isLoading={isMarkersLoading} />
-      <EventsList listTitle="Рекомендации для Вас" isLoading={isTopEventsFetching} data={topEvents.results} extraClasses="mt-[50px]" />
-      <EventsList listTitle="Топ мероприятий" isLoading={isTopEventsFetching} data={topEvents.results} extraClasses="mt-[50px]" />
+      <EventsList listTitle="Рекомендации для Вас" isLoading={isTopEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
+      <EventsList listTitle="Топ мероприятий" isLoading={isTopEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
     </main>
   );
 }

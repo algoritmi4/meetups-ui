@@ -1,6 +1,7 @@
 import { useLeaveFromEventMutation, useLikeEventMutation, useRegisterToEventMutation, useUnlikeEventMutation } from "@/entities/event/api/eventApi";
 import { useAppDispatch } from "@/shared/model";
 import { isFavoriteSetted, isParticipantSetted } from "../model/eventInfoSlice";
+import { useCallback } from "react";
 
 export function useEventActions(eventId: number) {
   const dispatch = useAppDispatch();
@@ -11,41 +12,49 @@ export function useEventActions(eventId: number) {
 
   // In this responses I specifically change the state of the button without waiting
   // for response from the server to prevent delay when clicking
-  const handleRegisterToEvent = () => {
+  const handleRegisterToEvent = useCallback(async () => {
     dispatch(isParticipantSetted(true));
 
-    registerToEvent(eventId)
-      .unwrap()
-      .then(() => {return})
-      .catch(() => dispatch(isParticipantSetted(false)));
-  }
+    try {
+      await registerToEvent(eventId).unwrap();
+    } catch (err) {
+      dispatch(isParticipantSetted(false));
+      console.log(err);
+    }
+  }, [dispatch, eventId, registerToEvent]);
 
-  const handleLeaveFromEvent = () => {
+  const handleLeaveFromEvent = useCallback(async () => {
     dispatch(isParticipantSetted(false));
 
-    leaveFromEvent(eventId)
-      .unwrap()
-      .then(() => {return})
-      .catch(() => dispatch(isParticipantSetted(true)));
-  }
+    try {
+      await leaveFromEvent(eventId).unwrap();
+    } catch (err) {
+      dispatch(isParticipantSetted(false));
+      console.log(err);
+    }
+  }, [dispatch, eventId, leaveFromEvent]);
 
-  const handleLikeEvent = () => {
+  const handleLikeEvent = useCallback(async () => {
     dispatch(isFavoriteSetted(true));
 
-    likeEvent(eventId)
-      .unwrap()
-      .then(() => {return})
-      .catch(() => dispatch(isFavoriteSetted(false)));
-  }
+    try {
+      await likeEvent(eventId).unwrap()
+    } catch (err) {
+      dispatch(isFavoriteSetted(false));
+      console.log(err);
+    }
+  }, [dispatch, eventId, likeEvent]);
 
-  const handleUnlikeEvent = () => {
+  const handleUnlikeEvent = useCallback(async () => {
     dispatch(isFavoriteSetted(false));
 
-    unlikeEvent(eventId)
-      .unwrap()
-      .then(() => {return})
-      .catch(() => dispatch(isFavoriteSetted(true)));
-  }
+    try {
+      await unlikeEvent(eventId).unwrap()
+    } catch (err) {
+      dispatch(isFavoriteSetted(true));
+      console.log(err);
+    }
+  }, [dispatch, eventId, unlikeEvent]);
 
   return { handleRegisterToEvent, handleLeaveFromEvent, handleLikeEvent, handleUnlikeEvent };
 }

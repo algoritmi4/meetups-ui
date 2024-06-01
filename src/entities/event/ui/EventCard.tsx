@@ -1,4 +1,4 @@
-import {ReactElement, useState} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import {IEvent} from "../model/types";
 import { Link } from "react-router-dom";
 import Svg from "@/shared/ui/Svg";
@@ -31,6 +31,10 @@ export function EventCard({ event }: IEventCard): ReactElement {
       .then(() => {return})
       .catch(() => setIsFavorite(true));
   }
+
+  useEffect(() => {
+    setIsFavorite(event.is_favorite);
+  }, [event])
 
   return (
       <div className="w-full flex flex-col max-w-[270px] mr-[45px]">

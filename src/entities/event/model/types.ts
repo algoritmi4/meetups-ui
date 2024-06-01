@@ -31,7 +31,6 @@ export interface IEvent {
 
 export interface IGetEventRequest {
   search?: string;
-  category__name__in?: string;
   ordering?: 'start_date' | 'average_rating' | 'participants_number' | '-start_date' | '-average_rating' | '-participants_number';
   name?: string;
   name_contains?: string;

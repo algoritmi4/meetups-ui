@@ -8,7 +8,7 @@ interface IEventSlider {
 }
 
 export function EventSlider({ events }: IEventSlider): ReactElement {
-  const cards = events.map((el, index) => <EventCard key={index} event={el} />);
+  const cards = events.map((el) => <EventCard key={el.id} event={el} />);
 
   const [width, setWidth] = useState(103.7);
   const [slidesToShow, setSlidesToShow] = useState(4);

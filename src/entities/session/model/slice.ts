@@ -1,13 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {jwtApi} from "@/shared/api";
 import {sessionApi} from "@/entities/session";
+import { profileApi } from '@/entities/profile';
 
+const initialState = {
+  isAuthorized: false
+}
 
-export const SessionSlice = createSlice({
+const SessionSlice = createSlice({
     name: 'base',
-    initialState: {},
-    reducers: {
-    },
+    initialState,
+    reducers: {},
     extraReducers: (builder) => {
         builder.addMatcher(
             sessionApi.endpoints.login.matchFulfilled,
@@ -34,6 +37,20 @@ export const SessionSlice = createSlice({
           (state, { payload }) => {
             localStorage.setItem('access-token', payload.access)
           }
+        ),
+        builder.addMatcher(
+          profileApi.endpoints.myDetails.matchRejected,
+          () => ({
+            isAuthorized: false
+          })
+        ),
+        builder.addMatcher(
+          profileApi.endpoints.myDetails.matchFulfilled,
+          () => ({
+            isAuthorized: true
+          })
         )
     },
 })
+
+export default SessionSlice;

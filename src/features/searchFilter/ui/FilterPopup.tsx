@@ -13,20 +13,19 @@ interface IFilterPopupProps {
 export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
   const dispatch = useAppDispatch();
   const { isOpen } = useAppSelector((state) => state.filterPopup);
-  const [checkedCategories, setCheckedCategories] = useState<ICategory[]>([]);
+  const { checkedCategories } = useAppSelector((state) => state.searchFilter);
+  const [checkedCategoriesArr, setCheckedCategoriesArr] = useState<number[]>(checkedCategories || []);
 
   const handleCheckedCategories = (e: ChangeEvent<HTMLInputElement>, category: ICategory) => {
     e.target.checked
-    ? setCheckedCategories((state) => ([...state, category]))
-    : setCheckedCategories((state) => state.filter((el) => el.id !== category.id));
+    ? setCheckedCategoriesArr((state) => ([...state, category.id]))
+    : setCheckedCategoriesArr((state) => state.filter((el) => el !== category.id));
   }
 
   const onButtonClick = () => {
     dispatch(isPopupOpenSetted(false));
 
-    const checkedCategoriesString = checkedCategories.map((el) => el.name).join(',');
-
-    dispatch(categorySetted(checkedCategoriesString));
+    dispatch(categorySetted(checkedCategoriesArr));
   }
 
   return (
@@ -49,6 +48,7 @@ export function FilterPopup({ categories }: IFilterPopupProps): ReactElement {
                 extraBoxClass="mt-3 first-of-type:mt-4"
                 extraLabelClass="ml-2"
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleCheckedCategories(e, category)}
+                value={checkedCategories.some((el) => el === category.id)}
               />
             )
             }

@@ -5,7 +5,7 @@ import { Button } from "@/shared";
 import { useAppSelector } from "@/shared/model";
 import Svg from "@/shared/ui/Svg";
 import { Popover } from "@headlessui/react";
-import { ReactElement, useContext } from "react";
+import { ReactElement, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 interface IHeaderDetailsProps {
@@ -15,17 +15,43 @@ interface IHeaderDetailsProps {
 
 export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDetailsProps): ReactElement {
   const navigate = useNavigate();
+  const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] = useState(false);
 
   const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { eventId } = useParams<{eventId: string}>();
 
   const { isOwner, isFavorite } = useContext(EventPageContext);
 
-  const { handleRegisterToEvent, handleLeaveFromEvent, handleLikeEvent, handleUnlikeEvent } = useEventActions(Number(eventId));
+  const {
+    handleRegisterToEvent,
+    handleLeaveFromEvent,
+    handleLikeEvent,
+    handleUnlikeEvent
+  } = useEventActions(Number(eventId));
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(event.private_token ?? '')
       .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+  }
+
+  const onRegisterToEvent = () => {
+    setIsRegisterButtonDisabled(true);
+
+    handleRegisterToEvent()
+      .then(() => {
+        setIsRegisterButtonDisabled(false);
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const onLeaveFromEvent = () => {
+    setIsRegisterButtonDisabled(true);
+
+    handleLeaveFromEvent()
+      .then(() => {
+        setIsRegisterButtonDisabled(false);
+      })
       .catch((err) => console.log(err))
   }
 
@@ -37,6 +63,7 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
         id="heart-icon"
         extraUseClass={isFavorite ? "!fill-but-primary stroke-but-primary" : "stroke-text-black"}
         className="absolute top-[76px] right-[30px] w-6 h-6 cursor-pointer duration-150 hoverscreen:hover:opacity-70"
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={isFavorite ? handleUnlikeEvent : handleLikeEvent}
       />
       <div className="event_details flex flex-col space-y-[18px] text-[22px] text-neutral-800 mt-[30px]">
@@ -91,7 +118,8 @@ export function HeaderDetails({ event, handleOpenParticipantsPopup }: IHeaderDet
             importance={isParticipant ? 'secondary' : 'primary'}
             extraClass="self-start text-[18px] font-semibold mt-auto"
             size="md"
-            onClick={isParticipant ? handleLeaveFromEvent : handleRegisterToEvent}
+            onClick={isParticipant ? onLeaveFromEvent : onRegisterToEvent}
+            disabled={isRegisterButtonDisabled}
           >{isParticipant ? "Не смогу прийти" : "Присоединиться"}</Button>
         )
       }

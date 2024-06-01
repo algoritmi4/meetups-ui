@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface IGlobalFilterState {
   search: string;
-  checkedCategories: string;
+  checkedCategories: number[];
 }
 
 const initialState: IGlobalFilterState = {
   search: '',
-  checkedCategories: ''
+  checkedCategories: []
 }
 
 export const searchFilterSlice = createSlice({
@@ -17,7 +17,7 @@ export const searchFilterSlice = createSlice({
     setSearchFilter: (state, { payload: inputValue }: { payload: string }) => ({
       ...state, search: inputValue,
     }),
-    categorySetted: (state, { payload: checkedCategories }: { payload: string }) => ({
+    categorySetted: (state, { payload: checkedCategories }: { payload: number[] }) => ({
       ...state, checkedCategories
     })
   }

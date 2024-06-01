@@ -24,20 +24,19 @@ export function EventPage(): ReactElement {
   const dispatch = useAppDispatch();
   const [isParticipantPopupOpen, setIsParticipantPopupOpen] = useState(false);
   const { eventId } = useParams<{eventId: string}>();
+  const { isAuthorized } = useAppSelector((state) => state.session);
 
   const {
-    data: profile,
-    isLoading: isProfileLoading,
-    isError: isProfileError,
-    error: profileError
-  } = useMyDetailsQuery();
+    data: profile
+  } = useMyDetailsQuery(undefined, { skip: !isAuthorized });
 
   const {
     data: event,
     isLoading: isEventLoading,
     isError: isEventError,
     error: eventError,
-    isSuccess: isEventSuccess
+    isSuccess: isEventSuccess,
+    refetch
   } = useGetEventQuery(Number(eventId));
 
   const {
@@ -54,7 +53,6 @@ export function EventPage(): ReactElement {
   } = useGetReviewsQuery(Number(eventId));
 
   isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
-  isProfileError && console.log(`Ошибка при получении профиля - ${JSON.stringify(profileError)}`);
   isReviewsError && console.log(`Ошибка при получении отзывов - ${JSON.stringify(reviewsError)}`);
 
   const isOwner = event?.created_by.id === profile?.id;
@@ -62,18 +60,20 @@ export function EventPage(): ReactElement {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setIsPageReady(false);
+
+    refetch()
+      .unwrap()
+      .then((res) => {
+        dispatch(isFavoriteSetted(res.is_favorite));
+        dispatch(isParticipantSetted(res.is_participant));
+        setIsPageReady(true);
+      })
+      .catch((err) => console.log(err))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
 
-  useEffect(() => {
-    if (isEventSuccess) {
-      dispatch(isFavoriteSetted(event.is_favorite));
-      dispatch(isParticipantSetted(event.is_participant));
-      setIsPageReady(true);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEventSuccess, event]);
-
-  if (isEventLoading || isProfileLoading || isReviwesLoading || !isPageReady) {
+  if (isEventLoading || isReviwesLoading || !isPageReady) {
     return <EventLoader />;
   }
 

@@ -10,10 +10,11 @@ import { useGetTagsQuery } from "@/entities/tags/api/tagsApi";
 import { useGetCurrenciesQuery } from "@/features/addEvent/priceControl/api/currencyApi";
 import { ParticipantsControl, TimeControl, MediaControl, MainInfoControl } from "@/widgets/addEvent";
 import { PageTitle } from "@/widgets/PageTitle";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetEventQuery } from "@/entities/event/api/eventApi";
 import { removeExtraFields } from "@/features/addEvent/addEventForm/model/removeExtraFields";
 import { defaultFormValues } from "@/features/addEvent/addEventForm/model/constants";
+import { useMyDetailsQuery } from "@/entities/profile/api/profileApi";
 
 interface IAddEventPageProps {
   type: 'add' | 'edit';
@@ -21,6 +22,12 @@ interface IAddEventPageProps {
 
 function AddEventPage({ type }: IAddEventPageProps): ReactElement {
   const { eventId } = useParams();
+  const navigate = useNavigate();
+
+  const {
+    data: profile,
+    isSuccess: isProfileSuccess
+  } = useMyDetailsQuery();
 
   const {
     data: categories = {results: []},
@@ -79,6 +86,15 @@ function AddEventPage({ type }: IAddEventPageProps): ReactElement {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEventSuccess, type]);
+
+  useEffect(() => {
+    if (isEventSuccess && isProfileSuccess) {
+      if (profile.id !== event.created_by.id) {
+        navigate('/', { replace: true });
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEventSuccess, isProfileSuccess]);
 
   return (
     <main className={`w-full max-w-[1005px] mx-auto ${isFormLoading ? "" : "pb-[98px]"}`}>

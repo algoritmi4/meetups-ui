@@ -1,7 +1,7 @@
 import { Button } from "@/shared";
-import { ProfileButton } from "@/widgets/ProfileButton";
 import { ReactElement } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ProfileButton } from "./ProfileButton";
 
 export function Menu(): ReactElement {
   const navigate = useNavigate();

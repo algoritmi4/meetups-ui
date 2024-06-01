@@ -10,7 +10,6 @@ import { Preloader } from "@/shared/ui/Preloader";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDebounce } from "use-debounce";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi";
-import { skipToken } from "@reduxjs/toolkit/query";
 
 interface IParticipantsPopupProps {
   eventId: number;
@@ -23,6 +22,7 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
   const [inputValue, setInputValue] = useState('');
   const [offset, setOffset] = useState(0);
   const [deletedParticipants, setDeletedParticipants] = useState<number[]>([]);
+  const { isAuthorized } = useAppSelector((state) => state.session);
 
   const { isParticipant } = useAppSelector((state) => state.eventInfo);
   const { isOwner } = useContext(EventPageContext);
@@ -45,11 +45,11 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
   const {
     data: profile,
     isSuccess: isProfileSuccess
-  } = useMyDetailsQuery(skipToken);
+  } = useMyDetailsQuery(undefined, { skip: !isAuthorized });
 
   isError && console.log(`Ошибка при получении участников - ${JSON.stringify(error)}`);
 
-  const [kickParticipant, { isLoading: isKickParticipantLoading }] = useKickParticipantMutation();
+  const [kickParticipant] = useKickParticipantMutation();
 
   useEffect(() => {
     if (offset === 0) {
@@ -67,8 +67,8 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
     setInputValue(e.target.value);
   }
 
-  const handleKickParticipant = (user_id: number) => {
-    kickParticipant({ event_id: eventId, user_id })
+  const handleKickParticipant = async (user_id: number): Promise<void> => {
+    await kickParticipant({ event_id: eventId, user_id })
       .unwrap()
       .then(() => {
         setDeletedParticipants((state) => [...state, user_id]);
@@ -158,7 +158,6 @@ function ParticipantsPopup({ eventId, owner, isOpen, handleClose }: IParticipant
                         isOwnerCard={owner.id === el.id}
                         isOwnerView={isOwner}
                         handleKickParticipant={handleKickParticipant}
-                        isKickLoading={isKickParticipantLoading}
                       />
                     ))
                   }
