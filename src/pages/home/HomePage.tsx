@@ -1,3 +1,4 @@
+import { EventCard } from '@/entities/event';
 import {useGetEventsQuery} from '@/entities/event/api/eventApi';
 import {DateSlider} from '@/features/calendarFilter';
 import { useGetCategoriesQuery } from '@/features/searchFilter/api/categoriesApi';
@@ -46,15 +47,36 @@ export function HomePage(): ReactElement {
   isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
   isCategoriesError && console.log(`Ошибка при получении категорий - ${JSON.stringify(categoriesError)}`);
 
+  const eventsList = events.results.map((el) => <EventCard key={el.id} event={el} />);
+  const topEventsList = topEvents.results.map((el) => <EventCard key={el.id} event={el} />);
+
   return (
     <main className="w-full pb-[174px]">
       <FilterPopup categories={categories.results}/>
       <HomePageTitle />
       <DateSlider />
-      <EventsList listTitle="Ближайшие" isLoading={isEventsLoading} data={events.results} extraClasses="mt-14 mb-[50px]" />
+      <EventsList
+        listTitle="Ближайшие"
+        isLoading={isEventsLoading}
+        extraClasses="mt-14 mb-[50px]"
+        slidesLength={4}
+        arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+      >{eventsList}</EventsList>
       <MapWidget position={{ lat: 53.9, lng: 27.56667 }} zoom={14} markers={markers.features} isLoading={isMarkersLoading} />
-      <EventsList listTitle="Рекомендации для Вас" isLoading={isTopEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
-      <EventsList listTitle="Топ мероприятий" isLoading={isTopEventsLoading} data={topEvents.results} extraClasses="mt-[50px]" />
+      <EventsList
+        listTitle="Рекомендации для Вас"
+        isLoading={isTopEventsLoading}
+        extraClasses="mt-[50px]"
+        slidesLength={4}
+        arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+      >{topEventsList}</EventsList>
+      <EventsList
+        listTitle="Топ мероприятий"
+        isLoading={isTopEventsLoading}
+        extraClasses="mt-[50px]"
+        slidesLength={4}
+        arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+      >{topEventsList}</EventsList>
     </main>
   );
 }

@@ -113,7 +113,8 @@ module.exports = {
         'gallery-icon': "url('/images/gallery-icon.svg')",
         'plus-icon': "url('/images/plus-icon.svg')",
         'edit-photo': "url('/images/edit-photo.svg')",
-        'review-text-fade-out': "linear-gradient(90deg, rgba(243,243,245,0) 6%, rgba(243,243,245,1) 75%, rgba(243,243,245,1) 100%)"
+        'review-text-fade-out': "linear-gradient(90deg, rgba(243,243,245,0) 6%, rgba(243,243,245,1) 75%, rgba(243,243,245,1) 100%)",
+        'slider-fade-out-xl': "linear-gradient(to right, transparent, #FFFEFC 60%)",
       },
       borderRadius: {
         "12": "12px",

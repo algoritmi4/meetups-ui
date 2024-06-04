@@ -12,12 +12,20 @@ import { ProfileInfo, ProfileLoader } from "@/widgets/Profile/ProfileInfo";
 import { Button } from "@/shared/ui/Buttons/Button";
 import { ProfileFollowButton } from "@/widgets/ProfileButton";
 import { IFollowStatus } from "@/entities/profile/model/types";
+import { useGetEventsQuery } from "@/entities/event/api/eventApi";
+import { EventsList } from "@/widgets/EventsList";
+import { EventCard } from "@/entities/event";
 
 function RemoteProfileView(): ReactElement {
   const navigate = useNavigate();
   const [isPageReady, setIsPageReady] = useState(false);
   const { userId = "0" } = useParams();
   const [followStatus, setFollowStatus] = useState<IFollowStatus>(undefined);
+
+  const {
+    data = {results: []},
+    isLoading: isEventsLoading
+  } = useGetEventsQuery({ search: '' });
 
   const {
     data: remoteUser,
@@ -101,6 +109,8 @@ function RemoteProfileView(): ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessFollowingData]);
 
+  const eventsList = data.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+
   if (isNaN(Number(userId))) {
     return <h1>404 Page not found</h1>;
   }
@@ -124,7 +134,7 @@ function RemoteProfileView(): ReactElement {
 
   if (isSuccessRemoteUser && isSuccessProfileData && isSuccessFollowingData) {
     return (
-      <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-nowrap min-h-[1000px]">
+      <section className="w-full max-w-[1215px] mx-auto pb-[98px] flex flex-row flex-nowrap min-h-[1000px] overflow-x-hidden">
         <ProfileInfo
           profileData={remoteUser}
           optionButton={
@@ -152,6 +162,29 @@ function RemoteProfileView(): ReactElement {
             </Button>
           </div>
         </ProfileInfo>
+        <div className="w-[65%]">
+          <EventsList
+            listTitle="Созданные"
+            isLoading={isEventsLoading}
+            extraClasses="mt-[60px] before:!bg-slider-fade-out-xl before:!w-[450px]"
+            slidesLength={3}
+            arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+          >{eventsList}</EventsList>
+          <EventsList
+            listTitle="Созданные"
+            isLoading={isEventsLoading}
+            extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
+            slidesLength={3}
+            arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+          >{eventsList}</EventsList>
+          <EventsList
+            listTitle="Созданные"
+            isLoading={isEventsLoading}
+            extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
+            slidesLength={3}
+            arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+          >{eventsList}</EventsList>
+        </div>
       </section>
     );
   }
