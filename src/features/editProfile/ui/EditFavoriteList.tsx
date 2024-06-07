@@ -27,7 +27,7 @@ export function EditFavoriteList({
 
   const interestsList = value.map(({ name, image_url, id }) => (
     <div
-      className="flex flex-row flex-nowrap mt-[12px] cursor-pointer"
+      className="flex flex-row flex-nowrap cursor-pointer mt-[12px]"
       key={id}
     >
       <img
@@ -77,7 +77,7 @@ export function EditFavoriteList({
     <div className="mt-[18px]">
       <p className="text-[20px] mt-[18px]">Интересы</p>
       {value?.length != 0 && (
-        <div className="flex flex-wrap max-w-[550px] mt-[14px]">
+        <div className="flex flex-wrap max-w-[550px]">
           {interestsList}
         </div>
       )}
