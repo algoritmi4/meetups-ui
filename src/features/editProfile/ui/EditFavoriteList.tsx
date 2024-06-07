@@ -27,7 +27,7 @@ export function EditFavoriteList({
 
   const interestsList = value.map(({ name, image_url, id }) => (
     <div
-      className="flex flex-row flex-nowrap mt-[12px] cursor-pointer"
+      className="flex flex-row flex-nowrap cursor-pointer"
       key={id}
     >
       <img

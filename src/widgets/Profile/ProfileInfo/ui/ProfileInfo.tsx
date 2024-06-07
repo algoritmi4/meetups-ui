@@ -96,7 +96,7 @@ export function ProfileInfo({
           <p className="text-zinc-800 text-2xl font-semibold mt-[30px]">
             Интересы
           </p>
-          <div className="flex flex-row-revers flex-wrap max-w-[550px] max-h-[115px] text-pretty text-ellipsis overflow-hidden mt-[14px]">
+          <div className="flex flex-row-revers flex-wrap max-w-[550px] max-h-[115px] text-pretty text-ellipsis overflow-hidden">
             {interstsList}
           </div>
         </>
