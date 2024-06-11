@@ -10,7 +10,7 @@ import { useGetMarkersQuery } from '@/widgets/mapWidget/api/markersApi';
 import { ReactElement } from 'react';
 
 export function HomePage(): ReactElement {
-  const { search, checkedCategories } = useAppSelector(state => state.searchFilter);
+  const { search, checkedCategories, startDate, endDate, startDateGTE } = useAppSelector(state => state.searchFilter);
 
   const category_in = checkedCategories.join(',');
 
@@ -19,7 +19,7 @@ export function HomePage(): ReactElement {
     isLoading: isEventsLoading,
     isError: isEventsError,
     error: eventsError
-  } = useGetEventsQuery({ search, category_in, ordering: 'start_date' });
+  } = useGetEventsQuery({ search, start_date: startDate, start_date_gte: startDateGTE, start_date_lte: endDate, category_in, ordering: 'start_date' });
 
   const {
     data: topEvents = {results: []},

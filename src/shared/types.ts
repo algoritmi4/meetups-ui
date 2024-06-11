@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export enum ValueTextField {
   USERNAME = "username",
   EMAIL = "email",
@@ -17,8 +19,17 @@ export interface ISlickSliderSettings {
 }
 
 export interface ICardProps {
-  date: string | number;
+  date: string;
   weekDay: string;
+  month: string;
+  year: string;
+  summary: number;
+  // startDate: string;
+  // endDate: string;
+  // isStartDate: boolean;
+  // isEndDate: boolean;
+  // isBetweenDate: boolean;
+  // onClickDate: (date: string) =>  void;
 }
 
 export interface ArrowsExtraClasses {
