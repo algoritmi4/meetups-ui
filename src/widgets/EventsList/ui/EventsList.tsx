@@ -10,19 +10,28 @@ interface IEventList {
   extraClasses?: string;
 }
 
-export function EventsList({ listTitle, isLoading, data, extraClasses }: IEventList): ReactElement {
+export function EventsList({
+  listTitle,
+  isLoading,
+  data,
+  extraClasses,
+}: IEventList): ReactElement {
   return (
-    <div className={`flex flex-col relative before:w-[198px] before:absolute before:right-[-45px] before:h-full before:bg-slider-fade-out before:z-10 ${extraClasses}`}>
-      <h3 className="text-[30px] text-text-black font-semibold relative before:bg-black-right-arrow self-start before:absolute before:w-[11px] before:h-[18px] before:top-[16px] before:right-[-30px]">{listTitle}</h3>
-      {
-        isLoading ? (
-          <div className="w-full h-[276px]">
-            <EventsSkeleton />
-          </div>
-        ) : (
-          <EventSlider events={data} />
-        )
-      }
+    <div
+      className={`flex flex-col relative before:w-[198px] before:absolute before:right-[-45px] before:h-full before:bg-slider-fade-out before:z-10 ${extraClasses}`}
+    >
+      <h3 className="text-[30px] text-text-black font-semibold relative before:bg-black-right-arrow self-start before:absolute before:w-[11px] before:h-[18px] before:top-[16px] before:right-[-30px]">
+        {listTitle}
+      </h3>
+      {isLoading ? (
+        <div className="w-full h-[276px]">
+          <EventsSkeleton />
+        </div>
+      ) : data.length === 0 ? (
+        <p> Нет реультатов</p>
+      ) : (
+        <EventSlider events={data} />
+      )}
     </div>
-  )
+  );
 }

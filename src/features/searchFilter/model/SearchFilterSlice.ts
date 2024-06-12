@@ -35,7 +35,10 @@ export const searchFilterSlice = createSlice({
       ...state,
       startDate: startDate,
     }),
-    startDateGTESetted: (state, { payload: startDateGTE }: { payload: string }) => ({
+    startDateGTESetted: (
+      state,
+      { payload: startDateGTE }: { payload: string }
+    ) => ({
       ...state,
       startDateGTE: startDateGTE,
     }),

@@ -24,12 +24,6 @@ export interface ICardProps {
   month: string;
   year: string;
   summary: number;
-  // startDate: string;
-  // endDate: string;
-  // isStartDate: boolean;
-  // isEndDate: boolean;
-  // isBetweenDate: boolean;
-  // onClickDate: (date: string) =>  void;
 }
 
 export interface ArrowsExtraClasses {

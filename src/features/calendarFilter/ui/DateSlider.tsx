@@ -9,6 +9,7 @@ import {
   endDateSetted,
   startDateGTESetted,
 } from "@/features/searchFilter/model/SearchFilterSlice";
+import Svg from "@/shared/ui/Svg";
 
 export function DateSlider() {
   const dateArr = generateCalendarDays(40);
@@ -32,11 +33,14 @@ export function DateSlider() {
       dispatch(startDateGTESetted(startDate));
       dispatch(endDateSetted(generateDateFormat(date)));
     }
-    if (
-      generateDateFormat(date) <= startDate ||
-      generateDateFormat(date) <= startDateGTE
-    ) {
+    if (startDate != "" && generateDateFormat(date) < startDate) {
+      dispatch(startDateSetted(""));
+      dispatch(startDateGTESetted(generateDateFormat(date)));
+      dispatch(endDateSetted(startDate));
+    }
+    if (startDateGTE != "" && endDate != "") {
       onHandleCloseCalendarFilter();
+      dispatch(startDateSetted(generateDateFormat(date)));
     }
   };
 
@@ -60,7 +64,20 @@ export function DateSlider() {
   return (
     <div className="flex flex-col relative before:w-[165px] before:absolute before:right-[-5px] before:h-full before:bg-slider-fade-out before:z-10 mt-[46px]">
       <h3 className="capitalize text-[20px] font-normal text-text-black">
-        {currentMonth}
+        <div className="flex w-full items-center">
+          {currentMonth}
+          {(startDate != "" || startDateGTE != "") && (
+            <Svg
+              id="profile-x"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              extraUseClass="cursor-pointer"
+              onClick={onHandleCloseCalendarFilter}
+            />
+          )}
+        </div>
       </h3>
       <SlickSlider
         extraSettings={settings}
