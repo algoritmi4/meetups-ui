@@ -1,12 +1,13 @@
-import { EventCard } from '@/entities/event';
 import {useGetEventsQuery} from '@/entities/event/api/eventApi';
 import {DateSlider} from '@/features/calendarFilter';
 import { useGetCategoriesQuery } from '@/features/searchFilter/api/categoriesApi';
 import { FilterPopup } from '@/features/searchFilter/ui/FilterPopup';
 import {HomePageTitle} from '@/features/townFilter';
 import { SliderEmptyElem } from '@/shared';
+import { useLogServerError } from '@/shared/lib/hooks';
 import { useAppSelector } from '@/shared/model';
 import { EventsList } from '@/widgets/EventsList';
+import { getEventsCards } from '@/widgets/EventsList/model/getEventsCards';
 import { MapWidget } from '@/widgets/mapWidget';
 import { useGetMarkersQuery } from '@/widgets/mapWidget/api/markersApi';
 import { ReactElement } from 'react';
@@ -43,13 +44,13 @@ export function HomePage(): ReactElement {
     error: markersError
   } = useGetMarkersQuery();
 
-  isMarkersError && console.log(`Ошибка при получении mapMarkers - ${JSON.stringify(markersError)}`);
-  isEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(eventsError)}`);
-  isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
-  isCategoriesError && console.log(`Ошибка при получении категорий - ${JSON.stringify(categoriesError)}`);
+  useLogServerError(isMarkersError, 'mapMarkers', markersError);
+  useLogServerError(isEventsError, 'ивентов', eventsError);
+  useLogServerError(isTopEventsError, 'лучших ивентов', topEventsError);
+  useLogServerError(isCategoriesError, 'категорий', categoriesError);
 
-  const eventsList = events.results.map((el) => <EventCard key={el.id} event={el} />);
-  const topEventsList = topEvents.results.map((el) => <EventCard key={el.id} event={el} />);
+  const eventsList = getEventsCards(events.results, 'lg');
+  const topEventsList = getEventsCards(topEvents.results, 'lg');
 
   return (
     <main className="w-full pb-[174px]">

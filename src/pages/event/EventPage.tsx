@@ -18,8 +18,9 @@ import {EventPageContext} from './model/EventPageContext';
 import {mockReviews} from './model/consts';
 import {useGetReviewsQuery} from '@/entities/review/api/reviewApi';
 import { ParticipantsPopup } from '@/entities/eventParticipants';
-import { EventCard } from '@/entities/event';
 import { SliderEmptyElem } from '@/shared';
+import { useLogServerError } from '@/shared/lib/hooks';
+import { getEventsCards } from '@/widgets/EventsList/model/getEventsCards';
 
 export function EventPage(): ReactElement {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -54,8 +55,8 @@ export function EventPage(): ReactElement {
     isError: isReviewsError
   } = useGetReviewsQuery(Number(eventId));
 
-  isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
-  isReviewsError && console.log(`Ошибка при получении отзывов - ${JSON.stringify(reviewsError)}`);
+  useLogServerError(isTopEventsError, 'ивентов', topEventsError);
+  useLogServerError(isReviewsError, 'отзывов', reviewsError);
 
   const isOwner = event?.created_by.id === profile?.id;
   const { isFavorite } = useAppSelector((state) => state.eventInfo);
@@ -75,7 +76,8 @@ export function EventPage(): ReactElement {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
 
-  const topEventsList = topEvents.results.filter((el) => el.id !== event?.id).map((el) => <EventCard key={el.id} event={el} />);
+  const filteredEvents = topEvents.results.filter((el) => el.id !== event?.id);
+  const topEventsList = getEventsCards(filteredEvents, 'lg');
 
   if (isEventLoading || isReviwesLoading || !isPageReady) {
     return <EventLoader />;

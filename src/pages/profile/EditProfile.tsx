@@ -14,25 +14,24 @@ import { removeProfileExtraFields } from "@/features/editProfile/model/removePro
 import { useGetCategoriesQuery } from "@/features/searchFilter/api/categoriesApi";
 import { EditOptions } from "@/features/editProfile/ui/EditOptions";
 import { PageTitle } from "@/widgets/PageTitle";
+import { useLogServerError } from "@/shared/lib/hooks";
 
 function EditProfile(): ReactElement {
   const {
     data: profileData,
     isLoading: isProfileDataLoading,
-    isError: isErrorProfileData,
-    error: errorProfileData,
     isSuccess: isProfileDataSuccess,
   } = useMyDetailsQuery();
 
-  const { data: categories = { results: [] }, isLoading: isCategoriesLoading, isSuccess: isCategoriesSuccess } =
-    useGetCategoriesQuery();
+  const {
+    data: categories = { results: [] },
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+    error: categoriesError,
+    isSuccess: isCategoriesSuccess
+  } = useGetCategoriesQuery();
 
-  isErrorProfileData &&
-    console.log(
-      `Ошибка при получении данных пользователя - ${JSON.stringify(
-        errorProfileData
-      )}`
-    );
+  useLogServerError(isCategoriesError, 'категорий', categoriesError);
 
   const isFormLoading = isProfileDataLoading || isCategoriesLoading;
   const isFormDataSuccess = isProfileDataSuccess && isCategoriesSuccess;

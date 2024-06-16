@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { ReactElement } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -18,29 +18,35 @@ import {
   useGetUserPlannedEventsQuery
 } from "@/entities/event/api/eventApi";
 import { EventsList } from "@/widgets/EventsList";
-import { EventCard } from "@/entities/event";
-import Svg from "@/shared/ui/Svg";
 import { SliderEmptyElem } from "@/shared";
+import { getEventsCards } from "@/widgets/EventsList/model/getEventsCards";
+import { useLogServerError } from "@/shared/lib/hooks";
+import { PrivateUserEventsCap } from "@/widgets/Profile/PrivateUserEventsCap";
 
 function RemoteProfileView(): ReactElement {
   const navigate = useNavigate();
-  const [isPageReady, setIsPageReady] = useState(false);
   const { userId = "0" } = useParams();
   const [followStatus, setFollowStatus] = useState<IFollowStatus>(undefined);
 
   const {
     data: createdEvents = {results: []},
-    isLoading: isCreatedEventsLoading
+    isLoading: isCreatedEventsLoading,
+    isError: isCreatedEventsError,
+    error: createdEventsError
   } = useGetUserCreatedEventsQuery(Number(userId));
 
   const {
     data: finishedEvents = {results: []},
-    isLoading: isFinishedEventsLoading
+    isLoading: isFinishedEventsLoading,
+    isError: isFinishedEventsError,
+    error: finishedEventsError
   } = useGetUserFinishedEventsQuery(Number(userId));
 
   const {
     data: plannedEvents = {results: []},
-    isLoading: isPlannedEventsLoading
+    isLoading: isPlannedEventsLoading,
+    isError: isPlannedEventsError,
+    error: plannedEventsError
   } = useGetUserPlannedEventsQuery(Number(userId));
 
   const {
@@ -74,20 +80,12 @@ function RemoteProfileView(): ReactElement {
     }
   );
 
-  isErrorRemoteUser &&
-    console.log(
-      `Ошибка при получении remoteUser - ${JSON.stringify(errorRemoteUser)}`
-    );
-  isErrorProfileData &&
-    console.log(
-      `Ошибка при получении currentUser - ${JSON.stringify(errorProfileData)}`
-    );
-  isErrorFollowingData &&
-    console.log(
-      `Ошибка при получении информации о подписках пользователя - ${JSON.stringify(
-        errorFollowingData
-      )}`
-    );
+  useLogServerError(isErrorRemoteUser, 'remoteUser', errorRemoteUser);
+  useLogServerError(isErrorProfileData, 'currentUser', errorProfileData);
+  useLogServerError(isErrorFollowingData, 'подписок', errorFollowingData);
+  useLogServerError(isFinishedEventsError, 'посещенных ивентов', finishedEventsError);
+  useLogServerError(isPlannedEventsError, 'запланированных ивентов', plannedEventsError);
+  useLogServerError(isCreatedEventsError, 'созданных ивентов', createdEventsError);
 
   const isPrivateUser = remoteUser?.is_private;
 
@@ -112,22 +110,20 @@ function RemoteProfileView(): ReactElement {
       );
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isSuccessFollowingData) {
       setFollowStatus(
         () =>
           profileFollowingData.find(({ user }) => user === Number(userId))
             ?.status
       );
-
-      setIsPageReady(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessFollowingData]);
 
-  const createdEventsList = createdEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
-  const finishedEventsList = finishedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
-  const plannedEventsList = plannedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const createdEventsList = getEventsCards(createdEvents.results, 'sm');
+  const finishedEventsList = getEventsCards(finishedEvents.results, 'sm');
+  const plannedEventsList = getEventsCards(plannedEvents.results, 'sm');
 
   if (isNaN(Number(userId))) {
     return <h1>404 Page not found</h1>;
@@ -140,7 +136,6 @@ function RemoteProfileView(): ReactElement {
   if (
     isLoadingRemoteUser ||
     isLoadingFollowingData ||
-    !isPageReady ||
     isLoadingProfileData
   ) {
     return (
@@ -183,16 +178,7 @@ function RemoteProfileView(): ReactElement {
         <div className="w-[65%] mt-[60px] flex flex-col">
           {
             isPrivateUser ? (
-              <>
-                <h2 className="text-[28px] font-semibold text-but-primary">Это закрытый профиль</h2>
-                <p className="mt-[26px] text-[20px] font-medium">
-                  {`Подпишитесь на ${remoteUser.username}, чтобы смотреть ${remoteUser.gender === 'FEMALE' ? 'её' : 'его'} мероприятия`}
-                </p>
-                <Svg
-                  id="private-profile-lock"
-                  className="w-[125px] h-[125px] mt-5"
-                />
-              </>
+              <PrivateUserEventsCap remoteUser={remoteUser} />
             ) : (
               <>
                 <EventsList
@@ -202,6 +188,7 @@ function RemoteProfileView(): ReactElement {
                   slidesLength={3}
                   arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
                   emptyElement={<SliderEmptyElem text="Не создано" />}
+                  isError={isCreatedEventsError}
                 >{createdEventsList}</EventsList>
                 <EventsList
                   listTitle="Планирует посетить"
@@ -210,6 +197,7 @@ function RemoteProfileView(): ReactElement {
                   slidesLength={3}
                   arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
                   emptyElement={<SliderEmptyElem text="Не запланированно" />}
+                  isError={isPlannedEventsError}
                 >{plannedEventsList}</EventsList>
                 <EventsList
                   listTitle="Посещенные"
@@ -218,6 +206,7 @@ function RemoteProfileView(): ReactElement {
                   slidesLength={3}
                   arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
                   emptyElement={<SliderEmptyElem text="Не найдено" />}
+                  isError={isFinishedEventsError}
                 >{finishedEventsList}</EventsList>
               </>
             )

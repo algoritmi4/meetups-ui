@@ -8,6 +8,8 @@ interface IEventList extends IEventSlider {
   isLoading: boolean;
   extraClasses?: string;
   emptyElement: ReactNode;
+  isError?: boolean;
+  errorElement?: ReactNode;
 }
 
 export function EventsList({
@@ -17,7 +19,9 @@ export function EventsList({
   extraClasses,
   slidesLength,
   arrowsExtraClasses,
-  emptyElement
+  emptyElement,
+  isError,
+  errorElement = <p>Произошла ошибка на сервере, попробуйте перезагрузить страницу</p>
 }: IEventList): ReactElement {
   return (
     <div className={`flex flex-col relative w-full before:w-[198px] before:absolute before:right-[-45px] before:h-full before:bg-slider-fade-out before:z-10 before:pointer-events-none ${extraClasses}`}>
@@ -27,6 +31,8 @@ export function EventsList({
           <div className="w-full h-[276px]">
             <EventsSkeleton />
           </div>
+        ) : isError ? (
+          errorElement
         ) : children.length === 0 ? (
           emptyElement
         ) : (

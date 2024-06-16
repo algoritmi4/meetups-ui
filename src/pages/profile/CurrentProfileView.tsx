@@ -9,8 +9,9 @@ import {
   useGetUserPlannedEventsQuery
 } from "@/entities/event/api/eventApi";
 import { EventsList } from "@/widgets/EventsList";
-import { EventCard } from "@/entities/event";
 import { SliderEmptyElem } from "@/shared";
+import { useLogServerError } from "@/shared/lib/hooks";
+import { getEventsCards } from "@/widgets/EventsList/model/getEventsCards";
 
 function CurrentProfileView(): ReactElement {
   const navigate = useNavigate();
@@ -18,31 +19,40 @@ function CurrentProfileView(): ReactElement {
   const {
     data: profileData,
     isLoading: isProfileDataLoading,
-    isError,
-    error,
+    isError: isProfileDataError,
+    error: profileDataError,
     isSuccess: isProfileDataSuccess,
   } = useMyDetailsQuery();
 
   const {
     data: createdEvents = {results: []},
-    isLoading: isCreatedEventsLoading
+    isLoading: isCreatedEventsLoading,
+    isError: isCreatedEventsError,
+    error: createdEventsError
   } = useGetUserCreatedEventsQuery(isProfileDataSuccess ? profileData.id : 0);
 
   const {
     data: finishedEvents = {results: []},
-    isLoading: isFinishedEventsLoading
+    isLoading: isFinishedEventsLoading,
+    isError: isFinishedEventsError,
+    error: finishedEventsError
   } = useGetUserFinishedEventsQuery(isProfileDataSuccess ? profileData.id : 0);
 
   const {
     data: plannedEvents = {results: []},
-    isLoading: isPlannedEventsLoading
+    isLoading: isPlannedEventsLoading,
+    isError: isPlannedEventsError,
+    error: plannedEventsError
   } = useGetUserPlannedEventsQuery(isProfileDataSuccess ? profileData.id : 0);
 
-  isError && console.log(`Ошибка при получении профиля - ${JSON.stringify(error)}`);
+  useLogServerError(isProfileDataError, 'подписок', profileDataError);
+  useLogServerError(isFinishedEventsError, 'посещенных ивентов', finishedEventsError);
+  useLogServerError(isPlannedEventsError, 'запланированных ивентов', plannedEventsError);
+  useLogServerError(isCreatedEventsError, 'созданных ивентов', createdEventsError);
 
-  const createdEventsList = createdEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
-  const finishedEventsList = finishedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
-  const plannedEventsList = plannedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const createdEventsList = getEventsCards(createdEvents.results, 'sm');
+  const finishedEventsList = getEventsCards(finishedEvents.results, 'sm');
+  const plannedEventsList = getEventsCards(plannedEvents.results, 'sm');
 
   const onEditProfile = () => {
     navigate("/profile/edit");
