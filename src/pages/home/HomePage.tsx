@@ -4,6 +4,7 @@ import {DateSlider} from '@/features/calendarFilter';
 import { useGetCategoriesQuery } from '@/features/searchFilter/api/categoriesApi';
 import { FilterPopup } from '@/features/searchFilter/ui/FilterPopup';
 import {HomePageTitle} from '@/features/townFilter';
+import { SliderEmptyElem } from '@/shared';
 import { useAppSelector } from '@/shared/model';
 import { EventsList } from '@/widgets/EventsList';
 import { MapWidget } from '@/widgets/mapWidget';
@@ -61,6 +62,7 @@ export function HomePage(): ReactElement {
         extraClasses="mt-14 mb-[50px]"
         slidesLength={4}
         arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+        emptyElement={<SliderEmptyElem text="Не найдено" />}
       >{eventsList}</EventsList>
       <MapWidget position={{ lat: 53.9, lng: 27.56667 }} zoom={14} markers={markers.features} isLoading={isMarkersLoading} />
       <EventsList
@@ -69,6 +71,7 @@ export function HomePage(): ReactElement {
         extraClasses="mt-[50px]"
         slidesLength={4}
         arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+        emptyElement={<SliderEmptyElem text="Не найдено" />}
       >{topEventsList}</EventsList>
       <EventsList
         listTitle="Топ мероприятий"
@@ -76,6 +79,7 @@ export function HomePage(): ReactElement {
         extraClasses="mt-[50px]"
         slidesLength={4}
         arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+        emptyElement={<SliderEmptyElem text="Не найдено" />}
       >{topEventsList}</EventsList>
     </main>
   );

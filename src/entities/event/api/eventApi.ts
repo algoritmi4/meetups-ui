@@ -61,6 +61,27 @@ export const eventApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['EVENTS_TAG']
     }),
+    getUserCreatedEvents: build.query<IApiResponse<IEvent[]>, number>({
+      query: (user_id) => ({
+        url: `users/${user_id}/events/created/`,
+        method: 'GET'
+      }),
+      providesTags: ['EVENTS_TAG']
+    }),
+    getUserPlannedEvents: build.query<IApiResponse<IEvent[]>, number>({
+      query: (user_id) => ({
+        url: `users/${user_id}/events/planned/`,
+        method: 'GET'
+      }),
+      providesTags: ['EVENTS_TAG']
+    }),
+    getUserFinishedEvents: build.query<IApiResponse<IEvent[]>, number>({
+      query: (user_id) => ({
+        url: `users/${user_id}/events/finished/`,
+        method: 'GET'
+      }),
+      providesTags: ['EVENTS_TAG']
+    }),
   })
 })
 
@@ -72,5 +93,8 @@ export const {
   useRegisterToEventMutation,
   useLeaveFromEventMutation,
   useLikeEventMutation,
-  useUnlikeEventMutation
+  useUnlikeEventMutation,
+  useGetUserCreatedEventsQuery,
+  useGetUserPlannedEventsQuery,
+  useGetUserFinishedEventsQuery
 } = eventApi;

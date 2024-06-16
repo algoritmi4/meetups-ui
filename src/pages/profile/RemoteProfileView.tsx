@@ -12,9 +12,15 @@ import { ProfileInfo, ProfileLoader } from "@/widgets/Profile/ProfileInfo";
 import { Button } from "@/shared/ui/Buttons/Button";
 import { ProfileFollowButton } from "@/widgets/ProfileButton";
 import { IFollowStatus } from "@/entities/profile/model/types";
-import { useGetEventsQuery } from "@/entities/event/api/eventApi";
+import {
+  useGetUserCreatedEventsQuery,
+  useGetUserFinishedEventsQuery,
+  useGetUserPlannedEventsQuery
+} from "@/entities/event/api/eventApi";
 import { EventsList } from "@/widgets/EventsList";
 import { EventCard } from "@/entities/event";
+import Svg from "@/shared/ui/Svg";
+import { SliderEmptyElem } from "@/shared";
 
 function RemoteProfileView(): ReactElement {
   const navigate = useNavigate();
@@ -23,9 +29,19 @@ function RemoteProfileView(): ReactElement {
   const [followStatus, setFollowStatus] = useState<IFollowStatus>(undefined);
 
   const {
-    data = {results: []},
-    isLoading: isEventsLoading
-  } = useGetEventsQuery({ search: '' });
+    data: createdEvents = {results: []},
+    isLoading: isCreatedEventsLoading
+  } = useGetUserCreatedEventsQuery(Number(userId));
+
+  const {
+    data: finishedEvents = {results: []},
+    isLoading: isFinishedEventsLoading
+  } = useGetUserFinishedEventsQuery(Number(userId));
+
+  const {
+    data: plannedEvents = {results: []},
+    isLoading: isPlannedEventsLoading
+  } = useGetUserPlannedEventsQuery(Number(userId));
 
   const {
     data: remoteUser,
@@ -109,7 +125,9 @@ function RemoteProfileView(): ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessFollowingData]);
 
-  const eventsList = data.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const createdEventsList = createdEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const finishedEventsList = finishedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const plannedEventsList = plannedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
 
   if (isNaN(Number(userId))) {
     return <h1>404 Page not found</h1>;
@@ -162,28 +180,48 @@ function RemoteProfileView(): ReactElement {
             </Button>
           </div>
         </ProfileInfo>
-        <div className="w-[65%]">
-          <EventsList
-            listTitle="Созданные"
-            isLoading={isEventsLoading}
-            extraClasses="mt-[60px] before:!bg-slider-fade-out-xl before:!w-[450px]"
-            slidesLength={3}
-            arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
-          >{eventsList}</EventsList>
-          <EventsList
-            listTitle="Созданные"
-            isLoading={isEventsLoading}
-            extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
-            slidesLength={3}
-            arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
-          >{eventsList}</EventsList>
-          <EventsList
-            listTitle="Созданные"
-            isLoading={isEventsLoading}
-            extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
-            slidesLength={3}
-            arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
-          >{eventsList}</EventsList>
+        <div className="w-[65%] mt-[60px] flex flex-col">
+          {
+            isPrivateUser ? (
+              <>
+                <h2 className="text-[28px] font-semibold text-but-primary">Это закрытый профиль</h2>
+                <p className="mt-[26px] text-[20px] font-medium">
+                  {`Подпишитесь на ${remoteUser.username}, чтобы смотреть ${remoteUser.gender === 'FEMALE' ? 'её' : 'его'} мероприятия`}
+                </p>
+                <Svg
+                  id="private-profile-lock"
+                  className="w-[125px] h-[125px] mt-5"
+                />
+              </>
+            ) : (
+              <>
+                <EventsList
+                  listTitle="Созданные"
+                  isLoading={isCreatedEventsLoading}
+                  extraClasses="before:!bg-slider-fade-out-xl before:!w-[450px]"
+                  slidesLength={3}
+                  arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+                  emptyElement={<SliderEmptyElem text="Не создано" />}
+                >{createdEventsList}</EventsList>
+                <EventsList
+                  listTitle="Планирует посетить"
+                  isLoading={isPlannedEventsLoading}
+                  extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
+                  slidesLength={3}
+                  arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+                  emptyElement={<SliderEmptyElem text="Не запланированно" />}
+                >{plannedEventsList}</EventsList>
+                <EventsList
+                  listTitle="Посещенные"
+                  isLoading={isFinishedEventsLoading}
+                  extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
+                  slidesLength={3}
+                  arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+                  emptyElement={<SliderEmptyElem text="Не найдено" />}
+                >{finishedEventsList}</EventsList>
+              </>
+            )
+          }
         </div>
       </section>
     );

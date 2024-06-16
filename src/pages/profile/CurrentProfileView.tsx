@@ -3,17 +3,17 @@ import { ProfileInfo, ProfileLoader } from "@/widgets/Profile/ProfileInfo";
 import { useMyDetailsQuery } from "@/entities/profile/api/profileApi.ts";
 import { Button } from "@/shared/ui/Buttons/Button";
 import { useNavigate } from "react-router-dom";
-import { useGetEventsQuery } from "@/entities/event/api/eventApi";
+import {
+  useGetUserCreatedEventsQuery,
+  useGetUserFinishedEventsQuery,
+  useGetUserPlannedEventsQuery
+} from "@/entities/event/api/eventApi";
 import { EventsList } from "@/widgets/EventsList";
 import { EventCard } from "@/entities/event";
+import { SliderEmptyElem } from "@/shared";
 
 function CurrentProfileView(): ReactElement {
   const navigate = useNavigate();
-
-  const {
-    data = {results: []},
-    isLoading: isEventsLoading
-  } = useGetEventsQuery({ search: '' });
 
   const {
     data: profileData,
@@ -23,9 +23,26 @@ function CurrentProfileView(): ReactElement {
     isSuccess: isProfileDataSuccess,
   } = useMyDetailsQuery();
 
+  const {
+    data: createdEvents = {results: []},
+    isLoading: isCreatedEventsLoading
+  } = useGetUserCreatedEventsQuery(isProfileDataSuccess ? profileData.id : 0);
+
+  const {
+    data: finishedEvents = {results: []},
+    isLoading: isFinishedEventsLoading
+  } = useGetUserFinishedEventsQuery(isProfileDataSuccess ? profileData.id : 0);
+
+  const {
+    data: plannedEvents = {results: []},
+    isLoading: isPlannedEventsLoading
+  } = useGetUserPlannedEventsQuery(isProfileDataSuccess ? profileData.id : 0);
+
   isError && console.log(`Ошибка при получении профиля - ${JSON.stringify(error)}`);
 
-  const eventsList = data.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const createdEventsList = createdEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const finishedEventsList = finishedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
+  const plannedEventsList = plannedEvents.results.map((el) => <EventCard key={el.id} size="sm" event={el} />);
 
   const onEditProfile = () => {
     navigate("/profile/edit");
@@ -52,25 +69,28 @@ function CurrentProfileView(): ReactElement {
         <div className="w-[65%]">
           <EventsList
             listTitle="Созданные"
-            isLoading={isEventsLoading}
+            isLoading={isCreatedEventsLoading}
             extraClasses="mt-[60px] before:!bg-slider-fade-out-xl before:!w-[450px]"
             slidesLength={3}
             arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
-          >{eventsList}</EventsList>
+            emptyElement={<SliderEmptyElem text="Не создано" />}
+          >{createdEventsList}</EventsList>
           <EventsList
-            listTitle="Созданные"
-            isLoading={isEventsLoading}
+            listTitle="Планируете посетить"
+            isLoading={isPlannedEventsLoading}
             extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
             slidesLength={3}
             arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
-          >{eventsList}</EventsList>
+            emptyElement={<SliderEmptyElem text="Не запланировано" />}
+          >{plannedEventsList}</EventsList>
           <EventsList
-            listTitle="Созданные"
-            isLoading={isEventsLoading}
+            listTitle="Посещенные"
+            isLoading={isFinishedEventsLoading}
             extraClasses="mt-[50px] before:!bg-slider-fade-out-xl before:!w-[450px]"
             slidesLength={3}
             arrowsExtraClasses={{rightArrow: 'right-[90px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
-          >{eventsList}</EventsList>
+            emptyElement={<SliderEmptyElem text="Не найдено" />}
+          >{finishedEventsList}</EventsList>
         </div>
       </section>
     );

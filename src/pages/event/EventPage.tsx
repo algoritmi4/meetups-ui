@@ -19,6 +19,7 @@ import {mockReviews} from './model/consts';
 import {useGetReviewsQuery} from '@/entities/review/api/reviewApi';
 import { ParticipantsPopup } from '@/entities/eventParticipants';
 import { EventCard } from '@/entities/event';
+import { SliderEmptyElem } from '@/shared';
 
 export function EventPage(): ReactElement {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -117,6 +118,7 @@ export function EventPage(): ReactElement {
             extraClasses="mt-[50px]"
             slidesLength={4}
             arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+            emptyElement={<SliderEmptyElem text="Не найдено" />}
           >{topEventsList}</EventsList>
         </main>
       </EventPageContext.Provider>

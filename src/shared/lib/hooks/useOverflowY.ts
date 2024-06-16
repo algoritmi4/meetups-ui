@@ -16,7 +16,6 @@ export const useOverflowY = (
 
     if (current) {
       const hasOverflowY = current.scrollHeight > current.clientHeight;
-      console.log(current.scrollHeight, current.clientHeight)
       setIsOverflowY(hasOverflowY);
       callback?.(hasOverflowY);
     }
