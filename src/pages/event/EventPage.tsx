@@ -18,6 +18,9 @@ import {EventPageContext} from './model/EventPageContext';
 import {mockReviews} from './model/consts';
 import {useGetReviewsQuery} from '@/entities/review/api/reviewApi';
 import { ParticipantsPopup } from '@/entities/eventParticipants';
+import { SliderEmptyElem } from '@/shared';
+import { useLogServerError } from '@/shared/lib/hooks';
+import { getEventsCards } from '@/widgets/EventsList/model/getEventsCards';
 
 export function EventPage(): ReactElement {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -52,8 +55,8 @@ export function EventPage(): ReactElement {
     isError: isReviewsError
   } = useGetReviewsQuery(Number(eventId));
 
-  isTopEventsError && console.log(`Ошибка при получении ивентов - ${JSON.stringify(topEventsError)}`);
-  isReviewsError && console.log(`Ошибка при получении отзывов - ${JSON.stringify(reviewsError)}`);
+  useLogServerError(isTopEventsError, 'ивентов', topEventsError);
+  useLogServerError(isReviewsError, 'отзывов', reviewsError);
 
   const isOwner = event?.created_by.id === profile?.id;
   const { isFavorite } = useAppSelector((state) => state.eventInfo);
@@ -72,6 +75,9 @@ export function EventPage(): ReactElement {
       .catch((err) => console.log(err))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
+
+  const filteredEvents = topEvents.results.filter((el) => el.id !== event?.id);
+  const topEventsList = getEventsCards(filteredEvents, 'lg');
 
   if (isEventLoading || isReviwesLoading || !isPageReady) {
     return <EventLoader />;
@@ -108,7 +114,14 @@ export function EventPage(): ReactElement {
           <CreatorDetails creator={event.created_by}/>
           <Location event={event}/>
           <ReviewsRow reviews={mockReviews} rating={event.average_rating}/>
-          <EventsList listTitle="Рекомендации для Вас" isLoading={isTopEventsLoading} data={topEvents.results.filter((el) => el.id !== event.id)} extraClasses="mt-[50px]" />
+          <EventsList
+            listTitle="Рекомендации для Вас"
+            isLoading={isTopEventsLoading}
+            extraClasses="mt-[50px]"
+            slidesLength={4}
+            arrowsExtraClasses={{rightArrow: 'right-[-12px] top-[110px]', leftArrow: 'left-[-42px] top-[110px]'}}
+            emptyElement={<SliderEmptyElem text="Не найдено" />}
+          >{topEventsList}</EventsList>
         </main>
       </EventPageContext.Provider>
     )

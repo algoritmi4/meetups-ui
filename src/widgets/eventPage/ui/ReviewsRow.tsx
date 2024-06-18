@@ -10,7 +10,7 @@ interface IReviewsRow {
 
 export function ReviewsRow({reviews, rating}: IReviewsRow): ReactElement {
   return (
-    <section className="relative w-full before:w-[198px] before:absolute before:right-[-45px] before:h-full before:bg-slider-fade-out before:z-10">
+    <section className="relative w-full before:w-[198px] before:absolute before:right-[-45px] before:h-full before:bg-slider-fade-out before:z-10 before:pointer-events-none">
       <h2 className="text-text-black text-[28px] font-semibold mt-[92px]">
         Отзывы
       </h2>
@@ -26,7 +26,7 @@ export function ReviewsRow({reviews, rating}: IReviewsRow): ReactElement {
       }
 
       {reviews && reviews.length > 0 ? (
-        <ReviewSlider reviews={reviews}></ReviewSlider>
+        <ReviewSlider reviews={reviews} slidesLength={3}></ReviewSlider>
       ) : (
         <div>No reviews yet.</div>
       )}
