@@ -2,45 +2,60 @@ import { CalendarCard } from "@/shared/ui/CalendarCard";
 import { SlickSlider } from "@/shared/ui/SlickSlider/SlickSlider";
 import { ICardProps } from "@/shared/types";
 import { generateCalendarDays } from "../lib/generateCalendarDays";
-import { currentMonth, settings, generateDateFormat } from "../model/constants";
+import { currentMonth, settings } from "../model/constants";
 import { useAppSelector, useAppDispatch } from "@/shared/model";
 import {
-  startDateSetted,
+  selectedDateSetted,
   endDateSetted,
-  startDateGTESetted,
+  startDateSetted,
 } from "@/features/searchFilter/model/SearchFilterSlice";
 import Svg from "@/shared/ui/Svg";
+import { ReactElement } from "react";
 
-export function DateSlider() {
+interface IDateSlider {
+  isLoading: boolean;
+  isFetching: boolean;
+}
+
+export function DateSlider({
+  isLoading,
+  isFetching,
+}: IDateSlider): ReactElement {
   const dateArr = generateCalendarDays(40);
   const dispatch = useAppDispatch();
-  const { startDate, endDate, startDateGTE } = useAppSelector(
+  const { selectedDate, endDate, startDate } = useAppSelector(
     (state) => state.searchFilter
   );
 
-  const onHandleCloseCalendarFilter = () => {
-    dispatch(startDateSetted(""));
+  const onCloseCalendarFilter = () => {
+    dispatch(selectedDateSetted(""));
     dispatch(endDateSetted(""));
-    dispatch(startDateGTESetted(""));
+    dispatch(startDateSetted(""));
   };
 
   const onHandleClickDate = (date: ICardProps) => {
-    if (startDate === "") {
-      dispatch(startDateSetted(generateDateFormat(date)));
-    }
-    if (startDate != "" && generateDateFormat(date) > startDate) {
-      dispatch(startDateSetted(""));
-      dispatch(startDateGTESetted(startDate));
-      dispatch(endDateSetted(generateDateFormat(date)));
-    }
-    if (startDate != "" && generateDateFormat(date) < startDate) {
-      dispatch(startDateSetted(""));
-      dispatch(startDateGTESetted(generateDateFormat(date)));
-      dispatch(endDateSetted(startDate));
-    }
-    if (startDateGTE != "" && endDate != "") {
-      onHandleCloseCalendarFilter();
-      dispatch(startDateSetted(generateDateFormat(date)));
+    switch (true) {
+      case !!startDate && !!endDate:
+        onCloseCalendarFilter();
+        dispatch(selectedDateSetted(date.summary));
+        break;
+      case date.summary === selectedDate:
+        dispatch(selectedDateSetted(date.summary));
+        break;
+
+      case !selectedDate:
+        dispatch(selectedDateSetted(date.summary));
+        break;
+      case selectedDate && date.summary > selectedDate:
+        dispatch(selectedDateSetted(""));
+        dispatch(startDateSetted(selectedDate));
+        dispatch(endDateSetted(date.summary));
+        break;
+      case selectedDate && date.summary < selectedDate:
+        dispatch(selectedDateSetted(""));
+        dispatch(startDateSetted(date.summary));
+        dispatch(endDateSetted(selectedDate));
+        break;
     }
   };
 
@@ -48,16 +63,10 @@ export function DateSlider() {
     <CalendarCard
       key={index}
       date={el}
-      isStartDate={
-        startDate === generateDateFormat(el) ||
-        startDateGTE === generateDateFormat(el)
-      }
-      isEndDate={endDate === generateDateFormat(el)}
-      isBetweenDate={
-        generateDateFormat(el) < endDate &&
-        generateDateFormat(el) > startDateGTE
-      }
-      onClickDate={onHandleClickDate}
+      isStartDate={selectedDate === el.summary || startDate === el.summary}
+      isEndDate={endDate === el.summary}
+      isBetweenDate={el.summary < endDate && el.summary > startDate}
+      onClickDate={isLoading || isFetching ? undefined : onHandleClickDate}
     />
   ));
 
@@ -66,7 +75,7 @@ export function DateSlider() {
       <h3 className="capitalize text-[20px] font-normal text-text-black">
         <div className="flex w-full items-center">
           {currentMonth}
-          {(startDate != "" || startDateGTE != "") && (
+          {(selectedDate != "" || startDate != "") && (
             <Svg
               id="profile-x"
               width="24"
@@ -74,7 +83,7 @@ export function DateSlider() {
               viewBox="0 0 24 24"
               fill="none"
               extraUseClass="cursor-pointer"
-              onClick={onHandleCloseCalendarFilter}
+              onClick={onCloseCalendarFilter}
             />
           )}
         </div>

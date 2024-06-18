@@ -13,16 +13,17 @@ import { useGetMarkersQuery } from '@/widgets/mapWidget/api/markersApi';
 import { ReactElement } from 'react';
 
 export function HomePage(): ReactElement {
-  const { search, checkedCategories, startDate, endDate, startDateGTE } = useAppSelector(state => state.searchFilter);
+  const { search, checkedCategories, selectedDate, endDate, startDate } = useAppSelector(state => state.searchFilter);
 
   const category_in = checkedCategories.join(',');
 
   const {
     data: events = {results: []},
     isLoading: isEventsLoading,
+    isFetching: isEventsFetching,
     isError: isEventsError,
     error: eventsError
-  } = useGetEventsQuery({ search, start_date: startDate, start_date_gte: startDateGTE, start_date_lte: endDate, category_in, ordering: 'start_date' });
+  } = useGetEventsQuery({ search, start_date: selectedDate, start_date_gte: startDate, start_date_lte: endDate, category_in, ordering: 'start_date' });
 
   const {
     data: topEvents = {results: []},
@@ -56,7 +57,7 @@ export function HomePage(): ReactElement {
     <main className="w-full pb-[174px]">
       <FilterPopup categories={categories.results}/>
       <HomePageTitle />
-      <DateSlider />
+      <DateSlider isLoading={isEventsLoading} isFetching={isEventsFetching}/>
       <EventsList
         listTitle="Ближайшие"
         isLoading={isEventsLoading}

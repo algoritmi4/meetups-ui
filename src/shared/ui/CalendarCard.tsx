@@ -6,7 +6,7 @@ interface ICalendarCard {
   isStartDate: boolean;
   isEndDate: boolean;
   isBetweenDate: boolean;
-  onClickDate: (date: ICardProps) => void;
+  onClickDate?: (date: ICardProps) => void;
 }
 
 export function CalendarCard({
@@ -21,7 +21,7 @@ export function CalendarCard({
       className={`flex flex-col mr-8 shrink-0 max-w-[27px] cursor-pointer ${
         isStartDate || isEndDate ? "bg-gray rounded-md w-full" : ""
       } ${isBetweenDate ? "bg-custom-gray rounded-md w-full" : ""}`}
-      onClick={() => onClickDate(date)}
+      onClick={() => onClickDate && onClickDate(date)}
     >
       <p className="text-[22px] font-semibold text-text-black text-center">
         {date.date}

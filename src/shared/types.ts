@@ -19,9 +19,7 @@ export interface ISlickSliderSettings {
 export interface ICardProps {
   date: string;
   weekDay: string;
-  month: string;
-  year: string;
-  summary: number;
+  summary: string;
 }
 
 export interface ArrowsExtraClasses {

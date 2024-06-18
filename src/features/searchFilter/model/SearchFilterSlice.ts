@@ -3,17 +3,17 @@ import { createSlice } from "@reduxjs/toolkit";
 interface IGlobalFilterState {
   search: string;
   checkedCategories: number[];
-  startDate: string;
+  selectedDate: string;
   endDate: string;
-  startDateGTE: string;
+  startDate: string;
 }
 
 const initialState: IGlobalFilterState = {
   search: "",
   checkedCategories: [],
-  startDate: "",
+  selectedDate: "",
   endDate: "",
-  startDateGTE: "",
+  startDate: "",
 };
 
 export const searchFilterSlice = createSlice({
@@ -31,16 +31,16 @@ export const searchFilterSlice = createSlice({
       ...state,
       checkedCategories,
     }),
-    startDateSetted: (state, { payload: startDate }: { payload: string }) => ({
+    selectedDateSetted: (state, { payload: selectedDate }: { payload: string }) => ({
       ...state,
-      startDate: startDate,
+      selectedDate: selectedDate,
     }),
-    startDateGTESetted: (
+    startDateSetted: (
       state,
-      { payload: startDateGTE }: { payload: string }
+      { payload: startDate }: { payload: string }
     ) => ({
       ...state,
-      startDateGTE: startDateGTE,
+      startDate: startDate,
     }),
     endDateSetted: (state, { payload: endDate }: { payload: string }) => ({
       ...state,
@@ -52,7 +52,7 @@ export const searchFilterSlice = createSlice({
 export const {
   setSearchFilter,
   categorySetted,
-  startDateSetted,
+  selectedDateSetted,
   endDateSetted,
-  startDateGTESetted,
+  startDateSetted,
 } = searchFilterSlice.actions;
