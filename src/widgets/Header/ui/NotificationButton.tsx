@@ -1,6 +1,7 @@
 import { Menu } from "@headlessui/react";
 import Svg from "@/shared/ui/Svg";
 import { Fragment } from "react";
+import { Notifications } from "@/features/notifications/ui/Notifications";
 
 export function NotificationButton() {
   return (
@@ -16,7 +17,8 @@ export function NotificationButton() {
               fill="none"
             />
           </Menu.Button>
-          <Menu.Items className="absolute flex-col right-0 top-[62px] z-50 w-[375px] h-[416px] px-10 py-[30px] rounded-[20px] bg-white shadow-shadow-bm justify-start items-start gap-[15px] inline-flex focus:outline-none">
+          <Menu.Items className="absolute right-0 p-0 top-[62px] z-50 w-[375px] h-[416px] rounded-[20px] bg-white shadow-shadow-bm gap-[15px] inline-flex focus:outline-none">
+            <Notifications />
           </Menu.Items>
         </div>
       </Menu>
