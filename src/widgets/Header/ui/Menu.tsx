@@ -2,6 +2,8 @@ import { Button } from "@/shared";
 import { ReactElement } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProfileButton } from "./ProfileButton";
+import { NotificationButton } from "./NotificationButton";
+
 
 export function Menu(): ReactElement {
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ export function Menu(): ReactElement {
         extraClass="self-center"
         onClick={() => navigate('/event/add')}
       >Создать</Button>
+      <NotificationButton />
       <ProfileButton />
     </div>
   )
