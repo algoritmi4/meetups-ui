@@ -42,7 +42,6 @@ export function DateSlider({
       case date.summary === selectedDate:
         dispatch(selectedDateSetted(date.summary));
         break;
-
       case !selectedDate:
         dispatch(selectedDateSetted(date.summary));
         break;
@@ -67,26 +66,14 @@ export function DateSlider({
       isEndDate={endDate === el.summary}
       isBetweenDate={el.summary < endDate && el.summary > startDate}
       onClickDate={isLoading || isFetching ? undefined : onHandleClickDate}
+      onCloseCalendarFilter={onCloseCalendarFilter}
     />
   ));
 
   return (
     <div className="flex flex-col relative before:w-[165px] before:absolute before:right-[-5px] before:h-full before:bg-slider-fade-out before:z-10 mt-[46px]">
-      <h3 className="capitalize text-[20px] font-normal text-text-black">
-        <div className="flex w-full items-center">
+      <h3 className="capitalize text-[20px] font-normal mb-[-29px] text-text-black">
           {currentMonth}
-          {(selectedDate != "" || startDate != "") && (
-            <Svg
-              id="profile-x"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              extraUseClass="cursor-pointer"
-              onClick={onCloseCalendarFilter}
-            />
-          )}
-        </div>
       </h3>
       <SlickSlider
         extraSettings={settings}
